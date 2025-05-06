@@ -20,6 +20,7 @@ public class Battle {
 	
 	
 	public ArrayList<MilitaryUnit>[] getPlanetArmy() {
+		System.out.println("branch Alex");
 		return planetArmy;
 	}
 
