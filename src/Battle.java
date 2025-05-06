@@ -20,7 +20,6 @@ public class Battle {
 	
 	
 	public ArrayList<MilitaryUnit>[] getPlanetArmy() {
-		System.out.println("assdaasd");
 		return planetArmy;
 	}
 
