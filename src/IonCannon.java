@@ -2,7 +2,7 @@
 public class IonCannon extends Defense {
 
 	public IonCannon(int armor, int baseDamage) {
-		super(ARMOR_IONCANNON, ARMOR_IONCANNON, BASE_DAMAGE_PLASMACANNON);
+		super(ARMOR_IONCANNON, ARMOR_IONCANNON, BASE_DAMAGE_IONCANNON);
 		
 	}
 
