@@ -1,11 +1,24 @@
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main implements Variables{
 
 	public static void main(String[] args) {
-		Planet planet = new Planet(0,0, 53500,26800,UPGRADE_BASE_DEFENSE_TECHNOLOGY_DEUTERIUM_COST,UPGRADE_BASE_ATTACK_TECHNOLOGY_DEUTERIUM_COST,null);
+		ArrayList<MilitaryUnit>[] planetArmy = new ArrayList[7];
+		for (int i = 0; i < planetArmy.length; i++){
+			planetArmy[i] = new ArrayList<>();
+		}
+		planetArmy[0].add(new LightHunter());
+		planetArmy[1].add(new HeavyHunter());
+		planetArmy[2].add(new BattleShip());
+		planetArmy[3].add(new ArmoredShip());
+
+		Planet planet = new Planet(0,0, 53500,26800,UPGRADE_BASE_DEFENSE_TECHNOLOGY_DEUTERIUM_COST,UPGRADE_BASE_ATTACK_TECHNOLOGY_DEUTERIUM_COST,planetArmy);
+		
+		// [BATTLE SOURCES]
 		Battle battle = new Battle();
+		battle.setPlanetArmy(planetArmy);
 		
 		Scanner input = new Scanner(System.in);
 
@@ -32,7 +45,7 @@ public class Main implements Variables{
 				try {
 					int user_input = input.nextInt();
 					if (user_input == 1) {
-						System.out.println("Mostrando estadísticas del planeta...");
+						planet.printStats();
 					} else if (user_input == 2) {
 						flg_menu_principal = false;
 						flg_menu_build = true;

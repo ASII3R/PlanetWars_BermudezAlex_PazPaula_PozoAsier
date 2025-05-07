@@ -198,11 +198,24 @@ public class Planet {
 	
 	// Ver esto del planeta (informe general) habra que hacerlo formateado
 	public void printStats() {
-		System.out.println("Plantet Stats:\nTECHNOLOGY");
-		System.out.println("Attack Technology  " + this.getTechnologyAttack() + "\nDefense Technology  " + this.getTechnologyAttack());
-		System.out.println("DEFENSES");
-		//habra que hacer un for-each con cada clase de barco
-		System.out.println("RESOURCES\n Metal  " + this.getMetal() + "\nDeuterium  " + this.getDeuterium());
+		System.out.println("\nPlantet Stats:\n"+"\nTECHNOLOGY");
+		//System.out.println("\nAttack Technology  " + this.getTechnologyAttack() + "\nDefense Technology  " + this.getTechnologyAttack());
+		System.out.printf("\n%-20s %d \n%-20s %d\n","Attack Technology",this.getTechnologyAttack(),"Defense Technology",this.getTechnologyDefense());
+		System.out.println("\nDEFENSES");
+		System.out.printf("\n%-20s %d \n%-20s %d \n%-20s %d\n",
+		"Missile Launcher",army[4] != null ? army[4].size() : 0,
+				"Ion Cannon", army[5] != null ? army[5].size() : 0,
+				"Plasma Cannon", army[6] != null ? army[6].size() : 0);
+		System.out.println("\nFLEET");
+		System.out.printf("\n%-20s %d \n%-20s %d \n%-20s %d \n%-20s %d\n",
+		"Light Hunter", army[0] != null ? army[0].size() : 0,
+				"Heavy Hunter", army[1] != null ? army[1].size() : 0,
+				"Battle Ship", army[2] != null ? army[2].size() : 0,
+				"Armored Ship", army[3] != null ? army[3].size() : 0);
+		System.out.println("\nRESOURCES");
+		System.out.printf("\n%-20s %d \n%-20s %d\n",
+		"Metal",this.getMetal(),
+				"Deuterium", this.getDeuterium());
 		
 	}
 }
