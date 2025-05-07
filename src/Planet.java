@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.TimerTask;
 
 public class Planet implements Variables{
 	private int technologyDefense;
