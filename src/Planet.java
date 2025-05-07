@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Planet {
+public class Planet implements Variables{
 	private int technologyDefense;
 	private int technologyAttack;
 	private int metal;
@@ -82,7 +82,7 @@ public class Planet {
 	// [ Funciones del Planeta ]
 	
 	// Actualizar "Mejoras" de Defensa
-	public void upgradeTechnologyDefense() throws ResourceException {
+	public void upgradeTechnologyDefense(){
 		int precioAntiguoDefensa = this.getUpgradeAttackTechnologyDeuteriumCost();
 		
 		if (this.getDeuterium() > this.getUpgradeDefenseTechnologyDeuteriumCost()) {
@@ -93,16 +93,16 @@ public class Planet {
 			
 			// Actualizar precio de mejora de defensa
 			this.setUpgradeDefenseTechnologyDeuteriumCost(
-					(int) (this.getUpgradeDefenseTechnologyDeuteriumCost() * 1.10 )); //10%
+					(int) (this.getUpgradeDefenseTechnologyDeuteriumCost() * 1.6 )); //60%
 			System.out.println("PRECIO MEJORA DEFENSA ANTES = " + precioAntiguoDefensa + " AHORA " + this.getUpgradeDefenseTechnologyDeuteriumCost());
 			System.out.println("DETERIUM ACTUAL = " + this.getDeuterium());
 		} else {
 			// Si no tienes suficiente material salta el error
-			throw new ResourceException("No tienes Deuterium suficiente!");
+			System.out.println("\nNo tienes Deuterium suficiente!\n");
 		}
 	}
 	// Actualizar "Mejoras" de Ataque
-	public void upgradeTechnologyAttack() throws ResourceException {
+	public void upgradeTechnologyAttack() {
 		int precioAntiguoAtaque = this.getUpgradeDefenseTechnologyDeuteriumCost();
 		if (this.getDeuterium() > this.getUpgradeAttackTechnologyDeuteriumCost()) {
 			this.setTechnologyAttack(this.getTechnologyAttack() + 1); // Sumamos 1 punto al lvl de ataque
@@ -112,60 +112,169 @@ public class Planet {
 			
 			// Actualizar precio de mejora de ataque
 			this.setUpgradeAttackTechnologyDeuteriumCost(
-					(int) (this.getUpgradeAttackTechnologyDeuteriumCost() * 1.10)); // 10%
+					(int) (this.getUpgradeAttackTechnologyDeuteriumCost() * 1.6)); // 60%
 			System.out.println("PRECIO MEJORA ATAQUE ANTES = " + precioAntiguoAtaque + " AHORA " + this.getUpgradeAttackTechnologyDeuteriumCost());
 			System.out.println("DETERIUM ACTUAL = " + this.getDeuterium());
 		} else {
 			// Si no tienes suficiente material salta el error
-			throw new ResourceException("No tienes Deuterium suficiente!");
+			System.out.println("\nNo tienes Deuterium suficiente!\n");
 		}
 	}
 	
 	// Añadir nuevas tropas a cambio de material (metal)
 	
 	public void newLightHunter(int n) {
-		try {
-			for (int i = 0; i < n; i++) {
+		LightHunter infoLightHunter = new LightHunter();
+		int metalCost = infoLightHunter.getMetalCost();
+		int deuteriumCost = infoLightHunter.getDeteriumCost();
+		int amount = 0;
+		
+		for (int i = 0; i < n; i++) {
+			// Primero comprobar si reune los materiales necesarios
+			if (this.getMetal() >= metalCost && this.getDeuterium() >= deuteriumCost){
+				//Restamos dinero
+				this.setMetal(this.getMetal() - metalCost);
+				this.setDeuterium(this.getDeuterium() - deuteriumCost);
 				army[0].add(new LightHunter());
+				amount++;
+			} else {
+				System.out.println("There's not enough material to build a Light Hunter");
+				break;
 			}
-		} catch (Exception e) {
-			
 		}
+		System.out.println("Added " + amount + " Light Hunter");
 	}
 	
 	public void newHeavyHunter(int n) {
+		HeavyHunter infoHeavyHunter = new HeavyHunter();
+		int metalCost = infoHeavyHunter.getMetalCost();
+		int deuteriumCost = infoHeavyHunter.getMetalCost();
+		int amount = 0;
+
 		for (int i = 0; i < n; i++) {
-			army[1].add(new HeavyHunter());		}
+			// Primero comprobar si reune los materiales necesarios
+			if (this.getMetal() >= metalCost && this.getDeuterium() >= deuteriumCost){
+				//Restamos dinero
+				this.setMetal(this.getMetal() - metalCost);
+				this.setDeuterium(this.getDeuterium() - deuteriumCost);
+				army[1].add(new HeavyHunter());
+				amount++;
+			} else {
+				System.out.println("There's not enough material to build a Heavy Hunter");
+				break;
+			}
+		}
+		System.out.println("Added " + amount + " Heavy Hunter");
 	}
 	
 	public void newBattleShip(int n) {
+		BattleShip infoBattleShip = new BattleShip();
+		int metalCost = infoBattleShip.getMetalCost();
+		int deuteriumCost = infoBattleShip.getMetalCost();
+		int amount = 0;
+
 		for (int i = 0; i < n; i++) {
-			army[2].add(new BattleShip());
+			// Primero comprobar si reune los materiales necesarios
+			if (this.getMetal() >= metalCost && this.getDeuterium() >= deuteriumCost){
+				//Restamos dinero
+				this.setMetal(this.getMetal() - metalCost);
+				this.setDeuterium(this.getDeuterium() - deuteriumCost);
+				army[2].add(new BattleShip());
+				amount++;
+			} else {
+				System.out.println("There's not enough material to build a Battle Ship");
+				break;
+			}
 		}
+		System.out.println("Added " + amount + " Battle Ship");
 	}
 	
 	public void newArmoredShip(int n) {
+		ArmoredShip infoArmoredShip = new ArmoredShip();
+		int metalCost = infoArmoredShip.getMetalCost();
+		int deuteriumCost = infoArmoredShip.getMetalCost();
+		int amount = 0;
+
 		for (int i = 0; i < n; i++) {
-			army[3].add(new ArmoredShip());
+			// Primero comprobar si reune los materiales necesarios
+			if (this.getMetal() >= metalCost && this.getDeuterium() >= deuteriumCost){
+				//Restamos dinero
+				this.setMetal(this.getMetal() - metalCost);
+				this.setDeuterium(this.getDeuterium() - deuteriumCost);
+				army[3].add(new ArmoredShip());
+				amount++;
+			} else {
+				System.out.println("There's not enough material to build a Armored Ship");
+				break;
+			}
 		}
+		System.out.println("Added " + amount + " Armored Ship");
 	}
 	
 	public void newMissileLauncher(int n) {
+		MissileLauncher infoMissileLauncher = new MissileLauncher(ARMOR_MISSILELAUNCHER,BASE_DAMAGE_MISSILELAUNCHER);
+		int metalCost = infoMissileLauncher.getMetalCost();
+		int deuteriumCost = infoMissileLauncher.getMetalCost();
+		int amount = 0;
+
 		for (int i = 0; i < n; i++) {
-			army[4].add(new MissileLauncher(i, i));
+			// Primero comprobar si reune los materiales necesarios
+			if (this.getMetal() >= metalCost && this.getDeuterium() >= deuteriumCost){
+				//Restamos dinero
+				this.setMetal(this.getMetal() - metalCost);
+				this.setDeuterium(this.getDeuterium() - deuteriumCost);
+				army[4].add(new MissileLauncher(ARMOR_MISSILELAUNCHER,BASE_DAMAGE_MISSILELAUNCHER));
+				amount++;
+			} else {
+				System.out.println("There's not enough material to build a Missile Launcher");
+				break;
+			}
 		}
+		System.out.println("Added " + amount + " Missile Launcher");
 	}
 	
 	public void newIonCannon(int n) {
+		IonCannon infoIonCannon = new IonCannon(ARMOR_IONCANNON,BASE_DAMAGE_IONCANNON);
+		int metalCost = infoIonCannon.getMetalCost();
+		int deuteriumCost = infoIonCannon.getMetalCost();
+		int amount = 0;
+
 		for (int i = 0; i < n; i++) {
-			army[5].add(new IonCannon(i, i));
+			// Primero comprobar si reune los materiales necesarios
+			if (this.getMetal() >= metalCost && this.getDeuterium() >= deuteriumCost){
+				//Restamos dinero
+				this.setMetal(this.getMetal() - metalCost);
+				this.setDeuterium(this.getDeuterium() - deuteriumCost);
+				army[5].add(new IonCannon(ARMOR_IONCANNON,BASE_DAMAGE_IONCANNON));
+				amount++;
+			} else {
+				System.out.println("There's not enough material to build a Ion Cannon");
+				break;
+			}
 		}
+		System.out.println("Added " + amount + " Ion Cannon");
 	}
 	
 	public void newPlasmaCannon(int n) {
+		PlasmaCannon infoPlasmaCannon = new PlasmaCannon(ARMOR_PLASMACANNON,BASE_DAMAGE_PLASMACANNON);
+		int metalCost = infoPlasmaCannon.getMetalCost();
+		int deuteriumCost = infoPlasmaCannon.getMetalCost();
+		int amount = 0;
+
 		for (int i = 0; i < n; i++) {
-			army[6].add(new PlasmaCannon(i, i));
+			// Primero comprobar si reune los materiales necesarios
+			if (this.getMetal() >= metalCost && this.getDeuterium() >= deuteriumCost){
+				//Restamos dinero
+				this.setMetal(this.getMetal() - metalCost);
+				this.setDeuterium(this.getDeuterium() - deuteriumCost);
+				army[6].add(new PlasmaCannon(ARMOR_PLASMACANNON,BASE_DAMAGE_PLASMACANNON));
+				amount++;
+			} else {
+				System.out.println("There's not enough material to build a Plasma Cannon");
+				break;
+			}
 		}
+		System.out.println("Added " + amount + " Plasma Cannon");
 	}
 	
 	public int calcDamageShip(int damage, int plus_damage) {
