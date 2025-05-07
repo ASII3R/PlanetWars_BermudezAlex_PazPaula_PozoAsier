@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Main implements Variables{
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ResourceException {
 		ArrayList<MilitaryUnit>[] planetArmy = new ArrayList[7];
 		for (int i = 0; i < planetArmy.length; i++){
 			planetArmy[i] = new ArrayList<>();
@@ -163,16 +163,25 @@ public class Main implements Variables{
 			}
 			
 			while(flg_menu_upgrade_technology){
-				System.out.printf("%-20s %d \n %-20s %d\n",
-								"Actual Defense Technology: ", planet.getTechnologyDefense(),
+				System.out.printf("%-20s %d\n %-20s %d\n",
+						"\nActual Defense Technology: ", planet.getTechnologyDefense(),
 								"Actual Attack Techology: ", planet.getTechnologyAttack());
 				System.out.printf("\n%-20s %d %-20s\n%-20s %d %-20s\n%-20s",
 							"1)Upgrade Defense Technology. Cost: ", planet.getUpgradeDefenseTechnologyDeuteriumCost(), "Deuterium",
 									"2)Upgrade Attack Technology. Cost: ", planet.getUpgradeAttackTechnologyDeuteriumCost(), " Deuterium",
 									"3)Go Back");
-				System.out.print("Option > ");
+				System.out.print("\nOption > ");
 				try {
-					
+					int user_input = input.nextInt();
+					if (user_input == 1){
+						planet.upgradeTechnologyDefense();
+					} else if(user_input == 2){
+						planet.upgradeTechnologyAttack();
+					} else if (user_input == 3){
+						flg_menu_upgrade_technology = false;
+						flg_menu_principal = true;
+
+					}
 				} catch (InputMismatchException e) {
 					System.out.println("Incorrect Option\n");
 					input.next();

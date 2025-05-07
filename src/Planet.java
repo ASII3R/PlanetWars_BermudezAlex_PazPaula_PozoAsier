@@ -82,7 +82,7 @@ public class Planet implements Variables{
 	// [ Funciones del Planeta ]
 	
 	// Actualizar "Mejoras" de Defensa
-	public void upgradeTechnologyDefense() throws ResourceException {
+	public void upgradeTechnologyDefense(){
 		int precioAntiguoDefensa = this.getUpgradeAttackTechnologyDeuteriumCost();
 		
 		if (this.getDeuterium() > this.getUpgradeDefenseTechnologyDeuteriumCost()) {
@@ -93,16 +93,16 @@ public class Planet implements Variables{
 			
 			// Actualizar precio de mejora de defensa
 			this.setUpgradeDefenseTechnologyDeuteriumCost(
-					(int) (this.getUpgradeDefenseTechnologyDeuteriumCost() * 1.10 )); //10%
+					(int) (this.getUpgradeDefenseTechnologyDeuteriumCost() * 1.6 )); //60%
 			System.out.println("PRECIO MEJORA DEFENSA ANTES = " + precioAntiguoDefensa + " AHORA " + this.getUpgradeDefenseTechnologyDeuteriumCost());
 			System.out.println("DETERIUM ACTUAL = " + this.getDeuterium());
 		} else {
 			// Si no tienes suficiente material salta el error
-			throw new ResourceException("No tienes Deuterium suficiente!");
+			System.out.println("\nNo tienes Deuterium suficiente!\n");
 		}
 	}
 	// Actualizar "Mejoras" de Ataque
-	public void upgradeTechnologyAttack() throws ResourceException {
+	public void upgradeTechnologyAttack() {
 		int precioAntiguoAtaque = this.getUpgradeDefenseTechnologyDeuteriumCost();
 		if (this.getDeuterium() > this.getUpgradeAttackTechnologyDeuteriumCost()) {
 			this.setTechnologyAttack(this.getTechnologyAttack() + 1); // Sumamos 1 punto al lvl de ataque
@@ -112,12 +112,12 @@ public class Planet implements Variables{
 			
 			// Actualizar precio de mejora de ataque
 			this.setUpgradeAttackTechnologyDeuteriumCost(
-					(int) (this.getUpgradeAttackTechnologyDeuteriumCost() * 1.10)); // 10%
+					(int) (this.getUpgradeAttackTechnologyDeuteriumCost() * 1.6)); // 60%
 			System.out.println("PRECIO MEJORA ATAQUE ANTES = " + precioAntiguoAtaque + " AHORA " + this.getUpgradeAttackTechnologyDeuteriumCost());
 			System.out.println("DETERIUM ACTUAL = " + this.getDeuterium());
 		} else {
 			// Si no tienes suficiente material salta el error
-			throw new ResourceException("No tienes Deuterium suficiente!");
+			System.out.println("\nNo tienes Deuterium suficiente!\n");
 		}
 	}
 	
