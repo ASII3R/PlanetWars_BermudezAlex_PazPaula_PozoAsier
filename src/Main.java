@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Main implements Variables{
 
@@ -16,8 +18,21 @@ public class Main implements Variables{
 		planetArmy[4].add(new MissileLauncher(ARMOR_MISSILELAUNCHER, BASE_DAMAGE_MISSILELAUNCHER));
 		planetArmy[5].add(new IonCannon(ARMOR_IONCANNON, BASE_DAMAGE_PLASMACANNON));
 		planetArmy[6].add(new PlasmaCannon(ARMOR_PLASMACANNON, BASE_DAMAGE_PLASMACANNON));
-
+		
 		Planet planet = new Planet(0,0, 53500,26800,UPGRADE_BASE_DEFENSE_TECHNOLOGY_DEUTERIUM_COST,UPGRADE_BASE_ATTACK_TECHNOLOGY_DEUTERIUM_COST,planetArmy);
+		
+		// [TIMER]
+		Timer timer = new Timer();
+		TimerTask recolectResources = new TimerTask() {
+			public void run() {
+				// Recoger Metal
+				planet.setMetal(planet.getMetal() + PLANET_METAL_GENERATED);
+				// Recoger Deuterium
+				planet.setDeuterium(planet.getDeuterium() + PLANET_DEUTERIUM_GENERATED);
+				System.out.println("\nRecolected Resources...\n");
+			}
+		};
+		timer.schedule(recolectResources, 60000,60000); // Cada 1 minuto recolecta recursos
 		
 		// [BATTLE SOURCES]
 		Battle battle = new Battle();
@@ -189,6 +204,8 @@ public class Main implements Variables{
 
 			}
 		}
+
+		
 
 		System.out.println("Closing ...");
 		input.close();
