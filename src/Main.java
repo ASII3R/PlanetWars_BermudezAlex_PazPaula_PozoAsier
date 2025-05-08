@@ -205,8 +205,55 @@ public class Main implements Variables{
 			}
 		}
 
+			class Batalla {
+				TimerTask batalla = new TimerTask() {
+				
+				public void run() {
+					// Aquí va la lógica principal de ejecución de la batalla.
+				}
+			
+				public void initInitialArmies() {
+					// para inicializar el array initialArmies y poder calcular los reportes
+				}
+			
+				void updateResourcesLooses() {
+					// para generar el array de pérdidas
+				}
+			
+				void fleetResourceCost(ArrayList<MilitaryUnit>[] army) {
+					// para calcular costes de las flotas
+				}
+			
+				void initialFleetNumber(ArrayList<MilitaryUnit>[] army) {
+					// para calcular el número de unidades iniciales de cada flota
+				}
+			
+				int remainderPercentageFleet(ArrayList<MilitaryUnit>[] army) {
+					// para calcular los porcentajes de unidades que quedan respecto los ejércitos iniciales
+					return 0;
+				}
+			
+				int getGroupDefender(ArrayList<MilitaryUnit>[] army) {
+					// para escoger grupo defensor
+					return 0;
+				}
+			
+				int getPlanetGroupAttacker() {
+					// para escoger grupo atacante del planeta
+					return 0;
+				}
+			
+				int getEnemyGroupAttacker() {
+					// para escoger grupo atacante enemigo
+					return 0;
+				}
+			
+				void resetArmyArmor() {
+					// resetear los blindajes de nuestro ejército
+				}
+			};
+		}
 		
-
 		System.out.println("Closing ...");
 		input.close();
 	}
