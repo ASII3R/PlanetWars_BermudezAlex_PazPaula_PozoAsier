@@ -12,7 +12,6 @@ public class LightHunter extends Ship{
 		// Crea un objeto que se crea con sus propiedades por defecto
 	}
 
-	
 	public int attack() {
 		return getBaseDamage();
 	}
