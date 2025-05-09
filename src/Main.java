@@ -241,7 +241,7 @@ public class Main implements Variables{
 				int remainderPercentageFleet(ArrayList<MilitaryUnit>[] army) {
 					// para calcular los porcentajes de unidades que quedan respecto los ejércitos iniciales
 					return 0;
-				}
+				};
 			
 				int getGroupDefender(ArrayList<MilitaryUnit>[] army) {
 					// para escoger grupo defensor
