@@ -24,7 +24,8 @@ public class Main implements Variables{
 		planetArmy[6].add(new PlasmaCannon(ARMOR_PLASMACANNON, BASE_DAMAGE_PLASMACANNON));
 		
 		Planet planet = new Planet(0,0, 53500,26800,UPGRADE_BASE_DEFENSE_TECHNOLOGY_DEUTERIUM_COST,UPGRADE_BASE_ATTACK_TECHNOLOGY_DEUTERIUM_COST,planetArmy);
-		Batalla batalla = new Batalla();
+		Battle battle = new Battle();
+		Batalla batalla = new Batalla(battle);
 
 		// [TIMER]
 		Timer timer = new Timer();
@@ -40,7 +41,6 @@ public class Main implements Variables{
 		timer.schedule(recolectResources, 60000,60000); // Cada 1 minuto recolecta recursos
 		
 		// [BATTLE SOURCES]
-		Battle battle = new Battle();
 		battle.setPlanetArmy(planetArmy);
 		
 		Scanner input = new Scanner(System.in);
@@ -210,81 +210,86 @@ public class Main implements Variables{
 			}
 		}
 
-			class Batalla {
-				TimerTask batalla = new TimerTask() {
-				
-				public void createEnemyArmy() {
-					Random random = new Random();
-					if (random.nextDouble() < 0.35) {
-						battle.getEnemyArmy()[0].add(new LightHunter());
-					}
-					if (random.nextDouble() < 0.25) {
-						battle.getEnemyArmy()[1].add(new HeavyHunter());
-					}
-					if (random.nextDouble() < 0.20) {
-						battle.getEnemyArmy()[2].add(new BattleShip());
-					}
-					if (random.nextDouble() < 0.20) {
-						battle.getEnemyArmy()[3].add(new ArmoredShip());
-					}
-					
-				}
-
-
-				public void run() {
-					// Aquí va la lógica principal de ejecución de la batalla.
-				}
-			
-				public void initInitialArmies(ArrayList<MilitaryUnit>[] planetArmy, ArrayList<MilitaryUnit>[] enemyArmy) {
-					// para inicializar el array initialArmies y poder calcular los reportes
-					int[][] initialArmies = new int[2][7];
-					for (int i = 0; i < 7; i++) {
-						initialArmies[0][i] = planetArmy[i].size();
-						initialArmies[1][i] = enemyArmy[i].size();
-						battle.setInitialArmies(initialArmies);
-					}
-
-				}
-			
-				void updateResourcesLooses() {
-					// para generar el array de pérdidas
-				}
-			
-				void fleetResourceCost(ArrayList<MilitaryUnit>[] army) {
-					// para calcular costes de las flotas
-				}
-			
-				void initialFleetNumber(ArrayList<MilitaryUnit>[] army) {
-					// para calcular el número de unidades iniciales de cada flota
-				}
-			
-				int remainderPercentageFleet(ArrayList<MilitaryUnit>[] army) {
-					// para calcular los porcentajes de unidades que quedan respecto los ejércitos iniciales
-					return 0;
-				}
-			
-				int getGroupDefender(ArrayList<MilitaryUnit>[] army) {
-					// para escoger grupo defensor
-					return 0;
-				}
-			
-				int getPlanetGroupAttacker() {
-					// para escoger grupo atacante del planeta
-					return 0;
-				}
-			
-				int getEnemyGroupAttacker() {
-					// para escoger grupo atacante enemigo
-					return 0;
-				}
-			
-				void resetArmyArmor() {
-					// resetear los blindajes de nuestro ejército
-				}
-			};
-		}
-		
 		System.out.println("Closing ...");
 		input.close();
 	}
+}
+class Batalla {
+	private Battle battle;
+
+    public Batalla(Battle battle) {
+        this.battle = battle;
+    }
+
+	TimerTask batalla = new TimerTask() {
+	
+	public void createEnemyArmy() {
+		Random random = new Random();
+		if (random.nextDouble() < 0.35) {
+			battle.getEnemyArmy()[0].add(new LightHunter());
+		}
+		if (random.nextDouble() < 0.25) {
+			battle.getEnemyArmy()[1].add(new HeavyHunter());
+		}
+		if (random.nextDouble() < 0.20) {
+			battle.getEnemyArmy()[2].add(new BattleShip());
+		}
+		if (random.nextDouble() < 0.20) {
+			battle.getEnemyArmy()[3].add(new ArmoredShip());
+		}
+		
+	}
+
+
+	public void run() {
+		// Aquí va la lógica principal de ejecución de la batalla.
+	}
+
+	public void initInitialArmies(ArrayList<MilitaryUnit>[] planetArmy, ArrayList<MilitaryUnit>[] enemyArmy) {
+		// para inicializar el array initialArmies y poder calcular los reportes
+		int[][] initialArmies = new int[2][7];
+		for (int i = 0; i < 7; i++) {
+			initialArmies[0][i] = planetArmy[i].size();
+			initialArmies[1][i] = enemyArmy[i].size();
+			battle.setInitialArmies(initialArmies);
+		}
+
+	}
+
+	void updateResourcesLooses() {
+		// para generar el array de pérdidas
+	}
+
+	void fleetResourceCost(ArrayList<MilitaryUnit>[] army) {
+		// para calcular costes de las flotas
+	}
+
+	void initialFleetNumber(ArrayList<MilitaryUnit>[] army) {
+		// para calcular el número de unidades iniciales de cada flota
+	}
+
+	int remainderPercentageFleet(ArrayList<MilitaryUnit>[] army) {
+		// para calcular los porcentajes de unidades que quedan respecto los ejércitos iniciales
+		return 0;
+	}
+
+	int getGroupDefender(ArrayList<MilitaryUnit>[] army) {
+		// para escoger grupo defensor
+		return 0;
+	}
+
+	int getPlanetGroupAttacker() {
+		// para escoger grupo atacante del planeta
+		return 0;
+	}
+
+	int getEnemyGroupAttacker() {
+		// para escoger grupo atacante enemigo
+		return 0;
+	}
+
+	void resetArmyArmor() {
+		// resetear los blindajes de nuestro ejército
+	}
+};
 }
