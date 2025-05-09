@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.InputMismatchException;
-import java.util.Random;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -24,7 +23,7 @@ public class Main implements Variables{
 		planetArmy[6].add(new PlasmaCannon(ARMOR_PLASMACANNON, BASE_DAMAGE_PLASMACANNON));
 		
 		Planet planet = new Planet(0,0, 53500,26800,UPGRADE_BASE_DEFENSE_TECHNOLOGY_DEUTERIUM_COST,UPGRADE_BASE_ATTACK_TECHNOLOGY_DEUTERIUM_COST,planetArmy);
-		Batalla batalla = new Batalla();
+	//	Batalla batalla = new Batalla();
 
 		// [TIMER]
 		Timer timer = new Timer();
@@ -213,37 +212,22 @@ public class Main implements Variables{
 			class Batalla {
 				TimerTask batalla = new TimerTask() {
 				
-				public void createEnemyArmy() {
-					Random random = new Random();
-					if (random.nextDouble() < 0.35) {
-						battle.getEnemyArmy()[0].add(new LightHunter());
-					}
-					if (random.nextDouble() < 0.25) {
-						battle.getEnemyArmy()[1].add(new HeavyHunter());
-					}
-					if (random.nextDouble() < 0.20) {
-						battle.getEnemyArmy()[2].add(new BattleShip());
-					}
-					if (random.nextDouble() < 0.20) {
-						battle.getEnemyArmy()[3].add(new ArmoredShip());
-					}
-					
-				}
-
-
 				public void run() {
 					// Aquí va la lógica principal de ejecución de la batalla.
 				}
-			
-				public void initInitialArmies(ArrayList<MilitaryUnit>[] planetArmy, ArrayList<MilitaryUnit>[] enemyArmy) {
-					// para inicializar el array initialArmies y poder calcular los reportes
-					int[][] initialArmies = new int[2][7];
-					for (int i = 0; i < 7; i++) {
-						initialArmies[0][i] = planetArmy[i].size();
-						initialArmies[1][i] = enemyArmy[i].size();
-						battle.setInitialArmies(initialArmies);
-					}
 
+				private void viewThreat() { //para ver que tipo de amenaza es
+					System.out.println("\n[THREAT WARNING] Enemy Army approaching:");
+					for (int i = 0; i < battle.getEnemyArmy().length; i++) {
+						if (!battle.getEnemyArmy()[i].isEmpty()) {
+							System.out.println(battle.getEnemyArmy()[i].get(0).getClass().getSimpleName()
+									+ " x" + battle.getEnemyArmy()[i].size());
+						}
+					}
+				}
+
+				public void initInitialArmies() {
+					// para inicializar el array initialArmies y poder calcular los reportes
 				}
 			
 				void updateResourcesLooses() {
@@ -261,7 +245,7 @@ public class Main implements Variables{
 				int remainderPercentageFleet(ArrayList<MilitaryUnit>[] army) {
 					// para calcular los porcentajes de unidades que quedan respecto los ejércitos iniciales
 					return 0;
-				}
+				};
 			
 				int getGroupDefender(ArrayList<MilitaryUnit>[] army) {
 					// para escoger grupo defensor
