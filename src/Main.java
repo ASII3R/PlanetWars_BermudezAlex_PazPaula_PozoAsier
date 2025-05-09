@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -226,44 +227,116 @@ public class Main implements Variables{
 					}
 				}
 
-				public void initInitialArmies() {
-					// para inicializar el array initialArmies y poder calcular los reportes
+				void initInitialArmies(ArrayList<MilitaryUnit>[] army, int[] initialArmies) {
+					// Inicializar el array con el tamaño de cada flota
+					for (int i = 0; i < army.length; i++) {
+						initialArmies[i] = army[i].size(); // Guardar el número inicial de unidades en cada flota
+					}
+				
+					System.out.println("Initial armies initialized:");
+					for (int i = 0; i < initialArmies.length; i++) {
+						System.out.println("Fleet " + i + ": " + initialArmies[i] + " units");
+					}
 				}
 			
 				void updateResourcesLooses() {
 					// para generar el array de pérdidas
+					ArrayList<Integer> resourceLosses = new ArrayList<>();
+					resourceLosses.add(planet.getMetal());
+					resourceLosses.add(planet.getDeuterium());
+					resourceLosses.add(planet.getTechnologyDefense());
+					resourceLosses.add(planet.getTechnologyAttack());
+					resourceLosses.add(planet.getMetal() - planet.getMetal());
+					resourceLosses.add(planet.getDeuterium() - planet.getDeuterium());
+					resourceLosses.add(planet.getTechnologyDefense() - planet.getTechnologyDefense());
+					resourceLosses.add(planet.getTechnologyAttack() - planet.getTechnologyAttack());	
 				}
 			
 				void fleetResourceCost(ArrayList<MilitaryUnit>[] army) {
 					// para calcular costes de las flotas
+					int totalMetalCost = 0;
+					int totalDeuteriumCost = 0;
+
+					//iterar sobre cada grupo de unidades en el ejército
+					for (ArrayList<MilitaryUnit> group : army) {
+						for (MilitaryUnit unit : group) {
+							totalMetalCost += unit.getMetalCost(); // Sumar el coste de metal de cada unidad
+							totalDeuteriumCost += unit.getDeteriumCost(); // Sumar el coste de deuterio de cada unidad
+						}
+					}
+				
+					// Imprimir los costes totales
+					System.out.println("Total Metal Cost: " + totalMetalCost);
+					System.out.println("Total Deuterium Cost: " + totalDeuteriumCost);
 				}
+
+
 			
 				void initialFleetNumber(ArrayList<MilitaryUnit>[] army) {
 					// para calcular el número de unidades iniciales de cada flota
+					System.out.println("Initial number of units in each fleet:");
+
+					// Iterar sobre cada grupo de unidades en el ejército
+					for (int i = 0; i < army.length; i++) {
+						int unitCount = army[i].size(); // Obtener el número de unidades en el grupo
+						System.out.println("Fleet " + i + ": " + unitCount + " units");
+					}
 				}
 			
-				int remainderPercentageFleet(ArrayList<MilitaryUnit>[] army) {
-					// para calcular los porcentajes de unidades que quedan respecto los ejércitos iniciales
-					return 0;
-				};
+				int remainderPercentageFleet(ArrayList<MilitaryUnit>[] army, int[] initialCounts) {
+					int totalInitialUnits = 0;
+					int totalRemainingUnits = 0;
+				
+					// Calcular el total de unidades iniciales y las unidades restantes
+					for (int i = 0; i < army.length; i++) {
+						totalInitialUnits += initialCounts[i]; // Sumar las unidades iniciales
+						totalRemainingUnits += army[i].size(); // Sumar las unidades restantes
+					}
+				
+					// Evitar división por cero
+					if (totalInitialUnits == 0) {
+						return 0;
+					}
+				
+					// Calcular el porcentaje de unidades restantes
+					int percentageRemaining = (totalRemainingUnits * 100) / totalInitialUnits;
+					return percentageRemaining;
+				}
 			
 				int getGroupDefender(ArrayList<MilitaryUnit>[] army) {
-					// para escoger grupo defensor
-					return 0;
+					// Escoger el grupo defensor con más unidades
+					int maxUnits = 0;
+					int defenderGroup = -1;
+				
+					for (int i = 0; i < army.length; i++) {
+						if (army[i].size() > maxUnits) {
+							maxUnits = army[i].size();
+							defenderGroup = i;
+						}
+					}
+				
+					return defenderGroup; // Retorna el índice del grupo defensor
 				}
-			
+				
 				int getPlanetGroupAttacker() {
-					// para escoger grupo atacante del planeta
-					return 0;
+					// Escoger el grupo atacante del planeta (aleatorio)
+					Random random = new Random();
+					return random.nextInt(7); // Retorna un índice aleatorio entre 0 y 6
 				}
-			
+				
 				int getEnemyGroupAttacker() {
-					// para escoger grupo atacante enemigo
-					return 0;
+					// Escoger el grupo atacante enemigo (aleatorio)
+					Random random = new Random();
+					return random.nextInt(7); // Retorna un índice aleatorio entre 0 y 6
 				}
-			
-				void resetArmyArmor() {
-					// resetear los blindajes de nuestro ejército
+				
+				void resetArmyArmor(ArrayList<MilitaryUnit>[] army) {
+					// Resetear los blindajes de todas las unidades en el ejército
+					for (ArrayList<MilitaryUnit> group : army) {
+						for (MilitaryUnit unit : group) {
+							unit.resetArmor(); // Llama al método resetArmor() de cada unidad
+						}
+					}
 				}
 			};
 		}
