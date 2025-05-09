@@ -211,7 +211,17 @@ public class Main implements Variables{
 				public void run() {
 					// Aquí va la lógica principal de ejecución de la batalla.
 				}
-			
+
+				private void viewThreat() { //para ver que tipo de amenaza es
+					System.out.println("\n[THREAT WARNING] Enemy Army approaching:");
+					for (int i = 0; i < battle.getEnemyArmy().length; i++) {
+						if (!battle.getEnemyArmy()[i].isEmpty()) {
+							System.out.println(battle.getEnemyArmy()[i].get(0).getClass().getSimpleName()
+									+ " x" + battle.getEnemyArmy()[i].size());
+						}
+					}
+				}
+
 				public void initInitialArmies() {
 					// para inicializar el array initialArmies y poder calcular los reportes
 				}
