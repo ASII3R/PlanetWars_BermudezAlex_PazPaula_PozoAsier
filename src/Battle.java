@@ -31,6 +31,12 @@ public class Battle {
 	public ArrayList<MilitaryUnit>[] getEnemyArmy() {
 		return enemyArmy;
 	}
+	public void setEnemyArmy(ArrayList<MilitaryUnit>[] enemyArmy) {
+		this.enemyArmy = enemyArmy;
+	}
+	public void setInitialArmies(int[][] initialArmies) {
+		this.initialArmies = initialArmies;
+	}
 	
 	
 	

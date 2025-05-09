@@ -8,6 +8,9 @@ public class Main implements Variables{
 
 	public static void main(String[] args) throws ResourceException {
 		ArrayList<MilitaryUnit>[] planetArmy = new ArrayList[7];
+		ArrayList<MilitaryUnit>[] enemyArmy = new ArrayList[7];
+		
+
 		for (int i = 0; i < planetArmy.length; i++){
 			planetArmy[i] = new ArrayList<>();
 		}
@@ -20,7 +23,8 @@ public class Main implements Variables{
 		planetArmy[6].add(new PlasmaCannon(ARMOR_PLASMACANNON, BASE_DAMAGE_PLASMACANNON));
 		
 		Planet planet = new Planet(0,0, 53500,26800,UPGRADE_BASE_DEFENSE_TECHNOLOGY_DEUTERIUM_COST,UPGRADE_BASE_ATTACK_TECHNOLOGY_DEUTERIUM_COST,planetArmy);
-		
+	//	Batalla batalla = new Batalla();
+
 		// [TIMER]
 		Timer timer = new Timer();
 		TimerTask recolectResources = new TimerTask() {
