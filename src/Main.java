@@ -8,6 +8,26 @@ import java.util.TimerTask;
 public class Main implements Variables{
 
 	public static void main(String[] args) throws ResourceException {
+		DatabaseManager.insertPlanetStats(
+		1, "Planeta Tierra", 10000, 5000, 2, 3, 1,
+		5, 2, 1, 10, 4, 2, 1
+		);
+		// Insertar estadísticas de la batalla
+		//DatabaseManager.insertBattleStats(planetId, numBattle, metalAcquired, deuteriumAcquired);
+
+		// Insertar log de la batalla (puedes llamar esto en un bucle para cada línea del log)
+		//DatabaseManager.insertBattleLog(planetId, numBattle, 1, "La batalla comenzó...");
+
+		// Insertar defensas construidas/destruidas
+		//DatabaseManager.insertPlanetBattleDefense(planetId, numBattle, missileLauncherBuilt, missileLauncherDestroyed, ionCannonBuilt, ionCannonDestroyed, plasmaCanonBuilt, plasmaCanonDestroyed);
+
+		// Insertar unidades destruidas del ejército del planeta
+		//DatabaseManager.insertPlanetBattleArmy(planetId, numBattle, lightHunterDestroyed, heavyHunterDestroyed, battleShipDestroyed, armoredShipDestroyed);
+
+		// Insertar unidades destruidas del ejército enemigo
+		//DatabaseManager.insertEnemyArmy(planetId, numBattle, lightHunterDestroyed, heavyHunterDestroyed, battleShipDestroyed, armoredShipDestroyed);
+
+		// DatabaseManager.selectPlanetStats();  prueba del select para comprobar si funciona la bbdd
 		ArrayList<MilitaryUnit>[] planetArmy = new ArrayList[7];
 		ArrayList<MilitaryUnit>[] enemyArmy = new ArrayList[7];
 		
