@@ -130,25 +130,124 @@ public class DatabaseManager {
             e.printStackTrace();
         }
     }
-    // Selecciona y muestra todos los registros de Planet_stats
-    /*public static void selectPlanetStats() {
-        String sql = "SELECT * FROM Planet_stats";
+   
+    //UPDATES 
+    // Update Planet_stats
+    public static void updatePlanetStats(
+        int planet_id, String name, int resource_metal_amount, int resource_deuterion_amount,
+        int technology_defense_level, int technology_attack_level, int battles_counter,
+        int missile_launcher_remaining, int ion_cannon_remaining, int plasma_canon_remaining,
+        int light_hunter_remaining, int heavy_hunter_remaining, int battleship_remaining, int armored_ship_remaining
+    ) {
+        String sql = "UPDATE Planet_stats SET name=?, resource_metal_amount=?, resource_deuterion_amount=?, technology_defense_level=?, technology_attack_level=?, battles_counter=?, missile_launcher_remaining=?, ion_cannon_remaining=?, plasma_canon_remaining=?, light_hunter_remaining=?, heavy_hunter_remaining=?, battleship_remaining=?, armored_ship_remaining=? WHERE planet_id=?";
         try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                System.out.println(
-                    "planet_id: " + rs.getInt("planet_id") +
-                    ", name: " + rs.getString("name") +
-                    ", metal: " + rs.getInt("resource_metal_amount") +
-                    ", deuterium: " + rs.getInt("resource_deuterion_amount") +
-                    ", tech_def: " + rs.getInt("technology_defense_level") +
-                    ", tech_att: " + rs.getInt("technology_attack_level") +
-                    ", battles: " + rs.getInt("battles_counter")
-                );
-            }
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, name);
+            stmt.setInt(2, resource_metal_amount);
+            stmt.setInt(3, resource_deuterion_amount);
+            stmt.setInt(4, technology_defense_level);
+            stmt.setInt(5, technology_attack_level);
+            stmt.setInt(6, battles_counter);
+            stmt.setInt(7, missile_launcher_remaining);
+            stmt.setInt(8, ion_cannon_remaining);
+            stmt.setInt(9, plasma_canon_remaining);
+            stmt.setInt(10, light_hunter_remaining);
+            stmt.setInt(11, heavy_hunter_remaining);
+            stmt.setInt(12, battleship_remaining);
+            stmt.setInt(13, armored_ship_remaining);
+            stmt.setInt(14, planet_id);
+            stmt.executeUpdate();
+            System.out.println("Update en Planet_stats realizado correctamente.");
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-    }*/
-}
+        }
+    }
+
+    // Update Battle_stats
+    public static void updateBattleStats(int planet_id, int num_battle, int resource_metal_acquired, int resource_deuterion_acquired) {
+        String sql = "UPDATE Battle_stats SET resource_metal_acquired=?, resource_deuterion_acquired=? WHERE planet_id=? AND num_battle=?";
+        try (Connection conn = getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, resource_metal_acquired);
+            stmt.setInt(2, resource_deuterion_acquired);
+            stmt.setInt(3, planet_id);
+            stmt.setInt(4, num_battle);
+            stmt.executeUpdate();
+            System.out.println("Update en Battle_stats realizado correctamente.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Update Battle_log
+    public static void updateBattleLog(int planet_id, int num_battle, int num_line, String log_entry) {
+        String sql = "UPDATE Battle_log SET log_entry=? WHERE planet_id=? AND num_battle=? AND num_line=?";
+        try (Connection conn = getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, log_entry);
+            stmt.setInt(2, planet_id);
+            stmt.setInt(3, num_battle);
+            stmt.setInt(4, num_line);
+            stmt.executeUpdate();
+            System.out.println("Update en Battle_log realizado correctamente.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Update Planet_battle_defense
+    public static void updatePlanetBattleDefense(int planet_id, int num_battle, int missile_launcher_built, int missile_launcher_destroyed, int ion_cannon_built, int ion_cannon_destroyed, int plasma_canon_built, int plasma_canon_destroyed) {
+        String sql = "UPDATE Planet_battle_defense SET missile_launcher_built=?, missile_launcher_destroyed=?, ion_cannon_built=?, ion_cannon_destroyed=?, plasma_canon_built=?, plasma_canon_destroyed=? WHERE planet_id=? AND num_battle=?";
+        try (Connection conn = getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, missile_launcher_built);
+            stmt.setInt(2, missile_launcher_destroyed);
+            stmt.setInt(3, ion_cannon_built);
+            stmt.setInt(4, ion_cannon_destroyed);
+            stmt.setInt(5, plasma_canon_built);
+            stmt.setInt(6, plasma_canon_destroyed);
+            stmt.setInt(7, planet_id);
+            stmt.setInt(8, num_battle);
+            stmt.executeUpdate();
+            System.out.println("Update en Planet_battle_defense realizado correctamente.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Update Planet_battle_army
+    public static void updatePlanetBattleArmy(int planet_id, int num_battle, int light_hunter_destroyed, int heavy_hunter_destroyed, int battle_ship_destroyed, int armored_ship_destroyed) {
+        String sql = "UPDATE Planet_battle_army SET light_hunter_destroyed=?, heavy_hunter_destroyed=?, battleship_destroyed=?, armored_ship_destroyed=? WHERE planet_id=? AND num_battle=?";
+        try (Connection conn = getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, light_hunter_destroyed);
+            stmt.setInt(2, heavy_hunter_destroyed);
+            stmt.setInt(3, battle_ship_destroyed);
+            stmt.setInt(4, armored_ship_destroyed);
+            stmt.setInt(5, planet_id);
+            stmt.setInt(6, num_battle);
+            stmt.executeUpdate();
+            System.out.println("Update en Planet_battle_army realizado correctamente.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Update Enemy_army
+    public static void updateEnemyArmy(int planet_id, int num_battle, int light_hunter_destroyed, int heavy_hunter_destroyed, int battle_ship_destroyed, int armored_ship_destroyed) {
+            String sql = "UPDATE Enemy_army SET light_hunter_destroyed=?, heavy_hunter_destroyed=?, battleship_destroyed=?, armored_ship_destroyed=? WHERE planet_id=? AND num_battle=?";
+            try (Connection conn = getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, light_hunter_destroyed);
+                stmt.setInt(2, heavy_hunter_destroyed);
+                stmt.setInt(3, battle_ship_destroyed);
+                stmt.setInt(4, armored_ship_destroyed);
+                stmt.setInt(5, planet_id);
+                stmt.setInt(6, num_battle);
+                stmt.executeUpdate();
+                System.out.println("Update en Enemy_army realizado correctamente.");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
