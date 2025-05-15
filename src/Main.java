@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -84,7 +85,7 @@ public class Main implements Variables {
 
                     } else if (user_input == 4) {
                         System.out.println("Mostrando reportes de batalla...");
-                        batalla.(planet, enemyArmy);
+                        //batalla.(planet, enemyArmy);
                     } else if (user_input == 0) {
                         running = false;
                         flg_menu_principal = false;
@@ -358,16 +359,39 @@ class Batalla {
         ArrayList<MilitaryUnit>[] planetArmy = battle.getPlanetArmy();
 
         for (ArrayList<MilitaryUnit> group : planetArmy) {
-            group.removeIf(unit -> unit.getActualArmor() <= 0);
+            Iterator<MilitaryUnit> iterator = group.iterator();
+            while (iterator.hasNext()) {
+                MilitaryUnit unit = iterator.next();
+                if (unit.getActualArmor() <= 0) {
+                    // Aumentamos contador de destrucciones de esa nave
+                    if (unit instanceof Ship) {
+                        Ship ship = (Ship) unit;
+                        ship.setShipConstruido(ship.getShipDestruido() + 1);
+                    }
+                    // Eliminamos del ejército
+                    iterator.remove();
+                }
+            }
         }
     }
+
 
     private void updateEnemyArmyAfterBattle() {
-        ArrayList<MilitaryUnit>[] enemyArmy = battle.getEnemyArmy();
+    ArrayList<MilitaryUnit>[] enemyArmy = battle.getEnemyArmy();
 
-        for (ArrayList<MilitaryUnit> group : enemyArmy) {
-            group.removeIf(unit -> unit.getActualArmor() <= 0);
+    for (ArrayList<MilitaryUnit> group : enemyArmy) {
+        // Usamos un iterator para poder eliminar mientras recorremos
+        Iterator<MilitaryUnit> iterator = group.iterator();
+        while (iterator.hasNext()) {
+            MilitaryUnit unit = iterator.next();
+            if (unit.getActualArmor() <= 0) {
+                // Incrementar contador destrucciones antes de eliminar
+                Ship shipUnit = (Ship) unit;
+                shipUnit.setShipDestruido(shipUnit.getShipDestruido() + 1);
+                iterator.remove();
+            }
         }
     }
+}
 }
 
