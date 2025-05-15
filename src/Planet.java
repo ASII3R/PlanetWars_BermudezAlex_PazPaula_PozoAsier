@@ -9,10 +9,11 @@ public class Planet implements Variables{
 	private int upgradeDefenseTechnologyDeuteriumCost;
 	private int upgradeAttackTechnologyDeuteriumCost;
 	private ArrayList<MilitaryUnit>[] army = new ArrayList[7];
+	private int idPlanet;
 	
 	public Planet(int technologyDefense, int technologyAttack, int metal, int deuterium,
 			int upgradeDefenseTechnologyDeuteriumCost, int upgradeAttackTechnologyDeuteriumCost,
-			ArrayList<MilitaryUnit>[] army) 
+			ArrayList<MilitaryUnit>[] army, int idPlanet) 
 	{
 		super();
 		this.technologyDefense = technologyDefense;
@@ -22,6 +23,7 @@ public class Planet implements Variables{
 		this.upgradeDefenseTechnologyDeuteriumCost = upgradeDefenseTechnologyDeuteriumCost;
 		this.upgradeAttackTechnologyDeuteriumCost = upgradeAttackTechnologyDeuteriumCost;
 		this.army = army;
+		this.idPlanet = idPlanet;
 	}
 
 	public int getTechnologyDefense() {
@@ -78,6 +80,9 @@ public class Planet implements Variables{
 
 	public void setArmy(ArrayList<MilitaryUnit>[] army) {
 		this.army = army;
+	}
+	public int getIdPlanet() {
+		return idPlanet;
 	}
 	
 	// [ Funciones del Planeta ]
@@ -304,6 +309,14 @@ public class Planet implements Variables{
 		int damageBonus = (this.getTechnologyAttack() * plus_damage * damage) /  100;
 		damageTotal = damage + damageBonus;
 		return damageTotal;
+	}
+
+	public void receiveMetal(int amount) {
+		this.setMetal(this.getMetal() + amount);
+	}
+	
+	public void receiveDeuterium(int amount) {
+		this.setDeuterium(this.getDeuterium() + amount);
 	}
 	
 	// Ver esto del planeta (informe general) habra que hacerlo formateado

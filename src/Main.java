@@ -25,7 +25,7 @@ public class Main implements Variables {
             enemyArmy[i] = new ArrayList<>();
         }
 
-        Planet planet = new Planet(0, 0, 53500, 26800, UPGRADE_BASE_DEFENSE_TECHNOLOGY_DEUTERIUM_COST, UPGRADE_BASE_ATTACK_TECHNOLOGY_DEUTERIUM_COST, planetArmy);
+        Planet planet = new Planet(0, 0, 53500, 26800, UPGRADE_BASE_DEFENSE_TECHNOLOGY_DEUTERIUM_COST, UPGRADE_BASE_ATTACK_TECHNOLOGY_DEUTERIUM_COST, planetArmy,1);
 
         // [TIMER]
         Timer timer = new Timer();
@@ -84,7 +84,7 @@ public class Main implements Variables {
 
                     } else if (user_input == 4) {
                         System.out.println("Mostrando reportes de batalla...");
-                        batalla.resolveBattle();
+                        batalla.(planet, enemyArmy);
                     } else if (user_input == 0) {
                         running = false;
                         flg_menu_principal = false;
@@ -216,6 +216,7 @@ public class Main implements Variables {
         }
 
         System.out.println("Closing ...");
+        System.exit(0);
         input.close();
     }
 }
@@ -281,7 +282,7 @@ class Batalla {
         System.out.println("Total Deuterium Cost: " + totalDeuteriumCost);
     }
 
-    public void resolveBattle() {
+    public void resolveBattle(Planet planet, ArrayList<MilitaryUnit>[] enemyArmy) {
         System.out.println("\n[Battle Report]");
 
         // Aplica daño mutuo entre ejércitos
@@ -296,13 +297,32 @@ class Batalla {
         int enemyPower = calculateArmyPower(battle.getEnemyArmy());
 
         if (planetPower > enemyPower) {
-            System.out.println("The planet won the battle!");
-            System.out.println("The planet receives 100 Metal and 50 Deuterium.");
-            planet.receiveMetal(100);
-            planet.receiveDeuterium(50);
+            System.out.println("Planet wins the battle!");
+        
+            int totalRecoveredMetal = 0;
+            int totalRecoveredDeuterium = 0;
+        
+            for (ArrayList<MilitaryUnit> unitList : enemyArmy) {
+                if (unitList != null) {
+                    for (MilitaryUnit unit : unitList) {
+                        // 50% de probabilidad de recuperar materiales de cada unidad
+                        if (Math.random() < 0.5) {
+                            totalRecoveredMetal += unit.getMetalCost();
+                            totalRecoveredDeuterium += unit.getDeteriumCost();
+                        }
+                    }
+                }
+            }
+        
+            planet.receiveMetal(totalRecoveredMetal);
+            planet.receiveDeuterium(totalRecoveredDeuterium);
+        
+            System.out.println("The planet recovers " + totalRecoveredMetal + " Metal and " + totalRecoveredDeuterium + " Deuterium from enemy wreckage.");
+        
         } else {
-            System.out.println("The planet lost the battle. No rewards.");
+            System.out.println("Planet lost the battle. No rewards.");
         }
+        
 
         System.out.println("Updated planet army after the battle.");
     }
