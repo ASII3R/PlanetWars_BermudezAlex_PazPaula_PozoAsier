@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Iterator;
@@ -88,12 +89,14 @@ public class Main implements Variables {
                         System.out.println("Mostrando reportes de batalla...");
                         batalla.resolveBattle(planet, enemyArmy);
 
+                        
+
                         // Aquí deberías calcular los datos necesarios para el resumen de batalla
                         // (planetUnits, planetDrops, etc.) antes de llamar a buildBattleSummary
-                        int[] planetUnits = {1};
-                        int[] planetDrops = {1};
-                        int[] enemyUnits = {enemyArmy.length};
-                        int[] enemyDrops = {enemyArmy.length};
+                        int[] planetUnits = {11, 3, 1, 1, 11, 1, 1};
+                        int[] planetDrops = {8, 1, 0, 0, 9, 1, 0};
+                        int[] enemyUnits = {19, 7, 1, 1};
+                        int[] enemyDrops = {17, 5, 1, 0};
 
                         // Variables de tipo int
                         int planetMetalCost = planet.getMetal();
@@ -109,17 +112,42 @@ public class Main implements Variables {
                         int planetWasteMetal = planet.getMetal();
                         int planetWasteDeut = planet.getDeuterium();
                         boolean planetWins = (wins == 1);
-                        
 
-                        // Nombre de archivo automático
-                        String fileName = "batalla" + battleNumber + ".xml";
+                        System.out.println("Mostrando reportes de batalla...");
+                        batalla.resolveBattle(planet, enemyArmy);
+
+                        // calcula los datos y llama a buildBattleSummary
+                        String xmlFileName = "batalla" + battleNumber + ".xml";
                         battle.buildBattleSummary(
                             battleNumber,
                             planetUnits, planetDrops, enemyUnits, enemyDrops,
                             planetMetalCost, planetDeutCost, enemyMetalCost, enemyDeutCost,
                             planetMetalLoss, planetDeutLoss, enemyMetalLoss, enemyDeutLoss,
                             planetWasteMetal, planetWasteDeut, planetWins
-                        );                        battle.exportBattleToXML(1, "battleReport.xml");
+                        );
+                        battle.exportBattleToXML(battleNumber, xmlFileName);
+
+                        int htmlBattleNumber = 1;
+                        File htmlFile;
+                        do {
+                            htmlFile = new File("battleReport" + htmlBattleNumber + ".html");
+                            htmlBattleNumber++;
+                        } while (htmlFile.exists());
+                        htmlBattleNumber--;
+                        String htmlFileName = "battleReport" + htmlBattleNumber + ".html";
+
+                        // Transforma el XML a HTML
+                        String xslFileName = "src/battleReport.xsl"; // Ajusta la ruta si es necesario
+                        battle.transformXMLToHTML(xmlFileName, xslFileName, htmlFileName);
+                        System.out.println("HTML generado: " + htmlFileName);
+                        // ----------------------------------------
+                        do {
+                            htmlFile = new File("battleReport" + htmlBattleNumber + ".html");
+                            htmlBattleNumber++;
+                        } while (htmlFile.exists());
+                        // Al salir del bucle, htmlBattleNumber se ha incrementado una vez de más
+                        htmlBattleNumber--;
+
                     } else if (user_input == 0) {
                         running = false;
                         flg_menu_principal = false;
