@@ -28,7 +28,7 @@ public class Main implements Variables {
         }
 
         Planet planet = new Planet(0, 0, 53500, 26800, UPGRADE_BASE_DEFENSE_TECHNOLOGY_DEUTERIUM_COST, UPGRADE_BASE_ATTACK_TECHNOLOGY_DEUTERIUM_COST, planetArmy,1);
-
+        int wins = 0;
         // [TIMER]
         Timer timer = new Timer();
         TimerTask recolectResources = new TimerTask() {
@@ -90,6 +90,26 @@ public class Main implements Variables {
 
                         // Aquí deberías calcular los datos necesarios para el resumen de batalla
                         // (planetUnits, planetDrops, etc.) antes de llamar a buildBattleSummary
+                        int[] planetUnits = {1};
+                        int[] planetDrops = {1};
+                        int[] enemyUnits = {enemyArmy.length};
+                        int[] enemyDrops = {enemyArmy.length};
+
+                        // Variables de tipo int
+                        int planetMetalCost = planet.getMetal();
+                        int planetDeutCost = planet.getDeuterium();
+                        int enemyMetalCost = 420;
+                        int enemyDeutCost = 100;
+
+                        int planetMetalLoss = 254;
+                        int planetDeutLoss = 300;
+                        int enemyMetalLoss = 100;
+                        int enemyDeutLoss = 400;
+
+                        int planetWasteMetal = planet.getMetal();
+                        int planetWasteDeut = planet.getDeuterium();
+                        boolean planetWins = (wins == 1);
+                        
 
                         // Nombre de archivo automático
                         String fileName = "batalla" + battleNumber + ".xml";
@@ -179,6 +199,7 @@ public class Main implements Variables {
                     int user_input = input.nextInt();
 
                     if (user_input == 1) {
+
                         System.out.print("\nAmount of Units\nAmount: > ");
                         int user_amount = input.nextInt();
                         planet.newMissileLauncher(user_amount);
