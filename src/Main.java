@@ -86,6 +86,7 @@ public class Main implements Variables {
                     } else if (user_input == 4) {
                         System.out.println("Mostrando reportes de batalla...");
                         batalla.resolveBattle(planet, enemyArmy);
+                        battle.exportBattleToXML(1, "battleReport.xml");
                     } else if (user_input == 0) {
                         running = false;
                         flg_menu_principal = false;
