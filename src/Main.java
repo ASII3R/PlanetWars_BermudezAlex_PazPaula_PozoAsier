@@ -197,8 +197,8 @@ public class Main implements Variables {
                         htmlBattleNumber--;
                         String htmlFileName = "battleReport" + htmlBattleNumber + ".html";
 
-                        // Transforma el XML a HTML  //!!!!!!!!!!! hay que pasar esta ruta a relativa
-                        String xslFileName = "c:/Users/asier/Downloads/PlanetWars_BermudezAlex_PazPaula_PozoAsier-master/PlanetWars_BermudezAlex_PazPaula_PozoAsier-master/src/battleReport.xsl";
+                        // Transforma el XML a HTML 
+                        String xslFileName = "src/battleReport.xsl";
                         battle.transformXMLToHTML(xmlFileName, xslFileName, htmlFileName);
                         System.out.println("HTML generado: " + htmlFileName);
                         // ----------------------------------------
