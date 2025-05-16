@@ -41,10 +41,8 @@ public class Juego implements Variables {
         planetArmy[6].add(new PlasmaCannon(ARMOR_PLASMACANNON, BASE_DAMAGE_PLASMACANNON));
 
 
-        planet = new Planet(0, 0, 53500, 26800, UPGRADE_BASE_DEFENSE_TECHNOLOGY_DEUTERIUM_COST, 
-                            UPGRADE_BASE_ATTACK_TECHNOLOGY_DEUTERIUM_COST, planetArmy);
-
         Planet planet = new Planet(0, 0, 53500, 26800, UPGRADE_BASE_DEFENSE_TECHNOLOGY_DEUTERIUM_COST, UPGRADE_BASE_ATTACK_TECHNOLOGY_DEUTERIUM_COST, planetArmy,1);
+
         
         battle = new Battle();
         battle.setPlanetArmy(planetArmy);
@@ -82,10 +80,27 @@ public class Juego implements Variables {
         panelStart = new JPanel(new BorderLayout());
         panelStart.setBackground(new Color(255, 140, 0));
 
-        JLabel title = new JLabel("Welcome to the game", SwingConstants.CENTER);
+        // Use the existing 'title' JLabel instead of redeclaring it
         title.setFont(new Font("Arial", Font.BOLD, 18));
         title.setForeground(Color.WHITE);
-        panelStart.add(title, BorderLayout.NORTH);
+        panelStart.add(title, BorderLayout.NORTH);        // ...existing code...
+        // Upgrade Technology panel
+        panelUpgradeTechnology = new JPanel(new GridLayout(3, 1));
+        panelUpgradeTechnology.setBackground(new Color(186, 85, 211));
+        panelUpgradeTechnology.add(new JLabel("Upgrade Technology", SwingConstants.CENTER));
+        
+        JButton buttonDefense = new JButton("Upgrade Defense Technology");
+        buttonDefense.addActionListener(e -> planet.upgradeTechnologyDefense());
+        JButton buttonAttack = new JButton("Upgrade Attack Technology");
+        buttonAttack.addActionListener(e -> planet.upgradeTechnologyAttack());
+        JButton buttonBackUpgrade = new JButton("Go Back");
+        
+        buttonBackUpgrade.addActionListener(e -> switchPanel(panelMainMenu));
+        
+        panelUpgradeTechnology.add(buttonDefense);
+        panelUpgradeTechnology.add(buttonAttack);
+        panelUpgradeTechnology.add(buttonBackUpgrade);
+        // ...existing code...
 
         JButton buttonPlay = new JButton("Play");
         buttonPlay.setPreferredSize(new Dimension(80, 25));
@@ -333,8 +348,43 @@ public class Juego implements Variables {
                 }
             }
         });
-
         // Battle Ship
+        buttonBS.addActionListener(e -> {
+            int cantidad = getUnitAmount("Enter the number of Battle Ships:");
+            BattleShip temp = new BattleShip();
+
+            int metalCost = temp.getMetalCost();
+            int deutCost = temp.getDeteriumCost();
+
+            int posiblesMetal = planet.getMetal() / metalCost;
+            int posiblesDeut = planet.getDeuterium() / deutCost;
+
+            int posibles;
+            if (posiblesMetal < posiblesDeut) {
+            posibles = posiblesMetal;
+            } else {
+            posibles = posiblesDeut;
+            }
+
+            if (posibles <= 0) {
+            JOptionPane.showMessageDialog(ventana, "Not enough resources to build any Battle Ships.");
+            } else {
+            int aConstruir;
+            if (cantidad < posibles) {
+                aConstruir = cantidad;
+            } else {
+                aConstruir = posibles;
+            }
+
+            planet.newBattleShip(aConstruir);
+
+            if (aConstruir < cantidad) {
+                JOptionPane.showMessageDialog(ventana, "Only " + aConstruir + " Battle Ships were built due to limited resources.");
+            } else {
+                JOptionPane.showMessageDialog(ventana, "Successfully built " + aConstruir + " Battle Ships.");
+            }
+            }
+        }); // Battle Ship
         buttonBS.addActionListener(e -> {
             int cantidad = getUnitAmount("Enter the number of Battle Ships:");
             BattleShip temp = new BattleShip();
@@ -411,8 +461,7 @@ public class Juego implements Variables {
         });
 
         buttonBackTroops.addActionListener(e -> switchPanel(panelBuild));
-
-        // Agregar botones al panel
+        // Agregar botones al panel // Agregar botones al panel
         panelBuildTroops.add(buttonLH);
         panelBuildTroops.add(buttonHH);
         panelBuildTroops.add(buttonBS);
@@ -663,6 +712,10 @@ panelUpgradeTechnology.add(buttonBackUpgrade);
     
 }
 
+    private void switchPanel(JPanel panelBuild) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
     public class TextAreaOutputStream extends OutputStream {
     private final JTextArea textArea;
 
@@ -777,7 +830,7 @@ panelUpgradeTechnology.add(buttonAttack);
 panelUpgradeTechnology.add(buttonBackUpgrade);
     }
 
-    private void switchPanel(JPanel newPanel) {
+    public void switchPanel(JPanel newPanel) {
         ventana.getContentPane().removeAll();
         ventana.add(newPanel);
         ventana.revalidate();
