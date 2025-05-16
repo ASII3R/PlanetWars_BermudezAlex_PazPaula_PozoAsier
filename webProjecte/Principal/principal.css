@@ -1,0 +1,286 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@media (max-width: 768px) {
+    .sticky-menu ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .miembro {
+        width: 80%;
+    }
+
+    .miembro img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .buscar-batalla input, .buscar-batalla button {
+        width: 80%;
+        font-size: 1em;
+    }
+}
+/* Animación de parpadeo en el título */
+/* Efecto glitch en el título principal */
+@keyframes glitch {
+    0% { text-shadow: 2px 2px 4px #ff00ff; }
+    20% { text-shadow: -2px -2px 4px #00ffff; }
+    40% { text-shadow: 2px 2px 4px #ff00ff; }
+    60% { text-shadow: -2px -2px 4px #00ffff; }
+    80% { text-shadow: 3px 3px 6px #ff00ff; }
+    100% { text-shadow: -3px -3px 6px #00ffff; }
+}
+
+header h1 {
+    animation: glitch 0.3s infinite alternate;
+    color: #00ffff;
+    text-shadow: 0px 0px 15px #00ffff;
+}
+
+/* Subtítulo con resplandor neón */
+.publicidad h2 {
+    animation: parpadeo 1s infinite alternate;
+    text-shadow: 0px 0px 10px #ff00ff;
+}
+
+/* Efecto neón en el menú */
+.sticky-menu {
+    position: sticky;
+    top: 0;
+    background-color: #440088;
+    padding: 10px;
+    box-shadow: 0px 0px 15px #ff00ff;
+    z-index: 9999;
+}
+
+/* Hover en el menú con brillo neón */
+.sticky-menu ul li:hover {
+    transform: translateY(-8px);
+    text-shadow: 0px 0px 15px #ff00ff;
+}
+
+/* Efecto de vibración en la imagen */
+@keyframes vibracion {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    50% { transform: translateX(2px); }
+    75% { transform: translateX(-1px); }
+    100% { transform: translateX(1px); }
+}
+
+.publicidad img {
+    animation: vibracion 0.5s infinite;
+}
+
+/* Botón con efecto pulsante */
+@keyframes brillo {
+    0% { box-shadow: 0 0 5px #ff00ff; }
+    50% { box-shadow: 0 0 20px #ff00ff; }
+    100% { box-shadow: 0 0 5px #ff00ff; }
+}
+
+.publicidad button {
+    background-color: #ff00ff;
+    border: none;
+    padding: 10px;
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    animation: brillo 1s infinite alternate;
+}
+
+.publicidad button:hover {
+    background-color: #00ffff;
+}
+.publicidad img {
+    animation: vibracion 0.5s infinite;
+}
+
+/* Animación de hover en el menú */
+.sticky-menu ul li:hover {
+    transform: translateY(-8px);
+    transition: 0.2s ease-in-out;
+}
+
+body {
+    font-family: 'Press Start 2P', cursive;
+    background-color: #0a0033;
+    color: #00ff99; 
+    margin: 0;
+    padding: 0;
+}
+header {
+    background-color: #220044;
+    color: #00ffff;
+    padding: 20px;
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    height: 120px; /* Ajusta la altura del encabezado */
+    text-align: center; /* Asegura que el texto esté alineado */
+}
+
+header h1 {
+    animation: glitch 0.3s infinite alternate;
+    color: #00ffff;
+    text-shadow: 0px 0px 15px #00ffff;
+}
+
+/* Subtítulo con resplandor neón */
+.publicidad h2 {
+    animation: parpadeo 1s infinite alternate;
+    text-shadow: 0px 0px 10px #ff00ff;
+}
+
+/* Efecto neón en el menú */
+.sticky-menu {
+    position: sticky;
+    top: 0;
+    background-color: #440088;
+    padding: 10px;
+    box-shadow: 0px 0px 15px #ff00ff;
+}
+
+/* Hover en el menú con brillo */
+.sticky-menu ul li:hover {
+    transform: translateY(-8px);
+    text-shadow: 0px 0px 15px #ff00ff;
+}
+
+/* Botón con efecto pulsante */
+@keyframes brillo {
+    0% { box-shadow: 0 0 5px #ff00ff; }
+    50% { box-shadow: 0 0 20px #ff00ff; }
+    100% { box-shadow: 0 0 5px #ff00ff; }
+}
+
+.publicidad button {
+    background-color: #ff00ff;
+    border: none;
+    padding: 10px;
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    animation: brillo 1s infinite alternate;
+}
+
+.publicidad button:hover {
+    background-color: #00ffff;
+}
+
+
+/* Menú sticky */
+.sticky-menu {
+    position: sticky;
+    top: 0;
+    background-color: #440088;
+    padding: 10px;
+}
+
+.sticky-menu ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    padding: 0;
+}
+
+.sticky-menu ul li {
+    margin: 0 15px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.sticky-menu ul li:hover {
+    transform: translateY(-5px); 
+}
+
+.sticky-menu ul li a {
+    text-decoration: none;
+    color: #ff00ff;
+    font-weight: bold;
+}
+
+.publicidad {
+    text-align: center;
+    padding: 20px;
+}
+
+.publicidad img {
+    width: 80%;
+    max-width: 600px;
+    animation: destello 1s infinite alternate;
+}
+
+/* Footer con efecto neón */
+footer {
+    background-color: #220044;
+    text-align: center;
+    padding: 10px;
+    position: relative;
+    bottom: 0;
+    box-shadow: 0px 0px 15px #00ffff; /* Resplandor neón */
+}
+
+/* Animación de brillo pulsante en el texto del footer */
+@keyframes brilloFooter {
+    0% { text-shadow: 0 0 5px #00ffff; }
+    50% { text-shadow: 0 0 15px #00ffff; }
+    100% { text-shadow: 0 0 5px #00ffff; }
+}
+
+footer p {
+    animation: brilloFooter 1s infinite alternate;
+    color: #00ffff;
+}
+
+
+@keyframes destello {
+    0% { opacity: 1; }
+    100% { opacity: 0.3; }
+}
+
+.carrusel {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+    overflow: hidden;
+    border: 2px solid #ff00ff;
+    box-shadow: 0 0 20px #00ffff;
+}
+
+.carrusel-imagenes {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 300%; /* 3 imágenes */
+}
+
+.carrusel-imagenes img {
+    width: 100%;
+    flex-shrink: 0;
+    animation: none; /* Desactiva el destello aquí */
+}
+
+.carrusel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 0, 255, 0.5);
+    border: none;
+    color: white;
+    font-size: 2em;
+    cursor: pointer;
+    padding: 5px 10px;
+    z-index: 2;
+    transition: background-color 0.3s ease;
+}
+
+.carrusel-btn:hover {
+    background-color: rgba(0, 255, 255, 0.7);
+}
+
+.carrusel-btn.anterior {
+    left: 10px;
+}
+
+.carrusel-btn.siguiente {
+    right: 10px;
+}
+
