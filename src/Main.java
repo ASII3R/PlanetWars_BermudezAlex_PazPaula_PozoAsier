@@ -8,6 +8,7 @@ import java.util.TimerTask;
 public class Main implements Variables {
 
     public static void main(String[] args) throws ResourceException {
+        int battleNumber = 1;
         ArrayList<MilitaryUnit>[] planetArmy = new ArrayList[7];
         ArrayList<MilitaryUnit>[] enemyArmy = new ArrayList[7];
 
@@ -86,7 +87,19 @@ public class Main implements Variables {
                     } else if (user_input == 4) {
                         System.out.println("Mostrando reportes de batalla...");
                         batalla.resolveBattle(planet, enemyArmy);
-                        battle.exportBattleToXML(1, "battleReport.xml");
+
+                        // Aquí deberías calcular los datos necesarios para el resumen de batalla
+                        // (planetUnits, planetDrops, etc.) antes de llamar a buildBattleSummary
+
+                        // Nombre de archivo automático
+                        String fileName = "batalla" + battleNumber + ".xml";
+                        battle.buildBattleSummary(
+                            battleNumber,
+                            planetUnits, planetDrops, enemyUnits, enemyDrops,
+                            planetMetalCost, planetDeutCost, enemyMetalCost, enemyDeutCost,
+                            planetMetalLoss, planetDeutLoss, enemyMetalLoss, enemyDeutLoss,
+                            planetWasteMetal, planetWasteDeut, planetWins
+                        );                        battle.exportBattleToXML(1, "battleReport.xml");
                     } else if (user_input == 0) {
                         running = false;
                         flg_menu_principal = false;
