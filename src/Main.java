@@ -29,6 +29,22 @@ public class Main implements Variables {
         }
 
         Planet planet = new Planet(0, 0, 53500, 26800, UPGRADE_BASE_DEFENSE_TECHNOLOGY_DEUTERIUM_COST, UPGRADE_BASE_ATTACK_TECHNOLOGY_DEUTERIUM_COST, planetArmy,1);
+        DatabaseManager.insertPlanetStats(
+        planet.getIdPlanet(),
+        "MIPLANETA",
+        planet.getMetal(),
+        planet.getDeuterium(),
+        planet.getTechnologyDefense(),
+        planet.getTechnologyAttack(),
+        0, // battles_counter
+        planet.getArmy()[4].size(),
+        planet.getArmy()[5].size(),
+        planet.getArmy()[6].size(),
+        planet.getArmy()[0].size(),
+        planet.getArmy()[1].size(),
+        planet.getArmy()[2].size(),
+        planet.getArmy()[3].size()
+    );
         int wins = 0;
         // [TIMER]
         Timer timer = new Timer();
@@ -113,8 +129,53 @@ public class Main implements Variables {
                         int planetWasteDeut = planet.getDeuterium();
                         boolean planetWins = (wins == 1);
 
-                        System.out.println("Mostrando reportes de batalla...");
-                        batalla.resolveBattle(planet, enemyArmy);
+
+                        DatabaseManager.insertBattleStats(
+                            planet.getIdPlanet(),
+                            battleNumber,
+                            planetMetalCost, // o el recurso ganado/perdido
+                            planetDeutCost
+                        );
+                        DatabaseManager.insertBattleLog(
+                            planet.getIdPlanet(),
+                            battleNumber,
+                            0, //!!hacer un bucle para que no se repita el número de batalla
+                            "null" // texto del log
+                        );
+
+                        //se inicia todo en 0
+                        int light_hunter_destroyed = 0;
+                        int heavy_hunter_destroyed = 0;
+                        int battleship_destroyed = 0;
+                        int armored_ship_destroyed = 0;
+
+                        int missile_launcher_built = 0;
+                        int missile_launcher_destroyed = 0;
+                        int ion_cannon_built = 0;
+                        int ion_cannon_destroyed = 0;
+                        int plasma_canon_built = 0;
+                        int plasma_canon_destroyed = 0;
+
+                        DatabaseManager.insertPlanetBattleArmy(
+                            planet.getIdPlanet(),
+                            battleNumber,
+                            light_hunter_destroyed,
+                            heavy_hunter_destroyed,
+                            battleship_destroyed,
+                            armored_ship_destroyed
+                        );
+
+                        DatabaseManager.insertPlanetBattleDefense(
+                            planet.getIdPlanet(),
+                            battleNumber,
+                            missile_launcher_built,
+                            missile_launcher_destroyed,
+                            ion_cannon_built,
+                            ion_cannon_destroyed,
+                            plasma_canon_built,
+                            plasma_canon_destroyed
+                        );
+
 
                         // calcula los datos y llama a buildBattleSummary
                         String xmlFileName = "batalla" + battleNumber + ".xml";
@@ -136,8 +197,8 @@ public class Main implements Variables {
                         htmlBattleNumber--;
                         String htmlFileName = "battleReport" + htmlBattleNumber + ".html";
 
-                        // Transforma el XML a HTML
-                        String xslFileName = "src/battleReport.xsl"; // Ajusta la ruta si es necesario
+                        // Transforma el XML a HTML  //!!!!!!!!!!! hay que pasar esta ruta a relativa
+                        String xslFileName = "c:/Users/asier/Downloads/PlanetWars_BermudezAlex_PazPaula_PozoAsier-master/PlanetWars_BermudezAlex_PazPaula_PozoAsier-master/src/battleReport.xsl";
                         battle.transformXMLToHTML(xmlFileName, xslFileName, htmlFileName);
                         System.out.println("HTML generado: " + htmlFileName);
                         // ----------------------------------------
@@ -389,6 +450,22 @@ class Batalla {
         
 
         System.out.println("Updated planet army after the battle.");
+        DatabaseManager.updatePlanetStats(
+            planet.getIdPlanet(),
+            "MIPLANETA",
+            planet.getMetal(),
+            planet.getDeuterium(),
+            planet.getTechnologyDefense(),
+            planet.getTechnologyAttack(),
+            0, //!!ESTO HABRÁ QUE ACTUALIZARLO CON EL CONTADOR DE BATALLAS
+            planet.getArmy()[4].size(),
+            planet.getArmy()[5].size(),
+            planet.getArmy()[6].size(),
+            planet.getArmy()[0].size(),
+            planet.getArmy()[1].size(),
+            planet.getArmy()[2].size(),
+            planet.getArmy()[3].size()
+        );
     }
 
     private void applyMutualDamage() {
