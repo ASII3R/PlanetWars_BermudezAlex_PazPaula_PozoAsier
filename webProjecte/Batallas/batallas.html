@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batallas - Juego Retro</title>
+    <link rel="stylesheet" href="batallas.css">
+    <script defer src="batallas.js"></script>
+</head>
+<body>
+
+    <header>
+        <h1>Reporte de Batallas</h1>
+    </header>
+
+    <nav class="sticky-menu">
+        <ul>
+            <li><a href="../principal/principal.html">Inicio</a></li>
+            <li><a href="../tutorial/tutorial.html">Tutorial</a></li>
+            <li><a href="../About Us/aboutus.html">About Us</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="buscar-batalla">
+            <h2>Consulta una batalla</h2>
+            <input type="number" id="numeroBatalla" placeholder="Introduce el número de batalla">
+            <button onclick="cargarBatalla()">Ver Batalla</button>
+        </section>
+
+        <section id="reporteBatalla" class="reporte">
+            <h2>Detalles de la batalla</h2>
+            <div id="batallaContenido">
+                <p>Introduce un número de batalla para ver el reporte.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>©Copyright</p>
+    </footer>
+
+</body>
+</html>
