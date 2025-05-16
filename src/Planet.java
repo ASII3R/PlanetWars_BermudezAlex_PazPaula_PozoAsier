@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.TimerTask;
 
 public class Planet implements Variables{
 	private int technologyDefense;
@@ -9,10 +8,11 @@ public class Planet implements Variables{
 	private int upgradeDefenseTechnologyDeuteriumCost;
 	private int upgradeAttackTechnologyDeuteriumCost;
 	private ArrayList<MilitaryUnit>[] army = new ArrayList[7];
+	private int idPlanet;
 	
 	public Planet(int technologyDefense, int technologyAttack, int metal, int deuterium,
 			int upgradeDefenseTechnologyDeuteriumCost, int upgradeAttackTechnologyDeuteriumCost,
-			ArrayList<MilitaryUnit>[] army) 
+			ArrayList<MilitaryUnit>[] army, int idPlanet) 
 	{
 		super();
 		this.technologyDefense = technologyDefense;
@@ -22,6 +22,7 @@ public class Planet implements Variables{
 		this.upgradeDefenseTechnologyDeuteriumCost = upgradeDefenseTechnologyDeuteriumCost;
 		this.upgradeAttackTechnologyDeuteriumCost = upgradeAttackTechnologyDeuteriumCost;
 		this.army = army;
+		this.idPlanet = idPlanet;
 	}
 
 	public int getTechnologyDefense() {
@@ -78,6 +79,9 @@ public class Planet implements Variables{
 
 	public void setArmy(ArrayList<MilitaryUnit>[] army) {
 		this.army = army;
+	}
+	public int getIdPlanet() {
+		return idPlanet;
 	}
 	
 	// [ Funciones del Planeta ]
@@ -138,6 +142,9 @@ public class Planet implements Variables{
 				this.setDeuterium(this.getDeuterium() - deuteriumCost);
 				army[0].add(new LightHunter());
 				amount++;
+
+				// Añadimos +1 en las id (shipConstruido)
+				infoLightHunter.setShipConstruido(infoLightHunter.getShipConstruido() + 1);
 			} else {
 				System.out.println("There's not enough material to build a Light Hunter");
 				break;
@@ -160,6 +167,8 @@ public class Planet implements Variables{
 				this.setDeuterium(this.getDeuterium() - deuteriumCost);
 				army[1].add(new HeavyHunter());
 				amount++;
+
+				infoHeavyHunter.setShipConstruido(infoHeavyHunter.getShipConstruido() + 1);
 			} else {
 				System.out.println("There's not enough material to build a Heavy Hunter");
 				break;
@@ -182,6 +191,8 @@ public class Planet implements Variables{
 				this.setDeuterium(this.getDeuterium() - deuteriumCost);
 				army[2].add(new BattleShip());
 				amount++;
+
+				infoBattleShip.setShipConstruido(infoBattleShip.getShipConstruido() + 1);
 			} else {
 				System.out.println("There's not enough material to build a Battle Ship");
 				break;
@@ -204,6 +215,8 @@ public class Planet implements Variables{
 				this.setDeuterium(this.getDeuterium() - deuteriumCost);
 				army[3].add(new ArmoredShip());
 				amount++;
+
+				infoArmoredShip.setShipConstruido(infoArmoredShip.getShipConstruido() + 1);
 			} else {
 				System.out.println("There's not enough material to build a Armored Ship");
 				break;
@@ -226,6 +239,8 @@ public class Planet implements Variables{
 				this.setDeuterium(this.getDeuterium() - deuteriumCost);
 				army[4].add(new MissileLauncher(ARMOR_MISSILELAUNCHER,BASE_DAMAGE_MISSILELAUNCHER));
 				amount++;
+				
+				infoMissileLauncher.setDefenseConstruido(infoMissileLauncher.getDefenseConstruido() + 1);
 			} else {
 				System.out.println("There's not enough material to build a Missile Launcher");
 				break;
@@ -248,6 +263,8 @@ public class Planet implements Variables{
 				this.setDeuterium(this.getDeuterium() - deuteriumCost);
 				army[5].add(new IonCannon(ARMOR_IONCANNON,BASE_DAMAGE_IONCANNON));
 				amount++;
+
+				infoIonCannon.setDefenseConstruido(infoIonCannon.getDefenseConstruido() + 1);
 			} else {
 				System.out.println("There's not enough material to build a Ion Cannon");
 				break;
@@ -270,6 +287,8 @@ public class Planet implements Variables{
 				this.setDeuterium(this.getDeuterium() - deuteriumCost);
 				army[6].add(new PlasmaCannon(ARMOR_PLASMACANNON,BASE_DAMAGE_PLASMACANNON));
 				amount++;
+
+				infoPlasmaCannon.setDefenseConstruido(infoPlasmaCannon.getDefenseConstruido() + 1);
 			} else {
 				System.out.println("There's not enough material to build a Plasma Cannon");
 				break;
@@ -304,6 +323,14 @@ public class Planet implements Variables{
 		int damageBonus = (this.getTechnologyAttack() * plus_damage * damage) /  100;
 		damageTotal = damage + damageBonus;
 		return damageTotal;
+	}
+
+	public void receiveMetal(int amount) {
+		this.setMetal(this.getMetal() + amount);
+	}
+	
+	public void receiveDeuterium(int amount) {
+		this.setDeuterium(this.getDeuterium() + amount);
 	}
 	
 	// Ver esto del planeta (informe general) habra que hacerlo formateado
