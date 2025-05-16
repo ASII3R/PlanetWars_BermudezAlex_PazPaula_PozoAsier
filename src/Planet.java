@@ -148,7 +148,7 @@ public class Planet implements Variables{
 	public void newHeavyHunter(int n) {
 		HeavyHunter infoHeavyHunter = new HeavyHunter();
 		int metalCost = infoHeavyHunter.getMetalCost();
-		int deuteriumCost = infoHeavyHunter.getMetalCost();
+		int deuteriumCost = infoHeavyHunter.getDeteriumCost();
 		int amount = 0;
 
 		for (int i = 0; i < n; i++) {
@@ -304,6 +304,14 @@ public class Planet implements Variables{
 		damageTotal = damage + damageBonus;
 		return damageTotal;
 	}
+
+	public String getStats() {
+    return String.format("Metal: %d\nDeuterium: %d\nDefense Tech: %d\nAttack Tech: %d",
+                         getMetal(), getDeuterium(), getTechnologyDefense(), getTechnologyAttack());
+}
+	
+
+
 	
 	// Ver esto del planeta (informe general) habra que hacerlo formateado
 	public void printStats() {
@@ -327,4 +335,6 @@ public class Planet implements Variables{
 				"Deuterium", this.getDeuterium());
 		
 	}
+
+	
 }
