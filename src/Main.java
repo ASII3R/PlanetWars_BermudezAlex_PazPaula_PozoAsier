@@ -85,7 +85,7 @@ public class Main implements Variables {
 
                     } else if (user_input == 4) {
                         System.out.println("Mostrando reportes de batalla...");
-                        //batalla.(planet, enemyArmy);
+                        batalla.resolveBattle(planet, enemyArmy);
                     } else if (user_input == 0) {
                         running = false;
                         flg_menu_principal = false;
@@ -380,7 +380,7 @@ class Batalla {
     ArrayList<MilitaryUnit>[] enemyArmy = battle.getEnemyArmy();
 
     for (ArrayList<MilitaryUnit> group : enemyArmy) {
-        // Usamos un iterator para poder eliminar mientras recorremos
+        // Usamos un iterator para poder eliminar mientras recorremos, p
         Iterator<MilitaryUnit> iterator = group.iterator();
         while (iterator.hasNext()) {
             MilitaryUnit unit = iterator.next();
