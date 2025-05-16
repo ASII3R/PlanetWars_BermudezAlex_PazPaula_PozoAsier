@@ -8,10 +8,11 @@ public class Planet implements Variables{
 	private int upgradeDefenseTechnologyDeuteriumCost;
 	private int upgradeAttackTechnologyDeuteriumCost;
 	private ArrayList<MilitaryUnit>[] army = new ArrayList[7];
+	private int idPlanet;
 	
 	public Planet(int technologyDefense, int technologyAttack, int metal, int deuterium,
 			int upgradeDefenseTechnologyDeuteriumCost, int upgradeAttackTechnologyDeuteriumCost,
-			ArrayList<MilitaryUnit>[] army) 
+			ArrayList<MilitaryUnit>[] army, int idPlanet) 
 	{
 		super();
 		this.technologyDefense = technologyDefense;
@@ -21,6 +22,7 @@ public class Planet implements Variables{
 		this.upgradeDefenseTechnologyDeuteriumCost = upgradeDefenseTechnologyDeuteriumCost;
 		this.upgradeAttackTechnologyDeuteriumCost = upgradeAttackTechnologyDeuteriumCost;
 		this.army = army;
+		this.idPlanet = idPlanet;
 	}
 
 	public int getTechnologyDefense() {
@@ -78,6 +80,9 @@ public class Planet implements Variables{
 	public void setArmy(ArrayList<MilitaryUnit>[] army) {
 		this.army = army;
 	}
+	public int getIdPlanet() {
+		return idPlanet;
+	}
 	
 	// [ Funciones del Planeta ]
 	
@@ -96,6 +101,22 @@ public class Planet implements Variables{
 					(int) (this.getUpgradeDefenseTechnologyDeuteriumCost() * 1.6 )); //60%
 			System.out.println("PRECIO MEJORA DEFENSA ANTES = " + precioAntiguoDefensa + " AHORA " + this.getUpgradeDefenseTechnologyDeuteriumCost());
 			System.out.println("DETERIUM ACTUAL = " + this.getDeuterium());
+			DatabaseManager.updatePlanetStats(
+				this.getIdPlanet(),
+				"PlanetName",
+				this.getMetal(),
+				this.getDeuterium(),
+				this.getTechnologyDefense(),
+				this.getTechnologyAttack(),
+				0,
+				this.getArmy()[4].size(),
+				this.getArmy()[5].size(),
+				this.getArmy()[6].size(),
+				this.getArmy()[0].size(),
+				this.getArmy()[1].size(),
+				this.getArmy()[2].size(),
+				this.getArmy()[3].size()
+			);
 		} else {
 			// Si no tienes suficiente material salta el error
 			System.out.println("\nNo tienes Deuterium suficiente!\n");
@@ -115,6 +136,22 @@ public class Planet implements Variables{
 					(int) (this.getUpgradeAttackTechnologyDeuteriumCost() * 1.6)); // 60%
 			System.out.println("PRECIO MEJORA ATAQUE ANTES = " + precioAntiguoAtaque + " AHORA " + this.getUpgradeAttackTechnologyDeuteriumCost());
 			System.out.println("DETERIUM ACTUAL = " + this.getDeuterium());
+			DatabaseManager.updatePlanetStats(
+				this.getIdPlanet(),
+				"PlanetName",
+				this.getMetal(),
+				this.getDeuterium(),
+				this.getTechnologyDefense(),
+				this.getTechnologyAttack(),
+				0,
+				this.getArmy()[4].size(),
+				this.getArmy()[5].size(),
+				this.getArmy()[6].size(),
+				this.getArmy()[0].size(),
+				this.getArmy()[1].size(),
+				this.getArmy()[2].size(),
+				this.getArmy()[3].size()
+			);
 		} else {
 			// Si no tienes suficiente material salta el error
 			System.out.println("\nNo tienes Deuterium suficiente!\n");
@@ -137,6 +174,9 @@ public class Planet implements Variables{
 				this.setDeuterium(this.getDeuterium() - deuteriumCost);
 				army[0].add(new LightHunter());
 				amount++;
+
+				// Añadimos +1 en las id (shipConstruido)
+				infoLightHunter.setShipConstruido(infoLightHunter.getShipConstruido() + 1);
 			} else {
 				System.out.println("There's not enough material to build a Light Hunter");
 				break;
@@ -159,6 +199,8 @@ public class Planet implements Variables{
 				this.setDeuterium(this.getDeuterium() - deuteriumCost);
 				army[1].add(new HeavyHunter());
 				amount++;
+
+				infoHeavyHunter.setShipConstruido(infoHeavyHunter.getShipConstruido() + 1);
 			} else {
 				System.out.println("There's not enough material to build a Heavy Hunter");
 				break;
@@ -181,6 +223,8 @@ public class Planet implements Variables{
 				this.setDeuterium(this.getDeuterium() - deuteriumCost);
 				army[2].add(new BattleShip());
 				amount++;
+
+				infoBattleShip.setShipConstruido(infoBattleShip.getShipConstruido() + 1);
 			} else {
 				System.out.println("There's not enough material to build a Battle Ship");
 				break;
@@ -203,6 +247,8 @@ public class Planet implements Variables{
 				this.setDeuterium(this.getDeuterium() - deuteriumCost);
 				army[3].add(new ArmoredShip());
 				amount++;
+
+				infoArmoredShip.setShipConstruido(infoArmoredShip.getShipConstruido() + 1);
 			} else {
 				System.out.println("There's not enough material to build a Armored Ship");
 				break;
@@ -225,6 +271,8 @@ public class Planet implements Variables{
 				this.setDeuterium(this.getDeuterium() - deuteriumCost);
 				army[4].add(new MissileLauncher(ARMOR_MISSILELAUNCHER,BASE_DAMAGE_MISSILELAUNCHER));
 				amount++;
+				
+				infoMissileLauncher.setDefenseConstruido(infoMissileLauncher.getDefenseConstruido() + 1);
 			} else {
 				System.out.println("There's not enough material to build a Missile Launcher");
 				break;
@@ -247,6 +295,8 @@ public class Planet implements Variables{
 				this.setDeuterium(this.getDeuterium() - deuteriumCost);
 				army[5].add(new IonCannon(ARMOR_IONCANNON,BASE_DAMAGE_IONCANNON));
 				amount++;
+
+				infoIonCannon.setDefenseConstruido(infoIonCannon.getDefenseConstruido() + 1);
 			} else {
 				System.out.println("There's not enough material to build a Ion Cannon");
 				break;
@@ -269,6 +319,8 @@ public class Planet implements Variables{
 				this.setDeuterium(this.getDeuterium() - deuteriumCost);
 				army[6].add(new PlasmaCannon(ARMOR_PLASMACANNON,BASE_DAMAGE_PLASMACANNON));
 				amount++;
+
+				infoPlasmaCannon.setDefenseConstruido(infoPlasmaCannon.getDefenseConstruido() + 1);
 			} else {
 				System.out.println("There's not enough material to build a Plasma Cannon");
 				break;
@@ -305,12 +357,51 @@ public class Planet implements Variables{
 		return damageTotal;
 	}
 
+
 	public String getStats() {
     return String.format("Metal: %d\nDeuterium: %d\nDefense Tech: %d\nAttack Tech: %d",
                          getMetal(), getDeuterium(), getTechnologyDefense(), getTechnologyAttack());
 }
 	
-
+	public void receiveMetal(int amount) {
+		this.setMetal(this.getMetal() + amount);
+		DatabaseManager.updatePlanetStats(
+		this.getIdPlanet(),
+		"MIPLANETA",
+		this.getMetal(),
+		this.getDeuterium(),
+		this.getTechnologyDefense(),
+		this.getTechnologyAttack(),
+		0,
+		this.getArmy()[4].size(),
+		this.getArmy()[5].size(),
+		this.getArmy()[6].size(),
+		this.getArmy()[0].size(),
+		this.getArmy()[1].size(),
+		this.getArmy()[2].size(),
+		this.getArmy()[3].size()
+	);
+	}
+	
+	public void receiveDeuterium(int amount) {
+		this.setDeuterium(this.getDeuterium() + amount);
+		DatabaseManager.updatePlanetStats(
+		this.getIdPlanet(),
+		"MIPLANETA",
+		this.getMetal(),
+		this.getDeuterium(),
+		this.getTechnologyDefense(),
+		this.getTechnologyAttack(),
+		0,
+		this.getArmy()[4].size(),
+		this.getArmy()[5].size(),
+		this.getArmy()[6].size(),
+		this.getArmy()[0].size(),
+		this.getArmy()[1].size(),
+		this.getArmy()[2].size(),
+		this.getArmy()[3].size()
+	);
+	}
 
 	
 	// Ver esto del planeta (informe general) habra que hacerlo formateado

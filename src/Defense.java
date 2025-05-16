@@ -4,6 +4,8 @@ public abstract class Defense implements MilitaryUnit, Variables{
 	private int armor;
 	private int initialArmor;
 	private int baseDamage;
+	private int defenseConstruido;
+	private int defenseDestruido;
 	
 	public Defense(int armor, int initialArmor, int baseDamage) {
 		this.armor = armor;
@@ -33,5 +35,21 @@ public abstract class Defense implements MilitaryUnit, Variables{
 
 	public void setBaseDamage(int baseDamage) {
 		this.baseDamage = baseDamage;
+	}
+
+	public int getDefenseConstruido(){
+		return defenseConstruido;
+	}
+
+	public void setDefenseConstruido(int defenseConstruido){
+		this.defenseConstruido = defenseConstruido;
+	}
+
+	public int getDefenseDestruido(){
+		return defenseDestruido;
+	}
+
+	public void setDefenseDestruido(){
+		this.defenseDestruido = defenseDestruido;
 	}
 }
