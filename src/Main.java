@@ -31,6 +31,51 @@ public class Main implements Variables{
 		ArrayList<MilitaryUnit>[] planetArmy = new ArrayList[7];
 		ArrayList<MilitaryUnit>[] enemyArmy = new ArrayList[7];
 		
+		//BATALLA HASTA 
+		// Puedes poner esto en el main o en un método de prueba
+		Battle batalla2 = new Battle();
+
+		int numeroBatalla = 1; // Puedes cargar este valor de la base de datos o de un archivo si quieres persistencia
+		boolean hayMasBatallas = true; 
+
+		while (hayMasBatallas) { 
+			Battle batalla = new Battle();
+
+			// Simula eventos y resumen de la batalla aquí...
+			batalla.logEvent("*CHANGE ATTACKER*");
+			// ...otros eventos...
+			batalla.buildBattleSummary(
+				numeroBatalla,
+				new int[]{11, 3, 1, 1, 11, 1, 1},
+				new int[]{8, 1, 0, 0, 9, 1, 0},
+				new int[]{19, 7, 1, 1, 0, 0, 0},
+				new int[]{17, 5, 1, 0, 0, 0, 0},
+				203500, 28200,
+				177500, 23300,
+				52500, 950,
+				128500, 8100,
+				52150, 910,
+				true
+			);
+
+			// Guarda XML y HTML usando el número de batalla
+			String xmlFile = "reportes/batalla" + numeroBatalla + ".xml";
+			String htmlFile = "reportes/batalla" + numeroBatalla + ".html";
+			batalla.exportBattleToXML(numeroBatalla, xmlFile);
+			batalla.transformXMLToHTML(xmlFile, "battleReport.xsl", htmlFile);
+
+			// Si quieres mostrar el resumen o preguntar por el desarrollo:
+			System.out.println(batalla.getBattleReport(numeroBatalla));
+			System.out.println("¿Ver desarrollo de la batalla? (S/n)");
+			java.util.Scanner sc = new java.util.Scanner(System.in);
+			String opt = sc.nextLine();
+			if (opt.equalsIgnoreCase("S")) {
+				System.out.println(batalla.getBattleDevelopment());
+			}
+
+			numeroBatalla++; // Incrementa para la siguiente batalla
+		}
+		//BATALLA HASTA AQUI
 
 		for (int i = 0; i < planetArmy.length; i++){
 			planetArmy[i] = new ArrayList<>();
