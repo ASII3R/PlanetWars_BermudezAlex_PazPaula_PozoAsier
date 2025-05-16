@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Iterator;
@@ -8,6 +9,7 @@ import java.util.TimerTask;
 public class Main implements Variables {
 
     public static void main(String[] args) throws ResourceException {
+        int battleNumber = 1;
         ArrayList<MilitaryUnit>[] planetArmy = new ArrayList[7];
         ArrayList<MilitaryUnit>[] enemyArmy = new ArrayList[7];
 
@@ -27,7 +29,23 @@ public class Main implements Variables {
         }
 
         Planet planet = new Planet(0, 0, 53500, 26800, UPGRADE_BASE_DEFENSE_TECHNOLOGY_DEUTERIUM_COST, UPGRADE_BASE_ATTACK_TECHNOLOGY_DEUTERIUM_COST, planetArmy,1);
-
+        DatabaseManager.insertPlanetStats(
+        planet.getIdPlanet(),
+        "MIPLANETA",
+        planet.getMetal(),
+        planet.getDeuterium(),
+        planet.getTechnologyDefense(),
+        planet.getTechnologyAttack(),
+        0, // battles_counter
+        planet.getArmy()[4].size(),
+        planet.getArmy()[5].size(),
+        planet.getArmy()[6].size(),
+        planet.getArmy()[0].size(),
+        planet.getArmy()[1].size(),
+        planet.getArmy()[2].size(),
+        planet.getArmy()[3].size()
+    );
+        int wins = 0;
         // [TIMER]
         Timer timer = new Timer();
         TimerTask recolectResources = new TimerTask() {
@@ -41,52 +59,10 @@ public class Main implements Variables {
         };
         timer.schedule(recolectResources, 60000, 60000); // Cada 1 minuto recolecta recursos
 
-		
-		//BATALLA HASTA 
-		// Puedes poner esto en el main o en un método de prueba
-		Battle batalla2 = new Battle();
-
-		int numeroBatalla = 1; // Puedes cargar este valor de la base de datos o de un archivo si quieres persistencia
-		boolean hayMasBatallas = true; 
-
-		while (hayMasBatallas) { 
-			Battle batalla = new Battle();
-
-			// Simula eventos y resumen de la batalla aquí...
-			batalla.logEvent("*CHANGE ATTACKER*");
-			// ...otros eventos...
-			batalla.buildBattleSummary(
-				numeroBatalla,
-				new int[]{11, 3, 1, 1, 11, 1, 1},
-				new int[]{8, 1, 0, 0, 9, 1, 0},
-				new int[]{19, 7, 1, 1, 0, 0, 0},
-				new int[]{17, 5, 1, 0, 0, 0, 0},
-				203500, 28200,
-				177500, 23300,
-				52500, 950,
-				128500, 8100,
-				52150, 910,
-				true
-			);
-
-			// Guarda XML y HTML usando el número de batalla
-			String xmlFile = "reportes/batalla" + numeroBatalla + ".xml";
-			String htmlFile = "reportes/batalla" + numeroBatalla + ".html";
-			batalla.exportBattleToXML(numeroBatalla, xmlFile);
-			batalla.transformXMLToHTML(xmlFile, "battleReport.xsl", htmlFile);
-
-			// Si quieres mostrar el resumen o preguntar por el desarrollo:
-			System.out.println(batalla.getBattleReport(numeroBatalla));
-			System.out.println("¿Ver desarrollo de la batalla? (S/n)");
-			java.util.Scanner sc = new java.util.Scanner(System.in);
-			String opt = sc.nextLine();
-			if (opt.equalsIgnoreCase("S")) {
-				System.out.println(batalla.getBattleDevelopment());
-			}
-
-			numeroBatalla++; // Incrementa para la siguiente batalla
-		}
-		//BATALLA HASTA AQUI
+        // [BATTLE SOURCES]
+        Battle battle = new Battle();
+        battle.setPlanetArmy(planetArmy);
+        battle.setEnemyArmy(enemyArmy);
 
         // Crear instancia de Batalla
         Batalla batalla = new Batalla(battle, planet);
@@ -127,7 +103,112 @@ public class Main implements Variables {
 
                     } else if (user_input == 4) {
                         System.out.println("Mostrando reportes de batalla...");
-                        //batalla.(planet, enemyArmy);
+                        batalla.resolveBattle(planet, enemyArmy);
+
+                        
+
+                        // Aquí deberías calcular los datos necesarios para el resumen de batalla
+                        // (planetUnits, planetDrops, etc.) antes de llamar a buildBattleSummary
+                        int[] planetUnits = {11, 3, 1, 1, 11, 1, 1};
+                        int[] planetDrops = {8, 1, 0, 0, 9, 1, 0};
+                        int[] enemyUnits = {19, 7, 1, 1};
+                        int[] enemyDrops = {17, 5, 1, 0};
+
+                        // Variables de tipo int
+                        int planetMetalCost = planet.getMetal();
+                        int planetDeutCost = planet.getDeuterium();
+                        int enemyMetalCost = 420;
+                        int enemyDeutCost = 100;
+
+                        int planetMetalLoss = 254;
+                        int planetDeutLoss = 300;
+                        int enemyMetalLoss = 100;
+                        int enemyDeutLoss = 400;
+
+                        int planetWasteMetal = planet.getMetal();
+                        int planetWasteDeut = planet.getDeuterium();
+                        boolean planetWins = (wins == 1);
+
+
+                        DatabaseManager.insertBattleStats(
+                            planet.getIdPlanet(),
+                            battleNumber,
+                            planetMetalCost, // o el recurso ganado/perdido
+                            planetDeutCost
+                        );
+                        DatabaseManager.insertBattleLog(
+                            planet.getIdPlanet(),
+                            battleNumber,
+                            0, //!!hacer un bucle para que no se repita el número de batalla
+                            "null" // texto del log
+                        );
+
+                        //se inicia todo en 0
+                        int light_hunter_destroyed = 0;
+                        int heavy_hunter_destroyed = 0;
+                        int battleship_destroyed = 0;
+                        int armored_ship_destroyed = 0;
+
+                        int missile_launcher_built = 0;
+                        int missile_launcher_destroyed = 0;
+                        int ion_cannon_built = 0;
+                        int ion_cannon_destroyed = 0;
+                        int plasma_canon_built = 0;
+                        int plasma_canon_destroyed = 0;
+
+                        DatabaseManager.insertPlanetBattleArmy(
+                            planet.getIdPlanet(),
+                            battleNumber,
+                            light_hunter_destroyed,
+                            heavy_hunter_destroyed,
+                            battleship_destroyed,
+                            armored_ship_destroyed
+                        );
+
+                        DatabaseManager.insertPlanetBattleDefense(
+                            planet.getIdPlanet(),
+                            battleNumber,
+                            missile_launcher_built,
+                            missile_launcher_destroyed,
+                            ion_cannon_built,
+                            ion_cannon_destroyed,
+                            plasma_canon_built,
+                            plasma_canon_destroyed
+                        );
+
+
+                        // calcula los datos y llama a buildBattleSummary
+                        String xmlFileName = "batalla" + battleNumber + ".xml";
+                        battle.buildBattleSummary(
+                            battleNumber,
+                            planetUnits, planetDrops, enemyUnits, enemyDrops,
+                            planetMetalCost, planetDeutCost, enemyMetalCost, enemyDeutCost,
+                            planetMetalLoss, planetDeutLoss, enemyMetalLoss, enemyDeutLoss,
+                            planetWasteMetal, planetWasteDeut, planetWins
+                        );
+                        battle.exportBattleToXML(battleNumber, xmlFileName);
+
+                        int htmlBattleNumber = 1;
+                        File htmlFile;
+                        do {
+                            htmlFile = new File("battleReport" + htmlBattleNumber + ".html");
+                            htmlBattleNumber++;
+                        } while (htmlFile.exists());
+                        htmlBattleNumber--;
+                        String htmlFileName = "battleReport" + htmlBattleNumber + ".html";
+
+                        // Transforma el XML a HTML  //!!!!!!!!!!! hay que pasar esta ruta a relativa
+                        String xslFileName = "c:/Users/asier/Downloads/PlanetWars_BermudezAlex_PazPaula_PozoAsier-master/PlanetWars_BermudezAlex_PazPaula_PozoAsier-master/src/battleReport.xsl";
+                        battle.transformXMLToHTML(xmlFileName, xslFileName, htmlFileName);
+                        System.out.println("HTML generado: " + htmlFileName);
+                        // ----------------------------------------
+                        do {
+                            htmlFile = new File("battleReport" + htmlBattleNumber + ".html");
+                            htmlBattleNumber++;
+                        } while (htmlFile.exists());
+                        // Al salir del bucle, htmlBattleNumber se ha incrementado una vez de más
+                        htmlBattleNumber--;
+
                     } else if (user_input == 0) {
                         running = false;
                         flg_menu_principal = false;
@@ -207,6 +288,7 @@ public class Main implements Variables {
                     int user_input = input.nextInt();
 
                     if (user_input == 1) {
+
                         System.out.print("\nAmount of Units\nAmount: > ");
                         int user_amount = input.nextInt();
                         planet.newMissileLauncher(user_amount);
@@ -368,6 +450,22 @@ class Batalla {
         
 
         System.out.println("Updated planet army after the battle.");
+        DatabaseManager.updatePlanetStats(
+            planet.getIdPlanet(),
+            "MIPLANETA",
+            planet.getMetal(),
+            planet.getDeuterium(),
+            planet.getTechnologyDefense(),
+            planet.getTechnologyAttack(),
+            0, //!!ESTO HABRÁ QUE ACTUALIZARLO CON EL CONTADOR DE BATALLAS
+            planet.getArmy()[4].size(),
+            planet.getArmy()[5].size(),
+            planet.getArmy()[6].size(),
+            planet.getArmy()[0].size(),
+            planet.getArmy()[1].size(),
+            planet.getArmy()[2].size(),
+            planet.getArmy()[3].size()
+        );
     }
 
     private void applyMutualDamage() {
@@ -422,7 +520,7 @@ class Batalla {
     ArrayList<MilitaryUnit>[] enemyArmy = battle.getEnemyArmy();
 
     for (ArrayList<MilitaryUnit> group : enemyArmy) {
-        // Usamos un iterator para poder eliminar mientras recorremos
+        // Usamos un iterator para poder eliminar mientras recorremos, p
         Iterator<MilitaryUnit> iterator = group.iterator();
         while (iterator.hasNext()) {
             MilitaryUnit unit = iterator.next();
