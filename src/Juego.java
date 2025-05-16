@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.border.Border;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -50,70 +52,138 @@ public class Juego implements Variables {
     }
 
     private void initializeScreens() {
-        // Start panel
-        panelStart = new JPanel(new BorderLayout());
+       // Start panel
+        panelStart = new JPanel();
+        panelStart.setLayout(new BoxLayout(panelStart, BoxLayout.Y_AXIS));
         panelStart.setBackground(new Color(255, 140, 0));
-        
-        
+        panelStart.setBorder(BorderFactory.createEmptyBorder(80, 50, 80, 50)); // Espacio alrededor
+
         JLabel title = new JLabel("SPACE WARS", SwingConstants.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 50));
         title.setForeground(Color.WHITE);
-        panelStart.add(title, BorderLayout.NORTH);
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JButton buttonPlay = new JButton("Play");
-        title.setFont(new Font("Arial", Font.BOLD, 50));
         buttonPlay.setPreferredSize(new Dimension(120, 40));
+        buttonPlay.setMaximumSize(new Dimension(150, 50));
         buttonPlay.setBackground(new Color(255, 69, 0));
         buttonPlay.setForeground(Color.WHITE);
         buttonPlay.setFocusPainted(false);
-        
         buttonPlay.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        buttonPlay.setAlignmentX(Component.CENTER_ALIGNMENT);
         buttonPlay.addActionListener(e -> switchPanel(panelMainMenu));
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setOpaque(false);
-        buttonPanel.add(buttonPlay);
-        panelStart.add(buttonPanel, BorderLayout.CENTER);
+        // Agregar componentes con espacio entre ellos
+        panelStart.add(title);
+        panelStart.add(Box.createRigidArea(new Dimension(0, 50))); // Espacio entre título y botón
+        panelStart.add(buttonPlay);
 
         ventana.add(panelStart);
 
+
         // Main Menu panel
-        panelMainMenu = new JPanel(new GridLayout(5, 1));
+        panelMainMenu = new JPanel();
+        panelMainMenu.setLayout(new BoxLayout(panelMainMenu, BoxLayout.Y_AXIS));
         panelMainMenu.setBackground(new Color(70, 130, 180));
+        panelMainMenu.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100)); // Márgenes grandes
 
+        // Título
         JLabel titleMainMenu = new JLabel("Main Menu", SwingConstants.CENTER);
-        titleMainMenu.setFont(new Font("Arial", Font.BOLD, 18));
+        titleMainMenu.setFont(new Font("Arial", Font.BOLD, 50));
         titleMainMenu.setForeground(Color.WHITE);
+        titleMainMenu.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelMainMenu.add(titleMainMenu);
+        panelMainMenu.add(Box.createRigidArea(new Dimension(0, 30))); // Espacio debajo del título
 
-        // Crear botones
+        // Estilo común
+        Font buttonFont = new Font("Arial", Font.BOLD, 16);
+        Dimension buttonSize = new Dimension(500, 90);
+        Color buttonColor = new Color(240, 248, 255); // Azul muy suave
+        Color textColor = new Color(25, 25, 112); // Azul oscuro
+        Border buttonBorder = BorderFactory.createLineBorder(Color.WHITE, 2);
+
+        // Botón 1
         JButton buttonStats = new JButton("View Planet Stats");
-        JButton buttonBuild = new JButton("Build");
-        JButton buttonUpgrade = new JButton("Upgrade Technology");
-        JButton buttonBattleReports = new JButton("View Battle Reports");
-        JButton buttonExit = new JButton("Exit");
+        buttonStats.setMaximumSize(buttonSize);
+        buttonStats.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buttonStats.setBackground(buttonColor);
+        buttonStats.setForeground(textColor);
+        buttonStats.setFont(buttonFont);
+        buttonStats.setFocusPainted(false);
+        buttonStats.setBorder(buttonBorder);
+        panelMainMenu.add(buttonStats);
+        panelMainMenu.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        // Configurar colores de fondo
-        Color buttonColor = new Color(230, 230, 250);
+        // Botón 2
+        JButton buttonBuild = new JButton("Build");
+        buttonBuild.setMaximumSize(buttonSize);
+        buttonBuild.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buttonBuild.setBackground(buttonColor);
+        buttonBuild.setForeground(textColor);
+        buttonBuild.setFont(buttonFont);
+        buttonBuild.setFocusPainted(false);
+        buttonBuild.setBorder(buttonBorder);
+        panelMainMenu.add(buttonBuild);
+        panelMainMenu.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        // Botón 3
+        JButton buttonUpgrade = new JButton("Upgrade Technology");
+        buttonUpgrade.setMaximumSize(buttonSize);
+        buttonUpgrade.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buttonUpgrade.setBackground(buttonColor);
+        buttonUpgrade.setForeground(textColor);
+        buttonUpgrade.setFont(buttonFont);
+        buttonUpgrade.setFocusPainted(false);
+        buttonUpgrade.setBorder(buttonBorder);
+        panelMainMenu.add(buttonUpgrade);
+        panelMainMenu.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        // Botón 4
+        JButton buttonBattleReports = new JButton("View Battle Reports");
+        buttonBattleReports.setMaximumSize(buttonSize);
+        buttonBattleReports.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buttonBattleReports.setBackground(buttonColor);
+        buttonBattleReports.setForeground(textColor);
+        buttonBattleReports.setFont(buttonFont);
+        buttonBattleReports.setFocusPainted(false);
+        buttonBattleReports.setBorder(buttonBorder);
+        panelMainMenu.add(buttonBattleReports);
+        panelMainMenu.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        // Botón 5
+        JButton buttonExit = new JButton("Exit");
+        buttonExit.setMaximumSize(buttonSize);
+        buttonExit.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buttonExit.setBackground(buttonColor);
+        buttonExit.setForeground(textColor);
+        buttonExit.setFont(buttonFont);
+        buttonExit.setFocusPainted(false);
+        buttonExit.setBorder(buttonBorder);
+        panelMainMenu.add(buttonExit);
+        panelMainMenu.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        // Agregar panel a ventana
+        ventana.add(panelMainMenu);
+            
         buttonStats.addActionListener(e -> {
-    JOptionPane.showMessageDialog(ventana,
-        "Planet Stats:\n\n" +
-        "Metal: " + planet.getMetal() + "\n" +
-        "Deuterium: " + planet.getDeuterium() + "\n\n" +
-        "Attack Tech Level: " + planet.getTechnologyAttack() + "\n" +
-        "Defense Tech Level: " + planet.getTechnologyDefense() + "\n\n" +
-        "Upgrade Cost (Attack): " + planet.getUpgradeAttackTechnologyDeuteriumCost() + " Deuterium\n" +
-        "Upgrade Cost (Defense): " + planet.getUpgradeDefenseTechnologyDeuteriumCost() + " Deuterium\n\n" +
-        "Army Composition:\n" +
-        "- Light Hunters: " + planetArmy[0].size() + "\n" +
-        "- Heavy Hunters: " + planetArmy[1].size() + "\n" +
-        "- Battle Ships: " + planetArmy[2].size() + "\n" +
-        "- Armored Ships: " + planetArmy[3].size() + "\n" +
-        "- Missile Launchers: " + planetArmy[4].size() + "\n" +
-        "- Ion Cannons: " + planetArmy[5].size() + "\n" +
-        "- Plasma Cannons: " + planetArmy[6].size(),
-        "Planet Statistics", JOptionPane.INFORMATION_MESSAGE
-    );
+        JOptionPane.showMessageDialog(ventana,
+            "Planet Stats:\n\n" +
+            "Metal: " + planet.getMetal() + "\n" +
+            "Deuterium: " + planet.getDeuterium() + "\n\n" +
+            "Attack Tech Level: " + planet.getTechnologyAttack() + "\n" +
+            "Defense Tech Level: " + planet.getTechnologyDefense() + "\n\n" +
+            "Upgrade Cost (Attack): " + planet.getUpgradeAttackTechnologyDeuteriumCost() + " Deuterium\n" +
+            "Upgrade Cost (Defense): " + planet.getUpgradeDefenseTechnologyDeuteriumCost() + " Deuterium\n\n" +
+            "Army Composition:\n" +
+            "- Light Hunters: " + planetArmy[0].size() + "\n" +
+            "- Heavy Hunters: " + planetArmy[1].size() + "\n" +
+            "- Battle Ships: " + planetArmy[2].size() + "\n" +
+            "- Armored Ships: " + planetArmy[3].size() + "\n" +
+            "- Missile Launchers: " + planetArmy[4].size() + "\n" +
+            "- Ion Cannons: " + planetArmy[5].size() + "\n" +
+            "- Plasma Cannons: " + planetArmy[6].size(),
+            "Planet Statistics", JOptionPane.INFORMATION_MESSAGE
+        );
 });
 
         buttonBuild.setBackground(buttonColor);
@@ -488,13 +558,13 @@ panelBuildDefenses.add(buttonBackDefenses);
 
 //  Panel para mejorar tecnología
 panelUpgradeTechnology = new JPanel(new GridLayout(4, 1));
-panelUpgradeTechnology.setBackground(new Color(255, 0, 128)); // Verde oscuro
+panelUpgradeTechnology.setBackground(new Color(59, 131, 189)); // azul
 panelUpgradeTechnology.add(new JLabel("Upgrade Technology", SwingConstants.CENTER));
-panelUpgradeTechnology.setFont(new Font("Arial", Font.BOLD, 30));
+panelUpgradeTechnology.setFont(new Font("Arial", Font.BOLD, 60));
 //  Botón para mejorar defensa
 JButton buttonDefense = new JButton("Upgrade Defense Technology");
 buttonDefense.setPreferredSize(new Dimension(80, 25));
-buttonDefense.setBackground(new Color(234, 137, 154)); // Verde claro
+buttonDefense.setBackground(new Color(240, 248, 255)); // 
 buttonDefense.setForeground(Color.BLACK);
 buttonDefense.setFocusPainted(false);
 buttonDefense.setFont(new Font("Arial", Font.BOLD, 18));
@@ -519,7 +589,7 @@ buttonDefense.addActionListener(e -> {
 // Botón para mejorar ataque
 JButton buttonAttack = new JButton("Upgrade Attack Technology");
 buttonAttack.setPreferredSize(new Dimension(80, 25));
-buttonAttack.setBackground(new Color(234, 137, 154)); // Rojo intenso
+buttonAttack.setBackground(new Color(240, 248, 255)); // Rojo intenso
 buttonAttack.setForeground(Color.BLACK);
 buttonAttack.setFocusPainted(false);
 buttonAttack.setFont(new Font("Arial", Font.BOLD, 18));
@@ -543,7 +613,7 @@ buttonAttack.addActionListener(e -> {
 // Botón para volver
 JButton buttonBackUpgrade = new JButton("Go Back");
 buttonBackUpgrade.setPreferredSize(new Dimension(80, 25));
-buttonBackUpgrade.setBackground(new Color(234, 137, 154)); // Azul brillante
+buttonBackUpgrade.setBackground(new Color(240, 248, 255)); // Azul brillante
 buttonBackUpgrade.setForeground(Color.BLACK);
 buttonBackUpgrade.setFocusPainted(false);
 buttonBackUpgrade.setFont(new Font("Arial", Font.BOLD, 18));
