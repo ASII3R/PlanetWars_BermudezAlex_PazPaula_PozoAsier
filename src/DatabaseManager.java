@@ -1,6 +1,7 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DatabaseManager {
@@ -19,7 +20,7 @@ public class DatabaseManager {
         int missile_launcher_remaining, int ion_cannon_remaining, int plasma_canon_remaining,
         int light_hunter_remaining, int heavy_hunter_remaining, int battleship_remaining, int armored_ship_remaining
     ) {
-        String sql = "INSERT INTO Planet_stats (planet_id, name, resource_metal_amount, resource_deuterion_amount, technology_defense_level, technology_attack_level, battles_counter, missile_launcher_remaining, ion_cannon_remaining, plasma_canon_remaining, light_hunter_remaining, heavy_hunter_remaining, battleship_remaining, armored_ship_remaining) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO planet_stats (planet_id, name, resource_metal_amount, resource_deuterion_amount, technology_defense_level, technology_attack_level, battles_counter, missile_launcher_remaining, ion_cannon_remaining, plasma_canon_remaining, light_hunter_remaining, heavy_hunter_remaining, battleship_remaining, armored_ship_remaining) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, planet_id);
@@ -45,7 +46,7 @@ public class DatabaseManager {
 
     // Insert en Battle_stats
     public static void insertBattleStats(int planet_id, int num_battle, int resource_metal_acquired, int resource_deuterion_acquired) {
-        String sql = "INSERT INTO Battle_stats (planet_id, num_battle, resource_metal_acquired, resource_deuterion_acquired) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO battle_stats (planet_id, num_battle, resource_metal_acquired, resource_deuterion_acquired) VALUES (?, ?, ?, ?)";
         try (Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, planet_id);
@@ -61,7 +62,7 @@ public class DatabaseManager {
 
     // Insert en Battle_log
     public static void insertBattleLog(int planet_id, int num_battle, int num_line, String log_entry) {
-        String sql = "INSERT INTO Battle_log (planet_id, num_battle, num_line, log_entry) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO battle_log (planet_id, num_battle, num_line, log_entry) VALUES (?, ?, ?, ?)";
         try (Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, planet_id);
@@ -77,7 +78,7 @@ public class DatabaseManager {
 
     // Insert en Planet_battle_defense
     public static void insertPlanetBattleDefense(int planet_id, int num_battle, int missile_launcher_built, int missile_launcher_destroyed, int ion_cannon_built, int ion_cannon_destroyed, int plasma_canon_built, int plasma_canon_destroyed) {
-        String sql = "INSERT INTO Planet_battle_defense (planet_id, num_battle, missile_launcher_built, missile_launcher_destroyed, ion_cannon_built, ion_cannon_destroyed, plasma_canon_built, plasma_canon_destroyed) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO planet_battle_defense (planet_id, num_battle, missile_launcher_built, missile_launcher_destroyed, ion_cannon_built, ion_cannon_destroyed, plasma_canon_built, plasma_canon_destroyed) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, planet_id);
@@ -97,7 +98,7 @@ public class DatabaseManager {
 
     // Insert en Planet_battle_army
     public static void insertPlanetBattleArmy(int planet_id, int num_battle, int light_hunter_destroyed, int heavy_hunter_destroyed, int battle_ship_destroyed, int armored_ship_destroyed) {
-        String sql = "INSERT INTO Planet_battle_army (planet_id, num_battle, light_hunter_destroyed, heavy_hunter_destroyed, battleship_destroyed, armored_ship_destroyed) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO planet_battle_army (planet_id, num_battle, light_hunter_destroyed, heavy_hunter_destroyed, battleship_destroyed, armored_ship_destroyed) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, planet_id);
@@ -115,7 +116,7 @@ public class DatabaseManager {
 
 // Insert en Enemy_army
     public static void insertEnemyArmy(int planet_id, int num_battle, int light_hunter_destroyed, int heavy_hunter_destroyed, int battle_ship_destroyed, int armored_ship_destroyed) {
-        String sql = "INSERT INTO Enemy_army (planet_id, num_battle, light_hunter_destroyed, heavy_hunter_destroyed, battleship_destroyed, armored_ship_destroyed) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO enemy_army (planet_id, num_battle, light_hunter_destroyed, heavy_hunter_destroyed, battleship_destroyed, armored_ship_destroyed) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, planet_id);
@@ -139,7 +140,7 @@ public class DatabaseManager {
         int missile_launcher_remaining, int ion_cannon_remaining, int plasma_canon_remaining,
         int light_hunter_remaining, int heavy_hunter_remaining, int battleship_remaining, int armored_ship_remaining
     ) {
-        String sql = "UPDATE Planet_stats SET name=?, resource_metal_amount=?, resource_deuterion_amount=?, technology_defense_level=?, technology_attack_level=?, battles_counter=?, missile_launcher_remaining=?, ion_cannon_remaining=?, plasma_canon_remaining=?, light_hunter_remaining=?, heavy_hunter_remaining=?, battleship_remaining=?, armored_ship_remaining=? WHERE planet_id=?";
+        String sql = "UPDATE planet_stats SET name=?, resource_metal_amount=?, resource_deuterion_amount=?, technology_defense_level=?, technology_attack_level=?, battles_counter=?, missile_launcher_remaining=?, ion_cannon_remaining=?, plasma_canon_remaining=?, light_hunter_remaining=?, heavy_hunter_remaining=?, battleship_remaining=?, armored_ship_remaining=? WHERE planet_id=?";
         try (Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, name);
@@ -165,7 +166,7 @@ public class DatabaseManager {
 
     // Update Battle_stats
     public static void updateBattleStats(int planet_id, int num_battle, int resource_metal_acquired, int resource_deuterion_acquired) {
-        String sql = "UPDATE Battle_stats SET resource_metal_acquired=?, resource_deuterion_acquired=? WHERE planet_id=? AND num_battle=?";
+        String sql = "UPDATE battle_stats SET resource_metal_acquired=?, resource_deuterion_acquired=? WHERE planet_id=? AND num_battle=?";
         try (Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, resource_metal_acquired);
@@ -181,7 +182,7 @@ public class DatabaseManager {
 
     // Update Battle_log
     public static void updateBattleLog(int planet_id, int num_battle, int num_line, String log_entry) {
-        String sql = "UPDATE Battle_log SET log_entry=? WHERE planet_id=? AND num_battle=? AND num_line=?";
+        String sql = "UPDATE battle_log SET log_entry=? WHERE planet_id=? AND num_battle=? AND num_line=?";
         try (Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, log_entry);
@@ -197,7 +198,7 @@ public class DatabaseManager {
 
     // Update Planet_battle_defense
     public static void updatePlanetBattleDefense(int planet_id, int num_battle, int missile_launcher_built, int missile_launcher_destroyed, int ion_cannon_built, int ion_cannon_destroyed, int plasma_canon_built, int plasma_canon_destroyed) {
-        String sql = "UPDATE Planet_battle_defense SET missile_launcher_built=?, missile_launcher_destroyed=?, ion_cannon_built=?, ion_cannon_destroyed=?, plasma_canon_built=?, plasma_canon_destroyed=? WHERE planet_id=? AND num_battle=?";
+        String sql = "UPDATE planet_battle_defense SET missile_launcher_built=?, missile_launcher_destroyed=?, ion_cannon_built=?, ion_cannon_destroyed=?, plasma_canon_built=?, plasma_canon_destroyed=? WHERE planet_id=? AND num_battle=?";
         try (Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, missile_launcher_built);
@@ -217,7 +218,7 @@ public class DatabaseManager {
 
     // Update Planet_battle_army
     public static void updatePlanetBattleArmy(int planet_id, int num_battle, int light_hunter_destroyed, int heavy_hunter_destroyed, int battle_ship_destroyed, int armored_ship_destroyed) {
-        String sql = "UPDATE Planet_battle_army SET light_hunter_destroyed=?, heavy_hunter_destroyed=?, battleship_destroyed=?, armored_ship_destroyed=? WHERE planet_id=? AND num_battle=?";
+        String sql = "UPDATE planet_battle_army SET light_hunter_destroyed=?, heavy_hunter_destroyed=?, battleship_destroyed=?, armored_ship_destroyed=? WHERE planet_id=? AND num_battle=?";
         try (Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, light_hunter_destroyed);
@@ -235,7 +236,7 @@ public class DatabaseManager {
 
     // Update Enemy_army
     public static void updateEnemyArmy(int planet_id, int num_battle, int light_hunter_destroyed, int heavy_hunter_destroyed, int battle_ship_destroyed, int armored_ship_destroyed) {
-            String sql = "UPDATE Enemy_army SET light_hunter_destroyed=?, heavy_hunter_destroyed=?, battleship_destroyed=?, armored_ship_destroyed=? WHERE planet_id=? AND num_battle=?";
+            String sql = "UPDATE enemy_army SET light_hunter_destroyed=?, heavy_hunter_destroyed=?, battleship_destroyed=?, armored_ship_destroyed=? WHERE planet_id=? AND num_battle=?";
             try (Connection conn = getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setInt(1, light_hunter_destroyed);
@@ -250,4 +251,50 @@ public class DatabaseManager {
                 e.printStackTrace();
             }
         }
-    }
+
+        //comprobar si existe algun campo
+        public static boolean existsPlanetBattleArmy(int planet_id, int num_battle) {
+            String sql = "SELECT 1 FROM planet_battle_army WHERE planet_id=? AND num_battle=?";
+            try (Connection conn = getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, planet_id);
+                stmt.setInt(2, num_battle);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    return rs.next();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        public static boolean existsPlanetBattleDefense(int planet_id, int num_battle) {
+            String sql = "SELECT 1 FROM planet_battle_defense WHERE planet_id=? AND num_battle=?";
+            try (Connection conn = getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, planet_id);
+                stmt.setInt(2, num_battle);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    return rs.next();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        public static boolean existsEnemyArmy(int planet_id, int num_battle) {
+            String sql = "SELECT 1 FROM enemy_army WHERE planet_id=? AND num_battle=?";
+            try (Connection conn = getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, planet_id);
+                stmt.setInt(2, num_battle);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    return rs.next();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            }
+}
+}
