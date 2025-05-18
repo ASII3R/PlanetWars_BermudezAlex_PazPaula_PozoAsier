@@ -6,7 +6,7 @@
 &lt;unit type="HeavyHunter" count="1" /&gt;
 &lt;unit type="BattleShip" count="1" /&gt;
 &lt;unit type="ArmoredShip" count="1" /&gt;
-&lt;unit type="MissileLauncher" count="1" /&gt;
+&lt;unit type="MissileLauncher" count="2" /&gt;
 &lt;unit type="IonCannon" count="1" /&gt;
 &lt;unit type="PlasmaCannon" count="1" /&gt;
 &lt;/units&gt;</planetArmy>
