@@ -1,12 +1,25 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 public class Juego implements Variables {
     private JFrame ventana;
@@ -962,6 +975,48 @@ buttonBattleReports.addActionListener(e -> {
             planet.setDeuterium(planet.getDeuterium() + deuteriumGained);
         }
 
+        // Generar reporte de batalla
+        StringBuilder planetArmyReport = new StringBuilder();
+        planetArmyReport.append("<units>\n");
+        for (int i = 0; i < planetArmy.length; i++) {
+            if (!planetArmy[i].isEmpty()) {
+                planetArmyReport.append("<unit type=\"")
+                    .append(planetArmy[i].get(0).getClass().getSimpleName())
+                    .append("\" count=\"")
+                    .append(planetArmy[i].size())
+                    .append("\" />\n");
+            }
+        }
+        planetArmyReport.append("</units>\n");
+
+        StringBuilder enemyArmyReport = new StringBuilder();
+        enemyArmyReport.append("<units>\n");
+        ArrayList<MilitaryUnit>[] enemy = battle.getEnemyArmy();
+        if (enemy != null) {
+            for (int i = 0; i < enemy.length; i++) {
+                if (!enemy[i].isEmpty()) {
+                    enemyArmyReport.append("<unit type=\"")
+                        .append(enemy[i].get(0).getClass().getSimpleName())
+                        .append("\" count=\"")
+                        .append(enemy[i].size())
+                        .append("\" />\n");
+                }
+            }
+        }
+        enemyArmyReport.append("</units>\n");
+
+        // Generar archivo XML
+        generateBattleReportXML(battleCounter, planetArmyReport.toString(), enemyArmyReport.toString());
+
+        // Transformar XML a HTML
+        String xmlFileName = "battle" + battleCounter + ".xml";
+        String xslFileName = "battleReport.xsl";
+        String htmlFileName = "battle" + battleCounter + ".html";
+        transformXMLToHTML(xmlFileName, xslFileName, htmlFileName);
+
+        // Incrementar el contador de batallas
+        battleCounter++;
+
         // Crear una nueva ventana para mostrar el resultado
         JFrame resultWindow = new JFrame("Battle Result");
         resultWindow.setSize(400, 250);
@@ -1028,6 +1083,68 @@ buttonBattleReports.addActionListener(e -> {
             return placeholderIcon;
         }
     }
+
+    private void generateBattleReportXML(int battleNumber, String planetArmyReport, String enemyArmyReport) {
+    String xmlFileName = "battle" + battleNumber + ".xml";
+
+    try {
+        // Crear el documento XML
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+        Document doc = docBuilder.newDocument();
+
+        // Elemento raíz
+        Element rootElement = doc.createElement("battleReport");
+        doc.appendChild(rootElement);
+
+        // Número de batalla
+        Element battleNumberElement = doc.createElement("battleNumber");
+        battleNumberElement.appendChild(doc.createTextNode(String.valueOf(battleNumber)));
+        rootElement.appendChild(battleNumberElement);
+
+        // Ejército del planeta
+        Element planetArmyElement = doc.createElement("planetArmy");
+        planetArmyElement.appendChild(doc.createTextNode(planetArmyReport.trim()));
+        rootElement.appendChild(planetArmyElement);
+
+        // Ejército enemigo
+        Element enemyArmyElement = doc.createElement("enemyArmy");
+        enemyArmyElement.appendChild(doc.createTextNode(enemyArmyReport.trim()));
+        rootElement.appendChild(enemyArmyElement);
+
+        // Escribir el contenido en el archivo XML con formato bonito
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+        DOMSource source = new DOMSource(doc);
+        StreamResult result = new StreamResult(new File(xmlFileName));
+
+        transformer.transform(source, result);
+
+        System.out.println("Archivo XML generado: " + xmlFileName);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
+    private void transformXMLToHTML(String xmlFileName, String xslFileName, String htmlFileName) {
+    try {
+        // Ruta de salida para los archivos HTML
+        String outputPath = "webProjecte/Batallas/" + htmlFileName;
+
+        // Ruta del archivo XSL (ajusta según la ubicación real)
+        String xslPath = "src/" + xslFileName;
+
+        TransformerFactory factory = TransformerFactory.newInstance();
+        Transformer transformer = factory.newTransformer(new StreamSource(xslPath));
+        transformer.transform(new StreamSource(xmlFileName), new StreamResult(outputPath));
+
+        System.out.println("Archivo HTML generado: " + outputPath);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
 
     public static void main(String[] args) {
         try {
