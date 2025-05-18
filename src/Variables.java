@@ -31,7 +31,7 @@ public interface Variables {
 	public final int METAL_COST_MISSILELAUNCHER = 2000;
 	public final int METAL_COST_IONCANNON = 4000;
 	public final int METAL_COST_PLASMACANNON = 50000;
-	public final int DEUTERIUM_COST_MISSILELAUNCHER = 0;
+	public final int DEUTERIUM_COST_MISSILELAUNCHER = 500;
 	public final int DEUTERIUM_COST_IONCANNON = 500;
 	public final int DEUTERIUM_COST_PLASMACANNON = 5000;
 	

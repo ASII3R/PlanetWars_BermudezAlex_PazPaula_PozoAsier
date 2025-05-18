@@ -46,6 +46,7 @@ public class Juego implements Variables {
         initializeScreens();
         ventana.setVisible(true);
     }
+    
 
     private void initializeScreens() {
        // Start panel
