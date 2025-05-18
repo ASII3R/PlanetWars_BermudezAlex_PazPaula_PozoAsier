@@ -1,0 +1,8 @@
+Per fer la connexió des d'un altre equip s'haurà de canviar la contrasenya 
+i l'usuari a l'hora de fer la connexió.
+
+Per fer això és necessari entrar a DatabaseManager.java i buscar root.
+Allà s'haurà de canviar l'usuari i la contrasenya per les de l'equip local.
+
+Primer s'ha de crear la base de dades amb la primera línea de text i després fer la resta
+NO FER-HO TOT DE COP!!!
