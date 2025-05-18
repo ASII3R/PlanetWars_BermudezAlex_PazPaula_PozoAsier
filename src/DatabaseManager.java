@@ -6,10 +6,17 @@ import java.sql.SQLException;
 
 public class DatabaseManager {
     private static final String URL = "jdbc:mysql://localhost:3306/planetwars";
-    private static final String USER = "root"; 
+    private static final String USER = "admin"; 
     private static final String PASSWORD = "1234";
+    
 
     public static Connection getConnection() throws SQLException {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");  // FORZAR la carga del driver
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            throw new SQLException("No se encontró el driver MySQL", e);
+        }
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 

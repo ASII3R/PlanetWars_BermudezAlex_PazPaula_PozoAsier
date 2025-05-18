@@ -1,0 +1,31 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Juego",
+            "request": "launch",
+            "mainClass": "Juego",
+            "projectName": "PlanetWars_BermudezAlex_PazPaula_PozoAsier",
+            "classpath": [
+                "lib/mysql-connector-j-9.3.0.jar"
+            ]
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "PlanetWars_BermudezAlex_PazPaula_PozoAsier",
+            "classpath": [
+                "lib/mysql-connector-j-9.3.0.jar"
+            ]
+        }
+    ]
+}
