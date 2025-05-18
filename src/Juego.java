@@ -3,13 +3,13 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -18,8 +18,6 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 public class Juego implements Variables {
     private JFrame ventana;
@@ -347,7 +345,7 @@ public class Juego implements Variables {
                 DatabaseManager.updatePlanetBattleArmy(
                     planet.getIdPlanet(),
                     battleCounter,
-                    aConstruir, 0, 0, 0,0,0,0,0
+                    aConstruir, 0, 0,0
                 );
 
                 if (aConstruir < cantidad) {
@@ -399,7 +397,7 @@ public class Juego implements Variables {
                 DatabaseManager.updatePlanetBattleArmy(
                     planet.getIdPlanet(),
                     battleCounter,
-                    0, 0, aConstruir,0,0,0,0,0
+                    0, 0, aConstruir,0
                 );
 
                 if (aConstruir < cantidad) {
@@ -450,7 +448,7 @@ public class Juego implements Variables {
                 DatabaseManager.updatePlanetBattleArmy(
                     planet.getIdPlanet(),
                     battleCounter,
-                    0, 0, 0,0,aConstruir,0,0,0
+                    0, 0, 0,aConstruir
                     );
 
                 if (aConstruir < cantidad) {
@@ -501,7 +499,7 @@ public class Juego implements Variables {
                 DatabaseManager.updatePlanetBattleArmy(
                     planet.getIdPlanet(),
                     battleCounter,
-                    0, 0, 0,0,0,0,aConstruir,0
+                    0, 0, 0,aConstruir
                 );
 
                 if (aConstruir < cantidad) {
@@ -729,7 +727,7 @@ public class Juego implements Variables {
             DatabaseManager.updatePlanetBattleArmy(
                 planet.getIdPlanet(),
                 battleCounter,
-                aConstruir, 0, 0, 0,0,0,0,0
+                aConstruir, 0, 0, 0
             );
 
             JOptionPane.showMessageDialog(ventana, "Successfully built " + aConstruir + " Armored Ships.");
@@ -909,7 +907,7 @@ buttonBattleReports.addActionListener(e -> {
         buttonBackCredits.setBackground(new Color(240, 248, 255)); // Azul muy suave
         buttonBackCredits.setForeground(new Color(25, 25, 112)); // Azul oscuro
         buttonBackCredits.setFont(new Font("Arial", Font.BOLD, 16));
-        buttonBackCredits.setFocusPainted(false);
+         buttonBackCredits.setFocusPainted(false);
         buttonBackCredits.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
         buttonBackCredits.addActionListener(e -> switchPanel(panelMainMenu));
         panelCredits.add(Box.createRigidArea(new Dimension(0, 30))); // Espacio antes del botón
@@ -1149,8 +1147,8 @@ buttonBattleReports.addActionListener(e -> {
     public static void main(String[] args) {
         try {
             new Juego();
-            DatabaseManager.resetAllBattleArmies();
-            DatabaseManager.resetAllBattleDefenses();
+            //DatabaseManager.resetAllBattleArmies();
+            //DatabaseManager.resetAllBattleDefenses();
         } catch (ResourceException e) {
             e.printStackTrace();
  }
