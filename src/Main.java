@@ -532,8 +532,7 @@ class Batalla {
                 shipUnit.setShipDestruido(shipUnit.getShipDestruido() + 1);
                 iterator.remove();
             }
-        }
-    }
-
+    }
+}
 }
 }
