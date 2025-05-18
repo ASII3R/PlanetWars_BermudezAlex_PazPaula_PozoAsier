@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -25,8 +26,11 @@ public class Juego implements Variables {
     // Añade este contador para simular el número de batalla (puedes mejorarlo según tu lógica)
     private int battleCounter = 1;
 
+    // Añade un indicador para evitar múltiples peleas consecutivas
+    private boolean isBattleInProgress = false;
+
     public Juego() throws ResourceException {
-        // Initialize units and battle
+        // Initialize planet army
         planetArmy = new ArrayList[7];
         for (int i = 0; i < planetArmy.length; i++) {
             planetArmy[i] = new ArrayList<>();
@@ -39,7 +43,7 @@ public class Juego implements Variables {
         planetArmy[5].add(new IonCannon(ARMOR_IONCANNON, BASE_DAMAGE_PLASMACANNON));
         planetArmy[6].add(new PlasmaCannon(ARMOR_PLASMACANNON, BASE_DAMAGE_PLASMACANNON));
 
-        //iniciar enemy army
+        // Initialize enemy army
         ArrayList<MilitaryUnit>[] enemyArmy = new ArrayList[7];
         for (int i = 0; i < enemyArmy.length; i++) {
             enemyArmy[i] = new ArrayList<>();
@@ -53,45 +57,46 @@ public class Juego implements Variables {
         enemyArmy[5].add(new IonCannon(ARMOR_IONCANNON, BASE_DAMAGE_IONCANNON));
         enemyArmy[6].add(new PlasmaCannon(ARMOR_PLASMACANNON, BASE_DAMAGE_PLASMACANNON));
 
+        // Initialize planet and battle
+        this.planet = new Planet(0, 0, 53500, 26800, UPGRADE_BASE_DEFENSE_TECHNOLOGY_DEUTERIUM_COST, UPGRADE_BASE_ATTACK_TECHNOLOGY_DEUTERIUM_COST, planetArmy, 1);
+        this.battle = new Battle();
+        this.battle.setPlanetArmy(planetArmy);
+        this.battle.setEnemyArmy(enemyArmy);
+
+        // Timer tasks
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
-        public void run() {
-            planet.setMetal(planet.getMetal() + PLANET_METAL_GENERATED);
-            planet.setDeuterium(planet.getDeuterium() + PLANET_DEUTERIUM_GENERATED);
-            SwingUtilities.invokeLater(() -> 
-                JOptionPane.showMessageDialog(ventana, "Recolected Resources...\n", "Resources", JOptionPane.INFORMATION_MESSAGE)
-            );
+            public void run() {
+                planet.setMetal(planet.getMetal() + PLANET_METAL_GENERATED);
+                planet.setDeuterium(planet.getDeuterium() + PLANET_DEUTERIUM_GENERATED);
+                SwingUtilities.invokeLater(() -> 
+                    JOptionPane.showMessageDialog(ventana, "Recolected Resources...\n", "Resources", JOptionPane.INFORMATION_MESSAGE)
+                );
             }
         }, 60000, 60000);
 
         timer.schedule(new TimerTask() {
-        public void run() {
-            ArrayList<MilitaryUnit>[] enemy = battle.getEnemyArmy();
-            StringBuilder sb = new StringBuilder();
-            sb.append("[THREAT WARNING] Enemy Army approaching:\n");
-            if (enemy == null) {
-                sb.append("Enemy army data is not available.");
-            } else {
-                for (int i = 0; i < enemy.length; i++) {
-                    if (!enemy[i].isEmpty()) {
-                        sb.append(enemy[i].get(0).getClass().getSimpleName())
-                        .append(" x").append(enemy[i].size()).append("\n");
+            public void run() {
+                ArrayList<MilitaryUnit>[] enemy = battle.getEnemyArmy();
+                boolean anyEnemy = false;
+
+                if (enemy != null) {
+                    for (ArrayList<MilitaryUnit> group : enemy) {
+                        if (!group.isEmpty()) {
+                            anyEnemy = true;
+                            break;
+                        }
                     }
                 }
+
+                if (anyEnemy && !isBattleInProgress) {
+                    isBattleInProgress = true; // Marcar que la batalla está en progreso
+                    SwingUtilities.invokeLater(() -> resolveBattle());
+                }
             }
-            SwingUtilities.invokeLater(() -> 
-                JOptionPane.showMessageDialog(ventana, sb.toString(), "Threat Warning", JOptionPane.WARNING_MESSAGE)
-            );
-        }
-    }, 0, 30000);
+        }, 0, 30000);
 
-
-        this.planet = new Planet(0, 0, 53500, 26800, UPGRADE_BASE_DEFENSE_TECHNOLOGY_DEUTERIUM_COST, UPGRADE_BASE_ATTACK_TECHNOLOGY_DEUTERIUM_COST, planetArmy,1);
-        
-        battle = new Battle();
-        battle.setPlanetArmy(planetArmy);
-        battle.setEnemyArmy(enemyArmy);
-
+        // Initialize GUI
         ventana = new JFrame("Space Wars Game");
         ventana.setSize(600, 400);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -269,14 +274,22 @@ public class Juego implements Variables {
         panelBuildTroops.setBackground(new Color(176, 196, 222));
         panelBuildTroops.add(new JLabel("Build Troops", SwingConstants.CENTER));
 
-        // Crear botones como JButton
+        // Crear botones como JButton con imágenes
         JButton buttonLH = new JButton("Build Light Hunter");
+        buttonLH.setIcon(loadImageIcon("src/images/light_hunter.jpg", 50, 50)); // Imagen para Light Hunter
+
         JButton buttonHH = new JButton("Build Heavy Hunter");
+        buttonHH.setIcon(loadImageIcon("src/images/heavy_hunter.png", 50, 50)); // Imagen para Heavy Hunter
+
         JButton buttonBS = new JButton("Build Battle Ship");
+        buttonBS.setIcon(loadImageIcon("src/images/battle_ship.png", 50, 50)); // Imagen para Battle Ship
+
         JButton buttonAS = new JButton("Build Armored Ship");
+        buttonAS.setIcon(loadImageIcon("src/images/armored_ship.png", 50, 50)); // Imagen para Armored Ship
+
         JButton buttonBackTroops = new JButton("Go Back");
 
-        // Light Hunter
+        // Agregar ActionListeners (ya existentes en tu código)
         buttonLH.addActionListener(e -> {
             int cantidad = getUnitAmount("Enter the number of Light Hunters:");
             LightHunter temp = new LightHunter();
@@ -709,12 +722,6 @@ public class Juego implements Variables {
             JOptionPane.showMessageDialog(ventana, "Successfully built " + aConstruir + " Armored Ships.");
         });
 
-        // Add buttons to panel
-        panelBuildDefenses.add(buttonML);
-        panelBuildDefenses.add(buttonIC);
-        panelBuildDefenses.add(buttonPC);
-        panelBuildDefenses.add(buttonBackDefenses);
-
         //  Panel para mejorar tecnología
         panelUpgradeTechnology = new JPanel(new GridLayout(4, 1));
         panelUpgradeTechnology.setBackground(new Color(59, 131, 189)); // azul
@@ -868,6 +875,35 @@ buttonBattleReports.addActionListener(e -> {
     switchPanel(panelBattleReports);
 });
 
+        // Panel de créditos
+        JPanel panelCredits = new JPanel();
+        panelCredits.setLayout(new BoxLayout(panelCredits, BoxLayout.Y_AXIS));
+        panelCredits.setBackground(new Color(176, 196, 222));
+        panelCredits.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100)); // Márgenes grandes
+
+        JLabel titleCredits = new JLabel("Credits", SwingConstants.CENTER);
+        titleCredits.setFont(new Font("Arial", Font.BOLD, 50));
+        titleCredits.setForeground(Color.WHITE);
+        titleCredits.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelCredits.add(titleCredits);
+        panelCredits.add(Box.createRigidArea(new Dimension(0, 30))); // Espacio debajo del título
+
+
+        // Botón Back
+        JButton buttonBackCredits = new JButton("Back");
+        buttonBackCredits.setMaximumSize(new Dimension(200, 50));
+        buttonBackCredits.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buttonBackCredits.setBackground(new Color(240, 248, 255)); // Azul muy suave
+        buttonBackCredits.setForeground(new Color(25, 25, 112)); // Azul oscuro
+        buttonBackCredits.setFont(new Font("Arial", Font.BOLD, 16));
+        buttonBackCredits.setFocusPainted(false);
+        buttonBackCredits.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        buttonBackCredits.addActionListener(e -> switchPanel(panelMainMenu));
+        panelCredits.add(Box.createRigidArea(new Dimension(0, 30))); // Espacio antes del botón
+        panelCredits.add(buttonBackCredits);
+
+        // Agregar panel de créditos a la ventana (asegúrate de que esto esté en el lugar correcto de tu código)
+        ventana.add(panelCredits);
     }
     private int getUnitAmount(String message) {
         String input = JOptionPane.showInputDialog(message);
@@ -900,6 +936,99 @@ buttonBattleReports.addActionListener(e -> {
         ventana.repaint();
     }
     
+    private void resolveBattle() {
+        // Simular el resultado de la batalla
+        boolean planetWins = simulateBattle();
+
+        int metalGained = 0; // Metal ganado
+        int deuteriumGained = 0; // Deuterium ganado
+
+        if (planetWins) {
+            // Calcular el costo total de las tropas enemigas
+            ArrayList<MilitaryUnit>[] enemyArmy = battle.getEnemyArmy();
+            for (ArrayList<MilitaryUnit> group : enemyArmy) {
+                for (MilitaryUnit unit : group) {
+                    metalGained += unit.getMetalCost();
+                    deuteriumGained += unit.getDeteriumCost();
+                }
+            }
+
+            // Dividir los materiales ganados a la mitad
+            metalGained /= 2;
+            deuteriumGained /= 2;
+
+            // Agregar los materiales obtenidos al inventario del planeta
+            planet.setMetal(planet.getMetal() + metalGained);
+            planet.setDeuterium(planet.getDeuterium() + deuteriumGained);
+        }
+
+        // Crear una nueva ventana para mostrar el resultado
+        JFrame resultWindow = new JFrame("Battle Result");
+        resultWindow.setSize(400, 250);
+        resultWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        resultWindow.setLayout(new BorderLayout());
+
+        String resultMessage = planetWins
+            ? "¡Has ganado!\nHas obtenido:\n" + metalGained + " de metal\n" + deuteriumGained + " de deuterium."
+            : "Has perdido.\nNo has obtenido materiales.";
+
+        JLabel resultLabel = new JLabel("<html><div style='text-align: center;'>" + resultMessage + "</div></html>", SwingConstants.CENTER);
+        resultLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        resultLabel.setForeground(planetWins ? Color.GREEN : Color.RED);
+
+        JButton closeButton = new JButton("Cerrar");
+        closeButton.addActionListener(e -> {
+            resultWindow.dispose();
+            isBattleInProgress = false; // Restablecer el indicador después de cerrar la ventana
+        });
+
+        resultWindow.add(resultLabel, BorderLayout.CENTER);
+        resultWindow.add(closeButton, BorderLayout.SOUTH);
+
+        resultWindow.setLocationRelativeTo(ventana); // Centrar respecto a la ventana principal
+        resultWindow.setVisible(true);
+
+        // Restablecer el indicador incluso si la ventana no se cierra manualmente
+        isBattleInProgress = false;
+    }
+
+    private boolean simulateBattle() {
+        // Simulación básica: puedes reemplazar esto con una lógica más compleja
+        int planetPower = calculateArmyPower(planetArmy);
+        int enemyPower = calculateArmyPower(battle.getEnemyArmy());
+
+        return planetPower > enemyPower; // El planeta gana si su poder es mayor
+    }
+
+    private int calculateArmyPower(ArrayList<MilitaryUnit>[] army) {
+        int totalPower = 0;
+        for (ArrayList<MilitaryUnit> group : army) {
+            for (MilitaryUnit unit : group) {
+                totalPower += unit.attack();
+            }
+        }
+        return totalPower;
+    }
+
+    private ImageIcon loadImageIcon(String path, int width, int height) {
+        try {
+            System.out.println("Cargando imagen desde: " + path); // Mensaje de depuración
+            ImageIcon icon = new ImageIcon(path);
+            Image img = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            return new ImageIcon(img);
+        } catch (Exception e) {
+            System.err.println("Image not found: " + path);
+            ImageIcon placeholderIcon = new ImageIcon(new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB));
+            Graphics g = placeholderIcon.getImage().getGraphics();
+            g.setColor(Color.RED);
+            g.fillRect(0, 0, width, height);
+            g.setColor(Color.WHITE);
+            g.drawString("Image Not Found", 5, height / 2);
+            g.dispose();
+            return placeholderIcon;
+        }
+    }
+
     public static void main(String[] args) {
         try {
             new Juego();
