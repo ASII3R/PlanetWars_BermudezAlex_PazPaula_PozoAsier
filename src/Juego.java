@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.Border;
 
-
 public class Juego implements Variables {
     private JFrame ventana;
     private JPanel panelStart, panelMainMenu, panelBuild, panelBuildTroops, panelBuildDefenses, panelUpgradeTechnology;
@@ -37,6 +36,24 @@ public class Juego implements Variables {
         
         battle = new Battle();
         battle.setPlanetArmy(planetArmy);
+
+        // Inserta el estado inicial del planeta en la base de datos
+        DatabaseManager.insertPlanetStats(
+            planet.getIdPlanet(),
+            "PlanetName",
+            planet.getMetal(),
+            planet.getDeuterium(),
+            planet.getTechnologyDefense(),
+            planet.getTechnologyAttack(),
+            0,
+            planetArmy[4].size(),
+            planetArmy[5].size(),
+            planetArmy[6].size(),
+            planetArmy[0].size(),
+            planetArmy[1].size(),
+            planetArmy[2].size(),
+            planetArmy[3].size()
+        );
 
         ventana = new JFrame("Space Wars Game");
         ventana.setSize(600, 400);
@@ -76,7 +93,6 @@ public class Juego implements Variables {
         panelStart.add(buttonPlay);
 
         ventana.add(panelStart);
-
 
         // Main Menu panel
         panelMainMenu = new JPanel();
@@ -181,7 +197,7 @@ public class Juego implements Variables {
             "- Plasma Cannons: " + planetArmy[6].size(),
             "Planet Statistics", JOptionPane.INFORMATION_MESSAGE
         );
-});
+        });
 
         buttonBuild.setBackground(buttonColor);
         buttonUpgrade.setBackground(buttonColor);
@@ -194,13 +210,6 @@ public class Juego implements Variables {
         buttonUpgrade.addActionListener(e -> switchPanel(panelUpgradeTechnology));
         buttonBattleReports.addActionListener(e -> JOptionPane.showMessageDialog(ventana, "Displaying battle reports..."));
         buttonExit.addActionListener(e -> System.exit(0));
-
-        // Agregar botones al panel
-        panelMainMenu.add(buttonStats);
-        panelMainMenu.add(buttonBuild);
-        panelMainMenu.add(buttonUpgrade);
-        panelMainMenu.add(buttonBattleReports);
-        panelMainMenu.add(buttonExit);
 
         // Build Menu panel
         panelBuild = new JPanel(new GridLayout(3, 1));
@@ -260,6 +269,24 @@ public class Juego implements Variables {
 
                 planet.newLightHunter(aConstruir);
 
+                // Update planet stats after building
+                DatabaseManager.updatePlanetStats(
+                    planet.getIdPlanet(),
+                    "PlanetName",
+                    planet.getMetal(),
+                    planet.getDeuterium(),
+                    planet.getTechnologyDefense(),
+                    planet.getTechnologyAttack(),
+                    0,
+                    planetArmy[4].size(),
+                    planetArmy[5].size(),
+                    planetArmy[6].size(),
+                    planetArmy[0].size(),
+                    planetArmy[1].size(),
+                    planetArmy[2].size(),
+                    planetArmy[3].size()
+                );
+
                 if (aConstruir < cantidad) {
                     JOptionPane.showMessageDialog(ventana, "Only " + aConstruir + " Light Hunters were built due to limited resources.");
                 } else {
@@ -297,6 +324,23 @@ public class Juego implements Variables {
                 }
 
                 planet.newHeavyHunter(aConstruir);
+
+                DatabaseManager.updatePlanetStats(
+                    planet.getIdPlanet(),
+                    "PlanetName",
+                    planet.getMetal(),
+                    planet.getDeuterium(),
+                    planet.getTechnologyDefense(),
+                    planet.getTechnologyAttack(),
+                    0,
+                    planetArmy[4].size(),
+                    planetArmy[5].size(),
+                    planetArmy[6].size(),
+                    planetArmy[0].size(),
+                    planetArmy[1].size(),
+                    planetArmy[2].size(),
+                    planetArmy[3].size()
+                );
 
                 if (aConstruir < cantidad) {
                     JOptionPane.showMessageDialog(ventana, "Only " + aConstruir + " Heavy Hunters were built due to limited resources.");
@@ -336,6 +380,23 @@ public class Juego implements Variables {
 
                 planet.newBattleShip(aConstruir);
 
+                DatabaseManager.updatePlanetStats(
+                    planet.getIdPlanet(),
+                    "PlanetName",
+                    planet.getMetal(),
+                    planet.getDeuterium(),
+                    planet.getTechnologyDefense(),
+                    planet.getTechnologyAttack(),
+                    0,
+                    planetArmy[4].size(),
+                    planetArmy[5].size(),
+                    planetArmy[6].size(),
+                    planetArmy[0].size(),
+                    planetArmy[1].size(),
+                    planetArmy[2].size(),
+                    planetArmy[3].size()
+                );
+
                 if (aConstruir < cantidad) {
                     JOptionPane.showMessageDialog(ventana, "Only " + aConstruir + " Battle Ships were built due to limited resources.");
                 } else {
@@ -374,6 +435,23 @@ public class Juego implements Variables {
 
                 planet.newArmoredShip(aConstruir);
 
+                DatabaseManager.updatePlanetStats(
+                    planet.getIdPlanet(),
+                    "PlanetName",
+                    planet.getMetal(),
+                    planet.getDeuterium(),
+                    planet.getTechnologyDefense(),
+                    planet.getTechnologyAttack(),
+                    0,
+                    planetArmy[4].size(),
+                    planetArmy[5].size(),
+                    planetArmy[6].size(),
+                    planetArmy[0].size(),
+                    planetArmy[1].size(),
+                    planetArmy[2].size(),
+                    planetArmy[3].size()
+                );
+
                 if (aConstruir < cantidad) {
                     JOptionPane.showMessageDialog(ventana, "Only " + aConstruir + " Armored Ships were built due to limited resources.");
                 } else {
@@ -391,263 +469,366 @@ public class Juego implements Variables {
         panelBuildTroops.add(buttonAS);
         panelBuildTroops.add(buttonBackTroops);
 
+        // Build Defenses panel
+        panelBuildDefenses = new JPanel(new GridLayout(5, 1));
+        panelBuildDefenses.setBackground(new Color(205, 92, 92));
+        panelBuildDefenses.add(new JLabel("Build Defenses", SwingConstants.CENTER));
 
-      // Build Defenses panel
-panelBuildDefenses = new JPanel(new GridLayout(5, 1));
-panelBuildDefenses.setBackground(new Color(205, 92, 92));
-panelBuildDefenses.add(new JLabel("Build Defenses", SwingConstants.CENTER));
+        // Missile Launcher
+        JButton buttonML = new JButton("Build Missile Launcher");
+        buttonML.addActionListener(e -> {
+            int cantidad = getUnitAmount("Enter the number of Missile Launchers:");
+            MissileLauncher temp = new MissileLauncher(ARMOR_MISSILELAUNCHER, BASE_DAMAGE_MISSILELAUNCHER);
 
-// Missile Launcher
-JButton buttonML = new JButton("Build Missile Launcher");
-buttonML.addActionListener(e -> {
-    int cantidad = getUnitAmount("Enter the number of Missile Launchers:");
-    MissileLauncher temp = new MissileLauncher(ARMOR_MISSILELAUNCHER, BASE_DAMAGE_MISSILELAUNCHER);
+            int metalCost = temp.getMetalCost();
+            int deutCost = temp.getDeteriumCost();
 
-    int metalCost = temp.getMetalCost();
-    int deutCost = temp.getDeteriumCost();
+            // Verificar que los costos no sean 0 para evitar división por cero
+            if (metalCost == 0 || deutCost == 0) {
+                JOptionPane.showMessageDialog(ventana, "Error: Cost values cannot be zero.");
+                return;
+            }
 
-    // Verificar que los costos no sean 0 para evitar división por cero
-    if (metalCost == 0 || deutCost == 0) {
-        JOptionPane.showMessageDialog(ventana, "Error: Cost values cannot be zero.");
-        return;
-    }
+            int maxMetal = planet.getMetal() / metalCost;
+            int maxDeut = planet.getDeuterium() / deutCost;
 
-    int maxMetal = planet.getMetal() / metalCost;
-    int maxDeut = planet.getDeuterium() / deutCost;
+            int posibles;
+            if (maxMetal < maxDeut) {
+                posibles = maxMetal;
+            } else {
+                posibles = maxDeut;
+            }
 
-    int posibles;
-    if (maxMetal < maxDeut) {
-        posibles = maxMetal;
-    } else {
-        posibles = maxDeut;
-    }
+            int aConstruir;
+            if (cantidad < posibles) {
+                aConstruir = cantidad;
+            } else {
+                aConstruir = posibles;
+            }
 
-    int aConstruir;
-    if (cantidad < posibles) {
-        aConstruir = cantidad;
-    } else {
-        aConstruir = posibles;
-    }
+            if (posibles <= 0) {
+                JOptionPane.showMessageDialog(ventana, "Not enough resources to build any Missile Launchers.");
+                return;
+            }
 
-    if (posibles <= 0) {
-        JOptionPane.showMessageDialog(ventana, "Not enough resources to build any Missile Launchers.");
-        return;
-    }
+            planet.newMissileLauncher(aConstruir);
 
-    planet.newMissileLauncher(aConstruir);
-    JOptionPane.showMessageDialog(ventana, "Successfully built " + aConstruir + " Missile Launchers.");
-});
+            DatabaseManager.updatePlanetStats(
+                planet.getIdPlanet(),
+                "PlanetName",
+                planet.getMetal(),
+                planet.getDeuterium(),
+                planet.getTechnologyDefense(),
+                planet.getTechnologyAttack(),
+                0,
+                planetArmy[4].size(),
+                planetArmy[5].size(),
+                planetArmy[6].size(),
+                planetArmy[0].size(),
+                planetArmy[1].size(),
+                planetArmy[2].size(),
+                planetArmy[3].size()
+            );
 
-// Back Button
-JButton buttonBackDefenses = new JButton("Go Back");
-buttonBackDefenses.addActionListener(e -> switchPanel(panelBuild));
+            JOptionPane.showMessageDialog(ventana, "Successfully built " + aConstruir + " Missile Launchers.");
+        });
 
-// Add buttons to panel
-panelBuildDefenses.add(buttonML);
-panelBuildDefenses.add(buttonBackDefenses);
+        // Back Button
+        JButton buttonBackDefenses = new JButton("Go Back");
+        buttonBackDefenses.addActionListener(e -> switchPanel(panelBuild));
 
-// Ion Cannon
-JButton buttonIC = new JButton("Build Ion Cannon");
-buttonIC.addActionListener(e -> {
-    int cantidad = getUnitAmount("Enter the number of Ion Cannons:");
-    IonCannon temp = new IonCannon(ARMOR_IONCANNON, BASE_DAMAGE_IONCANNON);
+        // Add buttons to panel
+        panelBuildDefenses.add(buttonML);
+        panelBuildDefenses.add(buttonBackDefenses);
 
-    int metalCost = temp.getMetalCost();
-    int deutCost = temp.getDeteriumCost();
+        // Ion Cannon
+        JButton buttonIC = new JButton("Build Ion Cannon");
+        buttonIC.addActionListener(e -> {
+            int cantidad = getUnitAmount("Enter the number of Ion Cannons:");
+            IonCannon temp = new IonCannon(ARMOR_IONCANNON, BASE_DAMAGE_IONCANNON);
 
-    int maxMetal = planet.getMetal() / metalCost;
-    int maxDeut = planet.getDeuterium() / deutCost;
-    
-    int posibles;
-    if (maxMetal < maxDeut) {
-        posibles = maxMetal;
-    } else {
-        posibles = maxDeut;
-    }
+            int metalCost = temp.getMetalCost();
+            int deutCost = temp.getDeteriumCost();
 
-    int aConstruir;
-    if (cantidad < posibles) {
-        aConstruir = cantidad;
-    } else {
-        aConstruir = posibles;
-    }
+            int maxMetal = planet.getMetal() / metalCost;
+            int maxDeut = planet.getDeuterium() / deutCost;
+            
+            int posibles;
+            if (maxMetal < maxDeut) {
+                posibles = maxMetal;
+            } else {
+                posibles = maxDeut;
+            }
 
-    if (posibles <= 0) {
-        JOptionPane.showMessageDialog(ventana, "Not enough resources to build any Ion Cannons.");
-        return;
-    }
+            int aConstruir;
+            if (cantidad < posibles) {
+                aConstruir = cantidad;
+            } else {
+                aConstruir = posibles;
+            }
 
-    planet.newIonCannon(aConstruir);
-    JOptionPane.showMessageDialog(ventana, "Successfully built " + aConstruir + " Ion Cannons.");
-});
+            if (posibles <= 0) {
+                JOptionPane.showMessageDialog(ventana, "Not enough resources to build any Ion Cannons.");
+                return;
+            }
 
-// Plasma Cannon
-JButton buttonPC = new JButton("Build Plasma Cannon");
-buttonPC.addActionListener(e -> {
-    int cantidad = getUnitAmount("Enter the number of Plasma Cannons:");
-    PlasmaCannon temp = new PlasmaCannon(ARMOR_PLASMACANNON, BASE_DAMAGE_PLASMACANNON);
+            planet.newIonCannon(aConstruir);
 
-    int metalCost = temp.getMetalCost();
-    int deutCost = temp.getDeteriumCost();
+            DatabaseManager.updatePlanetStats(
+                planet.getIdPlanet(),
+                "PlanetName",
+                planet.getMetal(),
+                planet.getDeuterium(),
+                planet.getTechnologyDefense(),
+                planet.getTechnologyAttack(),
+                0,
+                planetArmy[4].size(),
+                planetArmy[5].size(),
+                planetArmy[6].size(),
+                planetArmy[0].size(),
+                planetArmy[1].size(),
+                planetArmy[2].size(),
+                planetArmy[3].size()
+            );
 
-    int maxMetal = planet.getMetal() / metalCost;
-    int maxDeut = planet.getDeuterium() / deutCost;
-    
-    int posibles;
-    if (maxMetal < maxDeut) {
-        posibles = maxMetal;
-    } else {
-        posibles = maxDeut;
-    }
+            JOptionPane.showMessageDialog(ventana, "Successfully built " + aConstruir + " Ion Cannons.");
+        });
 
-    int aConstruir;
-    if (cantidad < posibles) {
-        aConstruir = cantidad;
-    } else {
-        aConstruir = posibles;
-    }
+        // Plasma Cannon
+        JButton buttonPC = new JButton("Build Plasma Cannon");
+        buttonPC.addActionListener(e -> {
+            int cantidad = getUnitAmount("Enter the number of Plasma Cannons:");
+            PlasmaCannon temp = new PlasmaCannon(ARMOR_PLASMACANNON, BASE_DAMAGE_PLASMACANNON);
 
-    if (posibles <= 0) {
-        JOptionPane.showMessageDialog(ventana, "Not enough resources to build any Plasma Cannons.");
-        return;
-    }
+            int metalCost = temp.getMetalCost();
+            int deutCost = temp.getDeteriumCost();
 
-    planet.newPlasmaCannon(aConstruir);
-    JOptionPane.showMessageDialog(ventana, "Successfully built " + aConstruir + " Plasma Cannons.");
-});
+            int maxMetal = planet.getMetal() / metalCost;
+            int maxDeut = planet.getDeuterium() / deutCost;
+            
+            int posibles;
+            if (maxMetal < maxDeut) {
+                posibles = maxMetal;
+            } else {
+                posibles = maxDeut;
+            }
 
-// Armored Ship
-JButton buttonArmoredShip = new JButton("Build Armored Ship");
-buttonArmoredShip.addActionListener(e -> {
-    int cantidad = getUnitAmount("Enter the number of Armored Ships:");
-    ArmoredShip temp = new ArmoredShip(ARMOR_ARMOREDSHIP, BASE_DAMAGE_ARMOREDSHIP);
+            int aConstruir;
+            if (cantidad < posibles) {
+                aConstruir = cantidad;
+            } else {
+                aConstruir = posibles;
+            }
 
-    int metalCost = temp.getMetalCost();
-    int deutCost = temp.getDeteriumCost();
+            if (posibles <= 0) {
+                JOptionPane.showMessageDialog(ventana, "Not enough resources to build any Plasma Cannons.");
+                return;
+            }
 
-    int maxMetal = planet.getMetal() / metalCost;
-    int maxDeut = planet.getDeuterium() / deutCost;
+            planet.newPlasmaCannon(aConstruir);
 
-    int posibles = Math.min(maxMetal, maxDeut);
+            DatabaseManager.updatePlanetStats(
+                planet.getIdPlanet(),
+                "PlanetName",
+                planet.getMetal(),
+                planet.getDeuterium(),
+                planet.getTechnologyDefense(),
+                planet.getTechnologyAttack(),
+                0,
+                planetArmy[4].size(),
+                planetArmy[5].size(),
+                planetArmy[6].size(),
+                planetArmy[0].size(),
+                planetArmy[1].size(),
+                planetArmy[2].size(),
+                planetArmy[3].size()
+            );
 
-    int aConstruir;
-    if (cantidad < posibles) {
-        aConstruir = cantidad;
-    } else {
-        aConstruir = posibles;
-    }
+            JOptionPane.showMessageDialog(ventana, "Successfully built " + aConstruir + " Plasma Cannons.");
+        });
 
-    if (posibles <= 0) {
-        JOptionPane.showMessageDialog(ventana, "Not enough resources to build any Armored Ships.");
-        return;
-    }
+        // Armored Ship (opcional, si quieres permitir construir desde defensas)
+        JButton buttonArmoredShip = new JButton("Build Armored Ship");
+        buttonArmoredShip.addActionListener(e -> {
+            int cantidad = getUnitAmount("Enter the number of Armored Ships:");
+            ArmoredShip temp = new ArmoredShip(ARMOR_ARMOREDSHIP, BASE_DAMAGE_ARMOREDSHIP);
 
-    planet.newArmoredShip(aConstruir);
-    JOptionPane.showMessageDialog(ventana, "Successfully built " + aConstruir + " Armored Ships.");
-});
+            int metalCost = temp.getMetalCost();
+            int deutCost = temp.getDeteriumCost();
 
-// Add buttons to panel
-panelBuildDefenses.add(buttonML);
-panelBuildDefenses.add(buttonIC);
-panelBuildDefenses.add(buttonPC);
-panelBuildDefenses.add(buttonBackDefenses);
+            int maxMetal = planet.getMetal() / metalCost;
+            int maxDeut = planet.getDeuterium() / deutCost;
 
+            int posibles = Math.min(maxMetal, maxDeut);
 
-//  Panel para mejorar tecnología
-panelUpgradeTechnology = new JPanel(new GridLayout(4, 1));
-panelUpgradeTechnology.setBackground(new Color(59, 131, 189)); // azul
-panelUpgradeTechnology.add(new JLabel("Upgrade Technology", SwingConstants.CENTER));
-panelUpgradeTechnology.setFont(new Font("Arial", Font.BOLD, 60));
-//  Botón para mejorar defensa
-JButton buttonDefense = new JButton("Upgrade Defense Technology");
-buttonDefense.setPreferredSize(new Dimension(80, 25));
-buttonDefense.setBackground(new Color(240, 248, 255)); // 
-buttonDefense.setForeground(Color.BLACK);
-buttonDefense.setFocusPainted(false);
-buttonDefense.setFont(new Font("Arial", Font.BOLD, 18));
+            int aConstruir;
+            if (cantidad < posibles) {
+                aConstruir = cantidad;
+            } else {
+                aConstruir = posibles;
+            }
 
-buttonDefense.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
-buttonDefense.addActionListener(e -> {
-    int previousLevel = planet.getTechnologyDefense();
-    int cost = planet.getUpgradeDefenseTechnologyDeuteriumCost();
+            if (posibles <= 0) {
+                JOptionPane.showMessageDialog(ventana, "Not enough resources to build any Armored Ships.");
+                return;
+            }
 
-    if (planet.getDeuterium() >= cost) {
-        planet.upgradeTechnologyDefense();
-        int newLevel = planet.getTechnologyDefense();
-        planet.setDeuterium(planet.getDeuterium() - cost);
+            planet.newArmoredShip(aConstruir);
 
-        JOptionPane.showMessageDialog(ventana, "Defense Technology upgraded!\nPrevious Level: " + previousLevel +
-                "\nNew Level: " + newLevel + "\nCost: " + cost + " Deuterium\nRemaining Deuterium: " + planet.getDeuterium());
-    } else {
-        JOptionPane.showMessageDialog(ventana, "Not enough deuterium!\nRequired: " + cost + " | Available: " + planet.getDeuterium());
-    }
-});
+            DatabaseManager.updatePlanetStats(
+                planet.getIdPlanet(),
+                "PlanetName",
+                planet.getMetal(),
+                planet.getDeuterium(),
+                planet.getTechnologyDefense(),
+                planet.getTechnologyAttack(),
+                0,
+                planetArmy[4].size(),
+                planetArmy[5].size(),
+                planetArmy[6].size(),
+                planetArmy[0].size(),
+                planetArmy[1].size(),
+                planetArmy[2].size(),
+                planetArmy[3].size()
+            );
 
-// Botón para mejorar ataque
-JButton buttonAttack = new JButton("Upgrade Attack Technology");
-buttonAttack.setPreferredSize(new Dimension(80, 25));
-buttonAttack.setBackground(new Color(240, 248, 255)); // Rojo intenso
-buttonAttack.setForeground(Color.BLACK);
-buttonAttack.setFocusPainted(false);
-buttonAttack.setFont(new Font("Arial", Font.BOLD, 18));
-buttonAttack.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
-buttonAttack.addActionListener(e -> {
-    int previousLevel = planet.getTechnologyAttack();
-    int cost = planet.getUpgradeAttackTechnologyDeuteriumCost();
+            JOptionPane.showMessageDialog(ventana, "Successfully built " + aConstruir + " Armored Ships.");
+        });
 
-    if (planet.getDeuterium() >= cost) {
-        planet.upgradeTechnologyAttack();
-        int newLevel = planet.getTechnologyAttack();
-        planet.setDeuterium(planet.getDeuterium() - cost);
+        // Add buttons to panel
+        panelBuildDefenses.add(buttonML);
+        panelBuildDefenses.add(buttonIC);
+        panelBuildDefenses.add(buttonPC);
+        panelBuildDefenses.add(buttonBackDefenses);
 
-        JOptionPane.showMessageDialog(ventana, "Attack Technology upgraded!\nPrevious Level: " + previousLevel +
-                "\nNew Level: " + newLevel + "\nCost: " + cost + " Deuterium\nRemaining Deuterium: " + planet.getDeuterium());
-    } else {
-        JOptionPane.showMessageDialog(ventana, "Not enough deuterium!\nRequired: " + cost + " | Available: " + planet.getDeuterium());
-    }
-});
+        //  Panel para mejorar tecnología
+        panelUpgradeTechnology = new JPanel(new GridLayout(4, 1));
+        panelUpgradeTechnology.setBackground(new Color(59, 131, 189)); // azul
+        panelUpgradeTechnology.add(new JLabel("Upgrade Technology", SwingConstants.CENTER));
+        panelUpgradeTechnology.setFont(new Font("Arial", Font.BOLD, 60));
+        //  Botón para mejorar defensa
+        JButton buttonDefense = new JButton("Upgrade Defense Technology");
+        buttonDefense.setPreferredSize(new Dimension(80, 25));
+        buttonDefense.setBackground(new Color(240, 248, 255)); // 
+        buttonDefense.setForeground(Color.BLACK);
+        buttonDefense.setFocusPainted(false);
+        buttonDefense.setFont(new Font("Arial", Font.BOLD, 18));
 
-// Botón para volver
-JButton buttonBackUpgrade = new JButton("Go Back");
-buttonBackUpgrade.setPreferredSize(new Dimension(80, 25));
-buttonBackUpgrade.setBackground(new Color(240, 248, 255)); // Azul brillante
-buttonBackUpgrade.setForeground(Color.BLACK);
-buttonBackUpgrade.setFocusPainted(false);
-buttonBackUpgrade.setFont(new Font("Arial", Font.BOLD, 18));
-buttonBackUpgrade.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
-buttonBackUpgrade.addActionListener(e -> switchPanel(panelMainMenu));
+        buttonDefense.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        buttonDefense.addActionListener(e -> {
+            int previousLevel = planet.getTechnologyDefense();
+            int cost = planet.getUpgradeDefenseTechnologyDeuteriumCost();
 
-// Añadir botones al panel de mejora de tecnología
-panelUpgradeTechnology.add(buttonDefense);
-panelUpgradeTechnology.add(buttonAttack);
-panelUpgradeTechnology.add(buttonBackUpgrade);
+            if (planet.getDeuterium() >= cost) {
+                planet.upgradeTechnologyDefense();
+                int newLevel = planet.getTechnologyDefense();
+                planet.setDeuterium(planet.getDeuterium() - cost);
+
+                // Update planet stats after upgrading
+                DatabaseManager.updatePlanetStats(
+                    planet.getIdPlanet(),
+                    "PlanetName",
+                    planet.getMetal(),
+                    planet.getDeuterium(),
+                    planet.getTechnologyDefense(),
+                    planet.getTechnologyAttack(),
+                    0,
+                    planetArmy[4].size(),
+                    planetArmy[5].size(),
+                    planetArmy[6].size(),
+                    planetArmy[0].size(),
+                    planetArmy[1].size(),
+                    planetArmy[2].size(),
+                    planetArmy[3].size()
+                );
+
+                JOptionPane.showMessageDialog(ventana, "Defense Technology upgraded!\nPrevious Level: " + previousLevel +
+                        "\nNew Level: " + newLevel + "\nCost: " + cost + " Deuterium\nRemaining Deuterium: " + planet.getDeuterium());
+            } else {
+                JOptionPane.showMessageDialog(ventana, "Not enough deuterium!\nRequired: " + cost + " | Available: " + planet.getDeuterium());
+            }
+        });
+
+        // Botón para mejorar ataque
+        JButton buttonAttack = new JButton("Upgrade Attack Technology");
+        buttonAttack.setPreferredSize(new Dimension(80, 25));
+        buttonAttack.setBackground(new Color(240, 248, 255)); // Rojo intenso
+        buttonAttack.setForeground(Color.BLACK);
+        buttonAttack.setFocusPainted(false);
+        buttonAttack.setFont(new Font("Arial", Font.BOLD, 18));
+        buttonAttack.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        buttonAttack.addActionListener(e -> {
+            int previousLevel = planet.getTechnologyAttack();
+            int cost = planet.getUpgradeAttackTechnologyDeuteriumCost();
+
+            if (planet.getDeuterium() >= cost) {
+                planet.upgradeTechnologyAttack();
+                int newLevel = planet.getTechnologyAttack();
+                planet.setDeuterium(planet.getDeuterium() - cost);
+
+                DatabaseManager.updatePlanetStats(
+                    planet.getIdPlanet(),
+                    "PlanetName",
+                    planet.getMetal(),
+                    planet.getDeuterium(),
+                    planet.getTechnologyDefense(),
+                    planet.getTechnologyAttack(),
+                    0,
+                    planetArmy[4].size(),
+                    planetArmy[5].size(),
+                    planetArmy[6].size(),
+                    planetArmy[0].size(),
+                    planetArmy[1].size(),
+                    planetArmy[2].size(),
+                    planetArmy[3].size()
+                );
+
+                JOptionPane.showMessageDialog(ventana, "Attack Technology upgraded!\nPrevious Level: " + previousLevel +
+                        "\nNew Level: " + newLevel + "\nCost: " + cost + " Deuterium\nRemaining Deuterium: " + planet.getDeuterium());
+            } else {
+                JOptionPane.showMessageDialog(ventana, "Not enough deuterium!\nRequired: " + cost + " | Available: " + planet.getDeuterium());
+            }
+        });
+
+        // Botón para volver
+        JButton buttonBackUpgrade = new JButton("Go Back");
+        buttonBackUpgrade.setPreferredSize(new Dimension(80, 25));
+        buttonBackUpgrade.setBackground(new Color(240, 248, 255)); // Azul brillante
+        buttonBackUpgrade.setForeground(Color.BLACK);
+        buttonBackUpgrade.setFocusPainted(false);
+        buttonBackUpgrade.setFont(new Font("Arial", Font.BOLD, 18));
+        buttonBackUpgrade.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        buttonBackUpgrade.addActionListener(e -> switchPanel(panelMainMenu));
+
+        // Añadir botones al panel de mejora de tecnología
+        panelUpgradeTechnology.add(buttonDefense);
+        panelUpgradeTechnology.add(buttonAttack);
+        panelUpgradeTechnology.add(buttonBackUpgrade);
 
     }
     private int getUnitAmount(String message) {
-    String input = JOptionPane.showInputDialog(message);
-    try {
-        return Integer.parseInt(input);
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(ventana, "Invalid input, defaulting to 1 unit.");
-        return 1;
+        String input = JOptionPane.showInputDialog(message);
+        try {
+            return Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(ventana, "Invalid input, defaulting to 1 unit.");
+            return 1;
+        }
     }
-
-    
-}
 
     public class TextAreaOutputStream extends OutputStream {
-    private final JTextArea textArea;
+        private final JTextArea textArea;
 
-    public TextAreaOutputStream(JTextArea textArea) {
-        this.textArea = textArea;
-    }
+        public TextAreaOutputStream(JTextArea textArea) {
+            this.textArea = textArea;
+        }
 
-    @Override
-    public void write(int b) throws IOException {
-        textArea.append(String.valueOf((char) b));
-        textArea.setCaretPosition(textArea.getDocument().getLength());
+        @Override
+        public void write(int b) throws IOException {
+            textArea.append(String.valueOf((char) b));
+            textArea.setCaretPosition(textArea.getDocument().getLength());
+        }
     }
-}
 
     private void switchPanel(JPanel newPanel) {
         ventana.getContentPane().removeAll();
