@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.*;
@@ -54,19 +55,28 @@ public class Juego implements Variables {
         planetArmy[5].add(new IonCannon(ARMOR_IONCANNON, BASE_DAMAGE_PLASMACANNON));
         planetArmy[6].add(new PlasmaCannon(ARMOR_PLASMACANNON, BASE_DAMAGE_PLASMACANNON));
 
-        // Initialize enemy army
+        // Initialize enemy army with random quantities
+        Random random = new Random();
         ArrayList<MilitaryUnit>[] enemyArmy = new ArrayList[7];
         for (int i = 0; i < enemyArmy.length; i++) {
             enemyArmy[i] = new ArrayList<>();
         }
-        enemyArmy[0].add(new LightHunter());
-        enemyArmy[0].add(new LightHunter());
-        enemyArmy[1].add(new HeavyHunter());
-        enemyArmy[2].add(new BattleShip());
-        enemyArmy[3].add(new ArmoredShip());
-        enemyArmy[4].add(new MissileLauncher(ARMOR_MISSILELAUNCHER, BASE_DAMAGE_MISSILELAUNCHER));
-        enemyArmy[5].add(new IonCannon(ARMOR_IONCANNON, BASE_DAMAGE_IONCANNON));
-        enemyArmy[6].add(new PlasmaCannon(ARMOR_PLASMACANNON, BASE_DAMAGE_PLASMACANNON));
+
+        // Generar cantidades aleatorias para cada tipo de unidad enemiga
+        for (int i = 0; i < 7; i++) {
+            int randomCount = random.nextInt(10) + 1; // Genera entre 1 y 10 unidades
+            for (int j = 0; j < randomCount; j++) {
+                switch (i) {
+                    case 0 -> enemyArmy[i].add(new LightHunter());
+                    case 1 -> enemyArmy[i].add(new HeavyHunter());
+                    case 2 -> enemyArmy[i].add(new BattleShip());
+                    case 3 -> enemyArmy[i].add(new ArmoredShip());
+                    case 4 -> enemyArmy[i].add(new MissileLauncher(ARMOR_MISSILELAUNCHER, BASE_DAMAGE_MISSILELAUNCHER));
+                    case 5 -> enemyArmy[i].add(new IonCannon(ARMOR_IONCANNON, BASE_DAMAGE_IONCANNON));
+                    case 6 -> enemyArmy[i].add(new PlasmaCannon(ARMOR_PLASMACANNON, BASE_DAMAGE_PLASMACANNON));
+                }
+            }
+        }
 
         // Initialize planet and battle
         this.planet = new Planet(0, 0, 53500, 26800, UPGRADE_BASE_DEFENSE_TECHNOLOGY_DEUTERIUM_COST, UPGRADE_BASE_ATTACK_TECHNOLOGY_DEUTERIUM_COST, planetArmy, 1);
@@ -582,10 +592,6 @@ public class Juego implements Variables {
         JButton buttonBackDefenses = new JButton("Go Back");
         buttonBackDefenses.addActionListener(e -> switchPanel(panelBuild));
 
-        // Add buttons to panel
-        panelBuildDefenses.add(buttonML);
-        panelBuildDefenses.add(buttonBackDefenses);
-
         // Ion Cannon
         JButton buttonIC = new JButton("Build Ion Cannon");
         buttonIC.addActionListener(e -> {
@@ -597,7 +603,7 @@ public class Juego implements Variables {
 
             int maxMetal = planet.getMetal() / metalCost;
             int maxDeut = planet.getDeuterium() / deutCost;
-            
+
             int posibles = Math.min(maxMetal, maxDeut);
 
             int aConstruir = Math.min(cantidad, posibles);
@@ -608,7 +614,6 @@ public class Juego implements Variables {
             }
 
             planet.newIonCannon(aConstruir);
-            //DatabaseManager.insertPlanetBattleDefense(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0, 0, 0);
 
             DatabaseManager.updatePlanetStats(
                 planet.getIdPlanet(),
@@ -629,7 +634,7 @@ public class Juego implements Variables {
             DatabaseManager.updatePlanetBattleDefense(
                 planet.getIdPlanet(),
                 battleCounter,
-                aConstruir, 0, 0, 0, 0, 0
+                0, aConstruir, 0, 0, 0, 0
             );
 
             JOptionPane.showMessageDialog(ventana, "Successfully built " + aConstruir + " Ion Cannons.");
@@ -646,7 +651,7 @@ public class Juego implements Variables {
 
             int maxMetal = planet.getMetal() / metalCost;
             int maxDeut = planet.getDeuterium() / deutCost;
-            
+
             int posibles = Math.min(maxMetal, maxDeut);
 
             int aConstruir = Math.min(cantidad, posibles);
@@ -657,7 +662,6 @@ public class Juego implements Variables {
             }
 
             planet.newPlasmaCannon(aConstruir);
-            //DatabaseManager.insertPlanetBattleDefense(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0, 0, 0);
 
             DatabaseManager.updatePlanetStats(
                 planet.getIdPlanet(),
@@ -678,60 +682,17 @@ public class Juego implements Variables {
             DatabaseManager.updatePlanetBattleDefense(
                 planet.getIdPlanet(),
                 battleCounter,
-                aConstruir, 0, 0, 0, 0, 0
+                0, 0, aConstruir, 0, 0, 0
             );
 
             JOptionPane.showMessageDialog(ventana, "Successfully built " + aConstruir + " Plasma Cannons.");
         });
 
-        // Armored Ship (opcional, si quieres permitir construir desde defensas)
-        JButton buttonArmoredShip = new JButton("Build Armored Ship");
-        buttonArmoredShip.addActionListener(e -> {
-            int cantidad = getUnitAmount("Enter the number of Armored Ships:");
-            ArmoredShip temp = new ArmoredShip(ARMOR_ARMOREDSHIP, BASE_DAMAGE_ARMOREDSHIP);
-
-            int metalCost = temp.getMetalCost();
-            int deutCost = temp.getDeteriumCost();
-
-            int maxMetal = planet.getMetal() / metalCost;
-            int maxDeut = planet.getDeuterium() / deutCost;
-
-            int posibles = Math.min(maxMetal, maxDeut);
-
-            int aConstruir = Math.min(cantidad, posibles);
-
-            if (posibles <= 0) {
-                JOptionPane.showMessageDialog(ventana, "Not enough resources to build any Armored Ships.");
-                return;
-            }
-
-            planet.newArmoredShip(aConstruir);
-            //DatabaseManager.insertPlanetBattleArmy(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0);
-
-            DatabaseManager.updatePlanetStats(
-                planet.getIdPlanet(),
-                "PlanetName",
-                planet.getMetal(),
-                planet.getDeuterium(),
-                planet.getTechnologyDefense(),
-                planet.getTechnologyAttack(),
-                0,
-                planetArmy[4].size(),
-                planetArmy[5].size(),
-                planetArmy[6].size(),
-                planetArmy[0].size(),
-                planetArmy[1].size(),
-                planetArmy[2].size(),
-                planetArmy[3].size()
-            );
-            DatabaseManager.updatePlanetBattleArmy(
-                planet.getIdPlanet(),
-                battleCounter,
-                aConstruir, 0, 0, 0
-            );
-
-            JOptionPane.showMessageDialog(ventana, "Successfully built " + aConstruir + " Armored Ships.");
-        });
+        // Add buttons to panel
+        panelBuildDefenses.add(buttonML);
+        panelBuildDefenses.add(buttonIC);
+        panelBuildDefenses.add(buttonPC);
+        panelBuildDefenses.add(buttonBackDefenses);
 
         //  Panel para mejorar tecnología
         panelUpgradeTechnology = new JPanel(new GridLayout(4, 1));
@@ -1004,7 +965,7 @@ buttonBattleReports.addActionListener(e -> {
         enemyArmyReport.append("</units>\n");
 
         // Generar archivo XML
-        generateBattleReportXML(battleCounter, planetArmyReport.toString(), enemyArmyReport.toString());
+        generateBattleReportXML(battleCounter, planetWins, metalGained, deuteriumGained, planetArmyReport.toString(), enemyArmyReport.toString());
 
         // Transformar XML a HTML
         String xmlFileName = "battle" + battleCounter + ".xml";
@@ -1082,7 +1043,7 @@ buttonBattleReports.addActionListener(e -> {
         }
     }
 
-    private void generateBattleReportXML(int battleNumber, String planetArmyReport, String enemyArmyReport) {
+    private void generateBattleReportXML(int battleNumber, boolean planetWins, int metalGained, int deuteriumGained, String planetArmyReport, String enemyArmyReport) {
     String xmlFileName = "battle" + battleNumber + ".xml";
 
     try {
@@ -1100,14 +1061,58 @@ buttonBattleReports.addActionListener(e -> {
         battleNumberElement.appendChild(doc.createTextNode(String.valueOf(battleNumber)));
         rootElement.appendChild(battleNumberElement);
 
+        // Resultado de la batalla
+        Element resultElement = doc.createElement("result");
+        resultElement.appendChild(doc.createTextNode(planetWins ? "win" : "lose"));
+        rootElement.appendChild(resultElement);
+
+        // Recursos ganados
+        Element resourcesElement = doc.createElement("resources");
+        Element metalElement = doc.createElement("metal");
+        metalElement.appendChild(doc.createTextNode(String.valueOf(metalGained)));
+        Element deuteriumElement = doc.createElement("deuterium");
+        deuteriumElement.appendChild(doc.createTextNode(String.valueOf(deuteriumGained)));
+        resourcesElement.appendChild(metalElement);
+        resourcesElement.appendChild(deuteriumElement);
+        rootElement.appendChild(resourcesElement);
+
         // Ejército del planeta
         Element planetArmyElement = doc.createElement("planetArmy");
-        planetArmyElement.appendChild(doc.createTextNode(planetArmyReport.trim()));
+        Element planetArmyDescription = doc.createElement("description");
+        planetArmyDescription.appendChild(doc.createTextNode("El ejército del planeta está compuesto por unidades de ataque y defensa."));
+        planetArmyElement.appendChild(planetArmyDescription);
+
+        Element planetUnitsElement = doc.createElement("units");
+        for (int i = 0; i < planetArmy.length; i++) {
+            if (!planetArmy[i].isEmpty()) {
+                Element unitElement = doc.createElement("unit");
+                unitElement.setAttribute("type", planetArmy[i].get(0).getClass().getSimpleName());
+                unitElement.setAttribute("count", String.valueOf(planetArmy[i].size()));
+                planetUnitsElement.appendChild(unitElement);
+            }
+        }
+        planetArmyElement.appendChild(planetUnitsElement);
         rootElement.appendChild(planetArmyElement);
 
         // Ejército enemigo
         Element enemyArmyElement = doc.createElement("enemyArmy");
-        enemyArmyElement.appendChild(doc.createTextNode(enemyArmyReport.trim()));
+        Element enemyArmyDescription = doc.createElement("description");
+        enemyArmyDescription.appendChild(doc.createTextNode("El ejército enemigo está compuesto por naves de combate avanzadas."));
+        enemyArmyElement.appendChild(enemyArmyDescription);
+
+        Element enemyUnitsElement = doc.createElement("units");
+        ArrayList<MilitaryUnit>[] enemy = battle.getEnemyArmy();
+        if (enemy != null) {
+            for (int i = 0; i < enemy.length; i++) {
+                if (!enemy[i].isEmpty()) {
+                    Element unitElement = doc.createElement("unit");
+                    unitElement.setAttribute("type", enemy[i].get(0).getClass().getSimpleName());
+                    unitElement.setAttribute("count", String.valueOf(enemy[i].size()));
+                    enemyUnitsElement.appendChild(unitElement);
+                }
+            }
+        }
+        enemyArmyElement.appendChild(enemyUnitsElement);
         rootElement.appendChild(enemyArmyElement);
 
         // Escribir el contenido en el archivo XML con formato bonito

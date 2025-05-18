@@ -6,7 +6,7 @@ import java.sql.SQLException;
 public class DatabaseManager {
     private static final String URL = "jdbc:mysql://localhost:3306/planetwars";
     private static final String USER = "root"; 
-    private static final String PASSWORD = "1234";
+    private static final String PASSWORD = "admin";
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
@@ -15,11 +15,11 @@ public class DatabaseManager {
     // Inserta un registro en Planet_stats
     public static void insertPlanetStats(
         int planet_id, String name, int resource_metal_amount, int resource_deuterion_amount,
-        int technology_defense_level, int technology_attack_level, int battles_counter,
-        int missile_launcher_remaining, int ion_cannon_remaining, int plasma_canon_remaining,
+        int technology_defense_level, int technology_attack_level, int battle_counter,
+        int missile_launcher_remaining, int ion_cannon_remaining, int plasma_cannon_remaining,
         int light_hunter_remaining, int heavy_hunter_remaining, int battleship_remaining, int armored_ship_remaining
     ) {
-        String sql = "INSERT INTO Planet_stats (planet_id, name, resource_metal_amount, resource_deuterion_amount, technology_defense_level, technology_attack_level, battles_counter, missile_launcher_remaining, ion_cannon_remaining, plasma_canon_remaining, light_hunter_remaining, heavy_hunter_remaining, battleship_remaining, armored_ship_remaining) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Planet_stats (planet_id, name, resource_metal_amount, resource_deuterion_amount, technology_defense_level, technology_attack_level, battle_counter, missile_launcher_remaining, ion_cannon_remaining, plasma_cannon_remaining, light_hunter_remaining, heavy_hunter_remaining, battleship_remaining, armored_ship_remaining) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, planet_id);
@@ -28,10 +28,10 @@ public class DatabaseManager {
             stmt.setInt(4, resource_deuterion_amount);
             stmt.setInt(5, technology_defense_level);
             stmt.setInt(6, technology_attack_level);
-            stmt.setInt(7, battles_counter);
+            stmt.setInt(7, battle_counter);
             stmt.setInt(8, missile_launcher_remaining);
             stmt.setInt(9, ion_cannon_remaining);
-            stmt.setInt(10, plasma_canon_remaining);
+            stmt.setInt(10, plasma_cannon_remaining);
             stmt.setInt(11, light_hunter_remaining);
             stmt.setInt(12, heavy_hunter_remaining);
             stmt.setInt(13, battleship_remaining);
@@ -76,8 +76,8 @@ public class DatabaseManager {
     }
 
     // Insert en Planet_battle_defense
-    public static void insertPlanetBattleDefense(int planet_id, int num_battle, int missile_launcher_built, int missile_launcher_destroyed, int ion_cannon_built, int ion_cannon_destroyed, int plasma_canon_built, int plasma_canon_destroyed) {
-        String sql = "INSERT INTO Planet_battle_defense (planet_id, num_battle, missile_launcher_built, missile_launcher_destroyed, ion_cannon_built, ion_cannon_destroyed, plasma_canon_built, plasma_canon_destroyed) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    public static void insertPlanetBattleDefense(int planet_id, int num_battle, int missile_launcher_built, int missile_launcher_destroyed, int ion_cannon_built, int ion_cannon_destroyed, int plasma_cannon_built, int plasma_cannon_destroyed) {
+        String sql = "INSERT INTO Planet_battle_defense (planet_id, num_battle, missile_launcher_built, missile_launcher_destroyed, ion_cannon_built, ion_cannon_destroyed, plasma_cannon_built, plasma_cannon_destroyed) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, planet_id);
@@ -86,8 +86,8 @@ public class DatabaseManager {
             stmt.setInt(4, missile_launcher_destroyed);
             stmt.setInt(5, ion_cannon_built);
             stmt.setInt(6, ion_cannon_destroyed);
-            stmt.setInt(7, plasma_canon_built);
-            stmt.setInt(8, plasma_canon_destroyed);
+            stmt.setInt(7, plasma_cannon_built);
+            stmt.setInt(8, plasma_cannon_destroyed);
             stmt.executeUpdate();
             System.out.println("Insert en Planet_battle_defense realizado correctamente.");
         } catch (SQLException e) {
@@ -135,11 +135,11 @@ public class DatabaseManager {
     // Update Planet_stats
     public static void updatePlanetStats(
         int planet_id, String name, int resource_metal_amount, int resource_deuterion_amount,
-        int technology_defense_level, int technology_attack_level, int battles_counter,
-        int missile_launcher_remaining, int ion_cannon_remaining, int plasma_canon_remaining,
+        int technology_defense_level, int technology_attack_level, int battle_counter,
+        int missile_launcher_remaining, int ion_cannon_remaining, int plasma_cannon_remaining,
         int light_hunter_remaining, int heavy_hunter_remaining, int battleship_remaining, int armored_ship_remaining
     ) {
-        String sql = "UPDATE Planet_stats SET name=?, resource_metal_amount=?, resource_deuterion_amount=?, technology_defense_level=?, technology_attack_level=?, battles_counter=?, missile_launcher_remaining=?, ion_cannon_remaining=?, plasma_canon_remaining=?, light_hunter_remaining=?, heavy_hunter_remaining=?, battleship_remaining=?, armored_ship_remaining=? WHERE planet_id=?";
+        String sql = "UPDATE Planet_stats SET name=?, resource_metal_amount=?, resource_deuterion_amount=?, technology_defense_level=?, technology_attack_level=?, battle_counter=?, missile_launcher_remaining=?, ion_cannon_remaining=?, plasma_cannon_remaining=?, light_hunter_remaining=?, heavy_hunter_remaining=?, battleship_remaining=?, armored_ship_remaining=? WHERE planet_id=?";
         try (Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, name);
@@ -147,10 +147,10 @@ public class DatabaseManager {
             stmt.setInt(3, resource_deuterion_amount);
             stmt.setInt(4, technology_defense_level);
             stmt.setInt(5, technology_attack_level);
-            stmt.setInt(6, battles_counter);
+            stmt.setInt(6, battle_counter);
             stmt.setInt(7, missile_launcher_remaining);
             stmt.setInt(8, ion_cannon_remaining);
-            stmt.setInt(9, plasma_canon_remaining);
+            stmt.setInt(9, plasma_cannon_remaining);
             stmt.setInt(10, light_hunter_remaining);
             stmt.setInt(11, heavy_hunter_remaining);
             stmt.setInt(12, battleship_remaining);
@@ -196,16 +196,16 @@ public class DatabaseManager {
     }
 
     // Update Planet_battle_defense
-    public static void updatePlanetBattleDefense(int planet_id, int num_battle, int missile_launcher_built, int missile_launcher_destroyed, int ion_cannon_built, int ion_cannon_destroyed, int plasma_canon_built, int plasma_canon_destroyed) {
-        String sql = "UPDATE Planet_battle_defense SET missile_launcher_built=?, missile_launcher_destroyed=?, ion_cannon_built=?, ion_cannon_destroyed=?, plasma_canon_built=?, plasma_canon_destroyed=? WHERE planet_id=? AND num_battle=?";
+    public static void updatePlanetBattleDefense(int planet_id, int num_battle, int missile_launcher_built, int missile_launcher_destroyed, int ion_cannon_built, int ion_cannon_destroyed, int plasma_cannon_built, int plasma_cannon_destroyed) {
+        String sql = "UPDATE Planet_battle_defense SET missile_launcher_built=?, missile_launcher_destroyed=?, ion_cannon_built=?, ion_cannon_destroyed=?, plasma_cannon_built=?, plasma_cannon_destroyed=? WHERE planet_id=? AND num_battle=?";
         try (Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, missile_launcher_built);
             stmt.setInt(2, missile_launcher_destroyed);
             stmt.setInt(3, ion_cannon_built);
             stmt.setInt(4, ion_cannon_destroyed);
-            stmt.setInt(5, plasma_canon_built);
-            stmt.setInt(6, plasma_canon_destroyed);
+            stmt.setInt(5, plasma_cannon_built);
+            stmt.setInt(6, plasma_cannon_destroyed);
             stmt.setInt(7, planet_id);
             stmt.setInt(8, num_battle);
             stmt.executeUpdate();
