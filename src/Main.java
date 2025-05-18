@@ -10,6 +10,7 @@ public class Main implements Variables {
 
     public static void main(String[] args) throws ResourceException {
         int battleNumber = 1;
+        int battleCounter = 0;
         ArrayList<MilitaryUnit>[] planetArmy = new ArrayList[7];
         ArrayList<MilitaryUnit>[] enemyArmy = new ArrayList[7];
 
@@ -103,6 +104,7 @@ public class Main implements Variables {
 
                     } else if (user_input == 4) {
                         System.out.println("Mostrando reportes de batalla...");
+                        battleCounter++;
                         batalla.resolveBattle(planet, enemyArmy);
 
                         
@@ -132,15 +134,15 @@ public class Main implements Variables {
 
                         DatabaseManager.insertBattleStats(
                             planet.getIdPlanet(),
-                            battleNumber,
+                            battleCounter,
                             planetMetalCost, // o el recurso ganado/perdido
                             planetDeutCost
                         );
                         DatabaseManager.insertBattleLog(
                             planet.getIdPlanet(),
-                            battleNumber,
+                            battleCounter,
                             0, //!!hacer un bucle para que no se repita el número de batalla
-                            "null" // texto del log
+                            "null"
                         );
 
                         //se inicia todo en 0
@@ -158,7 +160,7 @@ public class Main implements Variables {
 
                         DatabaseManager.insertPlanetBattleArmy(
                             planet.getIdPlanet(),
-                            battleNumber,
+                            battleCounter,
                             light_hunter_destroyed,
                             heavy_hunter_destroyed,
                             battleship_destroyed,
@@ -167,7 +169,7 @@ public class Main implements Variables {
 
                         DatabaseManager.insertPlanetBattleDefense(
                             planet.getIdPlanet(),
-                            battleNumber,
+                            battleCounter,
                             missile_launcher_built,
                             missile_launcher_destroyed,
                             ion_cannon_built,
@@ -457,7 +459,7 @@ class Batalla {
             planet.getDeuterium(),
             planet.getTechnologyDefense(),
             planet.getTechnologyAttack(),
-            0, //!!ESTO HABRÁ QUE ACTUALIZARLO CON EL CONTADOR DE BATALLAS
+            1, //!!ESTO HABRÁ QUE ACTUALIZARLO CON EL CONTADOR DE BATALLAS
             planet.getArmy()[4].size(),
             planet.getArmy()[5].size(),
             planet.getArmy()[6].size(),
@@ -530,9 +532,8 @@ class Batalla {
                 shipUnit.setShipDestruido(shipUnit.getShipDestruido() + 1);
                 iterator.remove();
             }
-        }
-    }
+        }
+    }
 
 }
 }
-
