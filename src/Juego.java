@@ -287,7 +287,7 @@ public class Juego implements Variables {
 
         // Crear botones como JButton con imágenes
         JButton buttonLH = new JButton("Build Light Hunter");
-        buttonLH.setIcon(loadImageIcon("src/images/light_hunter.jpg", 50, 50)); // Imagen para Light Hunter
+        buttonLH.setIcon(loadImageIcon("src/images/light_hunter.png", 50, 50)); // Imagen para Light Hunter
 
         JButton buttonHH = new JButton("Build Heavy Hunter");
         buttonHH.setIcon(loadImageIcon("src/images/heavy_hunter.png", 50, 50)); // Imagen para Heavy Hunter
