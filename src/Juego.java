@@ -18,6 +18,9 @@ public class Juego implements Variables {
     private boolean flg_build_defenses_menu = false;
     private boolean flg_upgrade_technology_menu = false;
 
+    // Añade este contador para simular el número de batalla (puedes mejorarlo según tu lógica)
+    private int battleCounter = 1;
+
     public Juego() throws ResourceException {
         // Initialize units and battle
         planetArmy = new ArrayList[7];
@@ -250,24 +253,18 @@ public class Juego implements Variables {
             int posiblesMetal = planet.getMetal() / metalCost;
             int posiblesDeut = planet.getDeuterium() / deutCost;
 
-            int posibles;
-            if (posiblesMetal < posiblesDeut) {
-                posibles = posiblesMetal;
-            } else {
-                posibles = posiblesDeut;
-            }
+            int posibles = Math.min(posiblesMetal, posiblesDeut);
 
             if (posibles <= 0) {
                 JOptionPane.showMessageDialog(ventana, "Not enough resources to build any Light Hunters.");
             } else {
-                int aConstruir;
-                if (cantidad < posibles) {
-                    aConstruir = cantidad;
-                } else {
-                    aConstruir = posibles;
-                }
+                int aConstruir = Math.min(cantidad, posibles);
 
                 planet.newLightHunter(aConstruir);
+                DatabaseManager.insertPlanetBattleArmy(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0);
+
+                //enemy army:
+                DatabaseManager.insertEnemyArmy(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0);
 
                 // Update planet stats after building
                 DatabaseManager.updatePlanetStats(
@@ -285,6 +282,12 @@ public class Juego implements Variables {
                     planetArmy[1].size(),
                     planetArmy[2].size(),
                     planetArmy[3].size()
+                );
+                // Update battle army table
+                DatabaseManager.updatePlanetBattleArmy(
+                    planet.getIdPlanet(),
+                    battleCounter,
+                    0, 0, 0, 0 // Puedes actualizar los destruidos si tienes lógica para ello
                 );
 
                 if (aConstruir < cantidad) {
@@ -306,24 +309,16 @@ public class Juego implements Variables {
             int posiblesMetal = planet.getMetal() / metalCost;
             int posiblesDeut = planet.getDeuterium() / deutCost;
 
-            int posibles;
-            if (posiblesMetal < posiblesDeut) {
-                posibles = posiblesMetal;
-            } else {
-                posibles = posiblesDeut;
-            }
+            int posibles = Math.min(posiblesMetal, posiblesDeut);
 
             if (posibles <= 0) {
                 JOptionPane.showMessageDialog(ventana, "Not enough resources to build any Heavy Hunters.");
             } else {
-                int aConstruir;
-                if (cantidad < posibles) {
-                    aConstruir = cantidad;
-                } else {
-                    aConstruir = posibles;
-                }
+                int aConstruir = Math.min(cantidad, posibles);
 
                 planet.newHeavyHunter(aConstruir);
+                DatabaseManager.insertPlanetBattleArmy(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0);
+
 
                 DatabaseManager.updatePlanetStats(
                     planet.getIdPlanet(),
@@ -340,6 +335,11 @@ public class Juego implements Variables {
                     planetArmy[1].size(),
                     planetArmy[2].size(),
                     planetArmy[3].size()
+                );
+                DatabaseManager.updatePlanetBattleArmy(
+                    planet.getIdPlanet(),
+                    battleCounter,
+                    0, 0, 0, 0
                 );
 
                 if (aConstruir < cantidad) {
@@ -361,24 +361,15 @@ public class Juego implements Variables {
             int posiblesMetal = planet.getMetal() / metalCost;
             int posiblesDeut = planet.getDeuterium() / deutCost;
 
-            int posibles;
-            if (posiblesMetal < posiblesDeut) {
-                posibles = posiblesMetal;
-            } else {
-                posibles = posiblesDeut;
-            }
+            int posibles = Math.min(posiblesMetal, posiblesDeut);
 
             if (posibles <= 0) {
                 JOptionPane.showMessageDialog(ventana, "Not enough resources to build any Battle Ships.");
             } else {
-                int aConstruir;
-                if (cantidad < posibles) {
-                    aConstruir = cantidad;
-                } else {
-                    aConstruir = posibles;
-                }
+                int aConstruir = Math.min(cantidad, posibles);
 
                 planet.newBattleShip(aConstruir);
+                DatabaseManager.insertPlanetBattleArmy(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0);
 
                 DatabaseManager.updatePlanetStats(
                     planet.getIdPlanet(),
@@ -395,6 +386,11 @@ public class Juego implements Variables {
                     planetArmy[1].size(),
                     planetArmy[2].size(),
                     planetArmy[3].size()
+                );
+                DatabaseManager.updatePlanetBattleArmy(
+                    planet.getIdPlanet(),
+                    battleCounter,
+                    0, 0, 0, 0
                 );
 
                 if (aConstruir < cantidad) {
@@ -416,24 +412,15 @@ public class Juego implements Variables {
             int posiblesMetal = planet.getMetal() / metalCost;
             int posiblesDeut = planet.getDeuterium() / deutCost;
 
-            int posibles;
-            if (posiblesMetal < posiblesDeut) {
-                posibles = posiblesMetal;
-            } else {
-                posibles = posiblesDeut;
-            }
+            int posibles = Math.min(posiblesMetal, posiblesDeut);
 
             if (posibles <= 0) {
                 JOptionPane.showMessageDialog(ventana, "Not enough resources to build any Armored Ships.");
             } else {
-                int aConstruir;
-                if (cantidad < posibles) {
-                    aConstruir = cantidad;
-                } else {
-                    aConstruir = posibles;
-                }
+                int aConstruir = Math.min(cantidad, posibles);
 
                 planet.newArmoredShip(aConstruir);
+                DatabaseManager.insertPlanetBattleArmy(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0);
 
                 DatabaseManager.updatePlanetStats(
                     planet.getIdPlanet(),
@@ -450,6 +437,11 @@ public class Juego implements Variables {
                     planetArmy[1].size(),
                     planetArmy[2].size(),
                     planetArmy[3].size()
+                );
+                DatabaseManager.updatePlanetBattleArmy(
+                    planet.getIdPlanet(),
+                    battleCounter,
+                    0, 0, 0, 0
                 );
 
                 if (aConstruir < cantidad) {
@@ -483,7 +475,6 @@ public class Juego implements Variables {
             int metalCost = temp.getMetalCost();
             int deutCost = temp.getDeteriumCost();
 
-            // Verificar que los costos no sean 0 para evitar división por cero
             if (metalCost == 0 || deutCost == 0) {
                 JOptionPane.showMessageDialog(ventana, "Error: Cost values cannot be zero.");
                 return;
@@ -492,19 +483,9 @@ public class Juego implements Variables {
             int maxMetal = planet.getMetal() / metalCost;
             int maxDeut = planet.getDeuterium() / deutCost;
 
-            int posibles;
-            if (maxMetal < maxDeut) {
-                posibles = maxMetal;
-            } else {
-                posibles = maxDeut;
-            }
+            int posibles = Math.min(maxMetal, maxDeut);
 
-            int aConstruir;
-            if (cantidad < posibles) {
-                aConstruir = cantidad;
-            } else {
-                aConstruir = posibles;
-            }
+            int aConstruir = Math.min(cantidad, posibles);
 
             if (posibles <= 0) {
                 JOptionPane.showMessageDialog(ventana, "Not enough resources to build any Missile Launchers.");
@@ -512,6 +493,7 @@ public class Juego implements Variables {
             }
 
             planet.newMissileLauncher(aConstruir);
+            DatabaseManager.insertPlanetBattleDefense(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0, 0, 0);
 
             DatabaseManager.updatePlanetStats(
                 planet.getIdPlanet(),
@@ -528,6 +510,11 @@ public class Juego implements Variables {
                 planetArmy[1].size(),
                 planetArmy[2].size(),
                 planetArmy[3].size()
+            );
+            DatabaseManager.updatePlanetBattleDefense(
+                planet.getIdPlanet(),
+                battleCounter,
+                0, 0, 0, 0, 0, 0 // Puedes actualizar los valores según tu lógica
             );
 
             JOptionPane.showMessageDialog(ventana, "Successfully built " + aConstruir + " Missile Launchers.");
@@ -553,19 +540,9 @@ public class Juego implements Variables {
             int maxMetal = planet.getMetal() / metalCost;
             int maxDeut = planet.getDeuterium() / deutCost;
             
-            int posibles;
-            if (maxMetal < maxDeut) {
-                posibles = maxMetal;
-            } else {
-                posibles = maxDeut;
-            }
+            int posibles = Math.min(maxMetal, maxDeut);
 
-            int aConstruir;
-            if (cantidad < posibles) {
-                aConstruir = cantidad;
-            } else {
-                aConstruir = posibles;
-            }
+            int aConstruir = Math.min(cantidad, posibles);
 
             if (posibles <= 0) {
                 JOptionPane.showMessageDialog(ventana, "Not enough resources to build any Ion Cannons.");
@@ -573,6 +550,7 @@ public class Juego implements Variables {
             }
 
             planet.newIonCannon(aConstruir);
+            DatabaseManager.insertPlanetBattleDefense(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0, 0, 0);
 
             DatabaseManager.updatePlanetStats(
                 planet.getIdPlanet(),
@@ -590,6 +568,11 @@ public class Juego implements Variables {
                 planetArmy[2].size(),
                 planetArmy[3].size()
             );
+            DatabaseManager.updatePlanetBattleDefense(
+                planet.getIdPlanet(),
+                battleCounter,
+                0, 0, 0, 0, 0, 0
+            );
 
             JOptionPane.showMessageDialog(ventana, "Successfully built " + aConstruir + " Ion Cannons.");
         });
@@ -606,19 +589,9 @@ public class Juego implements Variables {
             int maxMetal = planet.getMetal() / metalCost;
             int maxDeut = planet.getDeuterium() / deutCost;
             
-            int posibles;
-            if (maxMetal < maxDeut) {
-                posibles = maxMetal;
-            } else {
-                posibles = maxDeut;
-            }
+            int posibles = Math.min(maxMetal, maxDeut);
 
-            int aConstruir;
-            if (cantidad < posibles) {
-                aConstruir = cantidad;
-            } else {
-                aConstruir = posibles;
-            }
+            int aConstruir = Math.min(cantidad, posibles);
 
             if (posibles <= 0) {
                 JOptionPane.showMessageDialog(ventana, "Not enough resources to build any Plasma Cannons.");
@@ -626,6 +599,7 @@ public class Juego implements Variables {
             }
 
             planet.newPlasmaCannon(aConstruir);
+            DatabaseManager.insertPlanetBattleDefense(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0, 0, 0);
 
             DatabaseManager.updatePlanetStats(
                 planet.getIdPlanet(),
@@ -642,6 +616,11 @@ public class Juego implements Variables {
                 planetArmy[1].size(),
                 planetArmy[2].size(),
                 planetArmy[3].size()
+            );
+            DatabaseManager.updatePlanetBattleDefense(
+                planet.getIdPlanet(),
+                battleCounter,
+                0, 0, 0, 0, 0, 0
             );
 
             JOptionPane.showMessageDialog(ventana, "Successfully built " + aConstruir + " Plasma Cannons.");
@@ -661,12 +640,7 @@ public class Juego implements Variables {
 
             int posibles = Math.min(maxMetal, maxDeut);
 
-            int aConstruir;
-            if (cantidad < posibles) {
-                aConstruir = cantidad;
-            } else {
-                aConstruir = posibles;
-            }
+            int aConstruir = Math.min(cantidad, posibles);
 
             if (posibles <= 0) {
                 JOptionPane.showMessageDialog(ventana, "Not enough resources to build any Armored Ships.");
@@ -674,6 +648,7 @@ public class Juego implements Variables {
             }
 
             planet.newArmoredShip(aConstruir);
+            DatabaseManager.insertPlanetBattleArmy(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0);
 
             DatabaseManager.updatePlanetStats(
                 planet.getIdPlanet(),
@@ -690,6 +665,11 @@ public class Juego implements Variables {
                 planetArmy[1].size(),
                 planetArmy[2].size(),
                 planetArmy[3].size()
+            );
+            DatabaseManager.updatePlanetBattleArmy(
+                planet.getIdPlanet(),
+                battleCounter,
+                0, 0, 0, 0
             );
 
             JOptionPane.showMessageDialog(ventana, "Successfully built " + aConstruir + " Armored Ships.");
@@ -836,12 +816,12 @@ public class Juego implements Variables {
         ventana.revalidate();
         ventana.repaint();
     }
-
+    
     public static void main(String[] args) {
         try {
             new Juego();
         } catch (ResourceException e) {
             e.printStackTrace();
-        }
-    }
+ }
+}
 }
