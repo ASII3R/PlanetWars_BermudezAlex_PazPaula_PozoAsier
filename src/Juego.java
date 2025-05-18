@@ -40,23 +40,6 @@ public class Juego implements Variables {
         battle = new Battle();
         battle.setPlanetArmy(planetArmy);
 
-        // Inserta el estado inicial del planeta en la base de datos
-        DatabaseManager.insertPlanetStats(
-            planet.getIdPlanet(),
-            "PlanetName",
-            planet.getMetal(),
-            planet.getDeuterium(),
-            planet.getTechnologyDefense(),
-            planet.getTechnologyAttack(),
-            0,
-            planetArmy[4].size(),
-            planetArmy[5].size(),
-            planetArmy[6].size(),
-            planetArmy[0].size(),
-            planetArmy[1].size(),
-            planetArmy[2].size(),
-            planetArmy[3].size()
-        );
 
         ventana = new JFrame("Space Wars Game");
         ventana.setSize(600, 400);
@@ -250,8 +233,8 @@ public class Juego implements Variables {
             int metalCost = temp.getMetalCost();
             int deutCost = temp.getDeteriumCost();
 
-            int posiblesMetal = planet.getMetal() / metalCost;
-            int posiblesDeut = planet.getDeuterium() / deutCost;
+            int posiblesMetal = (metalCost > 0) ? planet.getMetal() / metalCost : 0;
+            int posiblesDeut = (deutCost > 0) ? planet.getDeuterium() / deutCost : 0;
 
             int posibles = Math.min(posiblesMetal, posiblesDeut);
 
@@ -261,10 +244,10 @@ public class Juego implements Variables {
                 int aConstruir = Math.min(cantidad, posibles);
 
                 planet.newLightHunter(aConstruir);
-                DatabaseManager.insertPlanetBattleArmy(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0);
+                //DatabaseManager.insertPlanetBattleArmy(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0);
 
                 //enemy army:
-                DatabaseManager.insertEnemyArmy(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0);
+                //DatabaseManager.insertEnemyArmy(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0);
 
                 // Update planet stats after building
                 DatabaseManager.updatePlanetStats(
@@ -287,7 +270,7 @@ public class Juego implements Variables {
                 DatabaseManager.updatePlanetBattleArmy(
                     planet.getIdPlanet(),
                     battleCounter,
-                    0, 0, 0, 0 // Puedes actualizar los destruidos si tienes lógica para ello
+                    aConstruir, 0, 0, 0,0,0,0,0
                 );
 
                 if (aConstruir < cantidad) {
@@ -306,8 +289,8 @@ public class Juego implements Variables {
             int metalCost = temp.getMetalCost();
             int deutCost = temp.getDeteriumCost();
 
-            int posiblesMetal = planet.getMetal() / metalCost;
-            int posiblesDeut = planet.getDeuterium() / deutCost;
+            int posiblesMetal = (metalCost > 0) ? planet.getMetal() / metalCost : 0;
+            int posiblesDeut = (deutCost > 0) ? planet.getDeuterium() / deutCost : 0;
 
             int posibles = Math.min(posiblesMetal, posiblesDeut);
 
@@ -317,7 +300,7 @@ public class Juego implements Variables {
                 int aConstruir = Math.min(cantidad, posibles);
 
                 planet.newHeavyHunter(aConstruir);
-                DatabaseManager.insertPlanetBattleArmy(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0);
+                //DatabaseManager.insertPlanetBattleArmy(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0);
 
 
                 DatabaseManager.updatePlanetStats(
@@ -339,7 +322,7 @@ public class Juego implements Variables {
                 DatabaseManager.updatePlanetBattleArmy(
                     planet.getIdPlanet(),
                     battleCounter,
-                    0, 0, 0, 0
+                    0, 0, aConstruir,0,0,0,0,0
                 );
 
                 if (aConstruir < cantidad) {
@@ -358,8 +341,8 @@ public class Juego implements Variables {
             int metalCost = temp.getMetalCost();
             int deutCost = temp.getDeteriumCost();
 
-            int posiblesMetal = planet.getMetal() / metalCost;
-            int posiblesDeut = planet.getDeuterium() / deutCost;
+            int posiblesMetal = (metalCost > 0) ? planet.getMetal() / metalCost : 0;
+            int posiblesDeut = (deutCost > 0) ? planet.getDeuterium() / deutCost : 0;
 
             int posibles = Math.min(posiblesMetal, posiblesDeut);
 
@@ -369,7 +352,7 @@ public class Juego implements Variables {
                 int aConstruir = Math.min(cantidad, posibles);
 
                 planet.newBattleShip(aConstruir);
-                DatabaseManager.insertPlanetBattleArmy(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0);
+                //DatabaseManager.insertPlanetBattleArmy(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0);
 
                 DatabaseManager.updatePlanetStats(
                     planet.getIdPlanet(),
@@ -390,8 +373,8 @@ public class Juego implements Variables {
                 DatabaseManager.updatePlanetBattleArmy(
                     planet.getIdPlanet(),
                     battleCounter,
-                    0, 0, 0, 0
-                );
+                    0, 0, 0,0,aConstruir,0,0,0
+                    );
 
                 if (aConstruir < cantidad) {
                     JOptionPane.showMessageDialog(ventana, "Only " + aConstruir + " Battle Ships were built due to limited resources.");
@@ -409,8 +392,8 @@ public class Juego implements Variables {
             int metalCost = temp.getMetalCost();
             int deutCost = temp.getDeteriumCost();
 
-            int posiblesMetal = planet.getMetal() / metalCost;
-            int posiblesDeut = planet.getDeuterium() / deutCost;
+            int posiblesMetal = (metalCost > 0) ? planet.getMetal() / metalCost : 0;
+            int posiblesDeut = (deutCost > 0) ? planet.getDeuterium() / deutCost : 0;
 
             int posibles = Math.min(posiblesMetal, posiblesDeut);
 
@@ -420,7 +403,7 @@ public class Juego implements Variables {
                 int aConstruir = Math.min(cantidad, posibles);
 
                 planet.newArmoredShip(aConstruir);
-                DatabaseManager.insertPlanetBattleArmy(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0);
+                //DatabaseManager.insertPlanetBattleArmy(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0);
 
                 DatabaseManager.updatePlanetStats(
                     planet.getIdPlanet(),
@@ -441,7 +424,7 @@ public class Juego implements Variables {
                 DatabaseManager.updatePlanetBattleArmy(
                     planet.getIdPlanet(),
                     battleCounter,
-                    0, 0, 0, 0
+                    0, 0, 0,0,0,0,aConstruir,0
                 );
 
                 if (aConstruir < cantidad) {
@@ -493,7 +476,7 @@ public class Juego implements Variables {
             }
 
             planet.newMissileLauncher(aConstruir);
-            DatabaseManager.insertPlanetBattleDefense(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0, 0, 0);
+            //DatabaseManager.insertPlanetBattleDefense(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0, 0, 0);
 
             DatabaseManager.updatePlanetStats(
                 planet.getIdPlanet(),
@@ -514,7 +497,7 @@ public class Juego implements Variables {
             DatabaseManager.updatePlanetBattleDefense(
                 planet.getIdPlanet(),
                 battleCounter,
-                0, 0, 0, 0, 0, 0 // Puedes actualizar los valores según tu lógica
+                aConstruir, 0, 0, 0, 0, 0
             );
 
             JOptionPane.showMessageDialog(ventana, "Successfully built " + aConstruir + " Missile Launchers.");
@@ -550,7 +533,7 @@ public class Juego implements Variables {
             }
 
             planet.newIonCannon(aConstruir);
-            DatabaseManager.insertPlanetBattleDefense(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0, 0, 0);
+            //DatabaseManager.insertPlanetBattleDefense(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0, 0, 0);
 
             DatabaseManager.updatePlanetStats(
                 planet.getIdPlanet(),
@@ -571,7 +554,7 @@ public class Juego implements Variables {
             DatabaseManager.updatePlanetBattleDefense(
                 planet.getIdPlanet(),
                 battleCounter,
-                0, 0, 0, 0, 0, 0
+                aConstruir, 0, 0, 0, 0, 0
             );
 
             JOptionPane.showMessageDialog(ventana, "Successfully built " + aConstruir + " Ion Cannons.");
@@ -599,7 +582,7 @@ public class Juego implements Variables {
             }
 
             planet.newPlasmaCannon(aConstruir);
-            DatabaseManager.insertPlanetBattleDefense(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0, 0, 0);
+            //DatabaseManager.insertPlanetBattleDefense(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0, 0, 0);
 
             DatabaseManager.updatePlanetStats(
                 planet.getIdPlanet(),
@@ -620,7 +603,7 @@ public class Juego implements Variables {
             DatabaseManager.updatePlanetBattleDefense(
                 planet.getIdPlanet(),
                 battleCounter,
-                0, 0, 0, 0, 0, 0
+                aConstruir, 0, 0, 0, 0, 0
             );
 
             JOptionPane.showMessageDialog(ventana, "Successfully built " + aConstruir + " Plasma Cannons.");
@@ -648,7 +631,7 @@ public class Juego implements Variables {
             }
 
             planet.newArmoredShip(aConstruir);
-            DatabaseManager.insertPlanetBattleArmy(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0);
+            //DatabaseManager.insertPlanetBattleArmy(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0);
 
             DatabaseManager.updatePlanetStats(
                 planet.getIdPlanet(),
@@ -669,7 +652,7 @@ public class Juego implements Variables {
             DatabaseManager.updatePlanetBattleArmy(
                 planet.getIdPlanet(),
                 battleCounter,
-                0, 0, 0, 0
+                aConstruir, 0, 0, 0,0,0,0,0
             );
 
             JOptionPane.showMessageDialog(ventana, "Successfully built " + aConstruir + " Armored Ships.");
@@ -820,6 +803,8 @@ public class Juego implements Variables {
     public static void main(String[] args) {
         try {
             new Juego();
+            DatabaseManager.resetAllBattleArmies();
+            DatabaseManager.resetAllBattleDefenses();
         } catch (ResourceException e) {
             e.printStackTrace();
  }
