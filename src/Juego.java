@@ -2,11 +2,15 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.*;
 import javax.swing.border.Border;
 
 public class Juego implements Variables {
     private JFrame ventana;
+    private JPanel panelBattleReports;
+    private JTextArea textAreaBattleReports;
     private JPanel panelStart, panelMainMenu, panelBuild, panelBuildTroops, panelBuildDefenses, panelUpgradeTechnology;
     private ArrayList<MilitaryUnit>[] planetArmy;
     private Planet planet;
@@ -35,11 +39,58 @@ public class Juego implements Variables {
         planetArmy[5].add(new IonCannon(ARMOR_IONCANNON, BASE_DAMAGE_PLASMACANNON));
         planetArmy[6].add(new PlasmaCannon(ARMOR_PLASMACANNON, BASE_DAMAGE_PLASMACANNON));
 
+        //iniciar enemy army
+        ArrayList<MilitaryUnit>[] enemyArmy = new ArrayList[7];
+        for (int i = 0; i < enemyArmy.length; i++) {
+            enemyArmy[i] = new ArrayList<>();
+        }
+        enemyArmy[0].add(new LightHunter());
+        enemyArmy[0].add(new LightHunter());
+        enemyArmy[1].add(new HeavyHunter());
+        enemyArmy[2].add(new BattleShip());
+        enemyArmy[3].add(new ArmoredShip());
+        enemyArmy[4].add(new MissileLauncher(ARMOR_MISSILELAUNCHER, BASE_DAMAGE_MISSILELAUNCHER));
+        enemyArmy[5].add(new IonCannon(ARMOR_IONCANNON, BASE_DAMAGE_IONCANNON));
+        enemyArmy[6].add(new PlasmaCannon(ARMOR_PLASMACANNON, BASE_DAMAGE_PLASMACANNON));
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+        public void run() {
+            planet.setMetal(planet.getMetal() + PLANET_METAL_GENERATED);
+            planet.setDeuterium(planet.getDeuterium() + PLANET_DEUTERIUM_GENERATED);
+            SwingUtilities.invokeLater(() -> 
+                JOptionPane.showMessageDialog(ventana, "Recolected Resources...\n", "Resources", JOptionPane.INFORMATION_MESSAGE)
+            );
+            }
+        }, 60000, 60000);
+
+        timer.schedule(new TimerTask() {
+        public void run() {
+            ArrayList<MilitaryUnit>[] enemy = battle.getEnemyArmy();
+            StringBuilder sb = new StringBuilder();
+            sb.append("[THREAT WARNING] Enemy Army approaching:\n");
+            if (enemy == null) {
+                sb.append("Enemy army data is not available.");
+            } else {
+                for (int i = 0; i < enemy.length; i++) {
+                    if (!enemy[i].isEmpty()) {
+                        sb.append(enemy[i].get(0).getClass().getSimpleName())
+                        .append(" x").append(enemy[i].size()).append("\n");
+                    }
+                }
+            }
+            SwingUtilities.invokeLater(() -> 
+                JOptionPane.showMessageDialog(ventana, sb.toString(), "Threat Warning", JOptionPane.WARNING_MESSAGE)
+            );
+        }
+    }, 0, 30000);
+
+
         this.planet = new Planet(0, 0, 53500, 26800, UPGRADE_BASE_DEFENSE_TECHNOLOGY_DEUTERIUM_COST, UPGRADE_BASE_ATTACK_TECHNOLOGY_DEUTERIUM_COST, planetArmy,1);
         
         battle = new Battle();
         battle.setPlanetArmy(planetArmy);
-
+        battle.setEnemyArmy(enemyArmy);
 
         ventana = new JFrame("Space Wars Game");
         ventana.setSize(600, 400);
@@ -767,6 +818,55 @@ public class Juego implements Variables {
         panelUpgradeTechnology.add(buttonDefense);
         panelUpgradeTechnology.add(buttonAttack);
         panelUpgradeTechnology.add(buttonBackUpgrade);
+
+        panelBattleReports = new JPanel(new BorderLayout());
+textAreaBattleReports = new JTextArea();
+textAreaBattleReports.setEditable(false);
+textAreaBattleReports.setFont(new Font("Monospaced", Font.PLAIN, 14));
+JScrollPane scrollPane = new JScrollPane(textAreaBattleReports);
+
+JButton buttonBackBattleReports = new JButton("Go Back");
+buttonBackBattleReports.addActionListener(e -> switchPanel(panelMainMenu));
+
+panelBattleReports.add(scrollPane, BorderLayout.CENTER);
+panelBattleReports.add(buttonBackBattleReports, BorderLayout.SOUTH);
+
+// Modifica el actionListener de buttonBattleReports:
+buttonBattleReports.addActionListener(e -> {
+    StringBuilder sb = new StringBuilder();
+    sb.append("[Battle Report]\n\n");
+    sb.append("Planet Army:\n");
+    for (int i = 0; i < planetArmy.length; i++) {
+        if (!planetArmy[i].isEmpty()) {
+            sb.append("- ").append(planetArmy[i].get(0).getClass().getSimpleName())
+              .append(" x").append(planetArmy[i].size()).append("\n");
+        }
+    }
+    sb.append("\n");
+
+    // Mostrar solo si hay enemigos atacando
+    ArrayList<MilitaryUnit>[] enemy = battle.getEnemyArmy();
+    boolean anyEnemy = false;
+    StringBuilder enemySb = new StringBuilder();
+    if (enemy != null) {
+        for (int i = 0; i < enemy.length; i++) {
+            if (!enemy[i].isEmpty()) {
+                anyEnemy = true;
+                enemySb.append("- ").append(enemy[i].get(0).getClass().getSimpleName())
+                       .append(" x").append(enemy[i].size()).append("\n");
+            }
+        }
+    }
+    if (anyEnemy) {
+        sb.append("¡Te están atacando! Enemigos detectados:\n");
+        sb.append(enemySb);
+    } else {
+        sb.append("No hay enemigos atacando en este momento.\n");
+    }
+
+    textAreaBattleReports.setText(sb.toString());
+    switchPanel(panelBattleReports);
+});
 
     }
     private int getUnitAmount(String message) {
