@@ -6,32 +6,32 @@
         <html>
             <head>
                 <META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-                <title>Reporte de Batalla</title>
+                <title>Battle Report</title>
             </head>
             <body>
-                <h1>Reporte de Batalla</h1>
-                <h2>Número de Batalla: <xsl:value-of select="battleReport/battleNumber" /></h2>
+                <h1>Battle Report</h1>
+                <h2>Battle Number: <xsl:value-of select="battleReport/battleNumber" /></h2>
 
                 <!-- Resultado de la batalla -->
-                <h3>Resultado:</h3>
+                <h3>Result:</h3>
                 <p>
                     <xsl:choose>
                         <xsl:when test="battleReport/result = 'win'">
-                            ¡El Ejército del Planeta ha ganado!
+                            The Army of the Planet has won!
                         </xsl:when>
                         <xsl:otherwise>
-                            El Ejército del Planeta ha perdido.
+                            The Army of the Planet has lost.
                         </xsl:otherwise>
                     </xsl:choose>
                 </p>
 
                 <!-- Recursos ganados -->
-                <h3>Recursos Ganados:</h3>
+                <h3>Earned Resources:</h3>
                 <p>Metal: <xsl:value-of select="battleReport/resources/metal" /></p>
                 <p>Deuterium: <xsl:value-of select="battleReport/resources/deuterium" /></p>
 
                 <!-- Ejército del Planeta -->
-                <h3>Ejército del Planeta</h3>
+                <h3>Army of the Planet</h3>
                 <p><xsl:value-of select="battleReport/planetArmy/description" /></p>
                 <ul style="letter-spacing:2px;">
                     <xsl:for-each select="battleReport/planetArmy/units/unit">
@@ -42,7 +42,7 @@
                 </ul>
 
                 <!-- Ejército Enemigo -->
-                <h3>Ejército Enemigo</h3>
+                <h3>Enemy Army</h3>
                 <p><xsl:value-of select="battleReport/enemyArmy/description" /></p>
                 <ul class="enemigo" style="letter-spacing:2px;">
                     <xsl:for-each select="battleReport/enemyArmy/units/unit">

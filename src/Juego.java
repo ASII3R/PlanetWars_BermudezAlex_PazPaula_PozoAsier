@@ -35,14 +35,13 @@ public class Juego implements Variables {
     private boolean flg_build_defenses_menu = false;
     private boolean flg_upgrade_technology_menu = false;
 
-    // Añade este contador para simular el número de batalla (puedes mejorarlo según tu lógica)
     private int battleCounter = 1;
 
-    // Añade un indicador para evitar múltiples peleas consecutivas
+    //[Controlar si la batalla está en progreso]
     private boolean isBattleInProgress = false;
 
     public Juego() throws ResourceException {
-        // Initialize planet army
+        //[Creación del ejército del planeta]
         planetArmy = new ArrayList[7];
         for (int i = 0; i < planetArmy.length; i++) {
             planetArmy[i] = new ArrayList<>();
@@ -55,7 +54,7 @@ public class Juego implements Variables {
         planetArmy[5].add(new IonCannon(ARMOR_IONCANNON, BASE_DAMAGE_PLASMACANNON));
         planetArmy[6].add(new PlasmaCannon(ARMOR_PLASMACANNON, BASE_DAMAGE_PLASMACANNON));
 
-        // Initialize enemy army with random quantities
+        //[Creacion del ejército enemigo (aleatorio)]
         Random random = new Random();
         ArrayList<MilitaryUnit>[] enemyArmy = new ArrayList[7];
         for (int i = 0; i < enemyArmy.length; i++) {
@@ -78,14 +77,15 @@ public class Juego implements Variables {
             }
         }
 
-        // Initialize planet and battle
+        // [Inicialización del planeta]
         this.planet = new Planet(0, 0, 53500, 26800, UPGRADE_BASE_DEFENSE_TECHNOLOGY_DEUTERIUM_COST, UPGRADE_BASE_ATTACK_TECHNOLOGY_DEUTERIUM_COST, planetArmy, 1);
         this.battle = new Battle();
         this.battle.setPlanetArmy(planetArmy);
         this.battle.setEnemyArmy(enemyArmy);
 
-        // Timer tasks
+        // [TimerTask]
         Timer timer = new Timer();
+        // [Recolección de recursos]
         timer.schedule(new TimerTask() {
             public void run() {
                 planet.setMetal(planet.getMetal() + PLANET_METAL_GENERATED);
@@ -117,7 +117,7 @@ public class Juego implements Variables {
             }
         }, 0, 30000);
 
-        // Initialize GUI
+        // [Creación de la ventana principal]
         ventana = new JFrame("Space Wars Game");
         ventana.setSize(600, 400);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -150,7 +150,7 @@ public class Juego implements Variables {
         buttonPlay.setAlignmentX(Component.CENTER_ALIGNMENT);
         buttonPlay.addActionListener(e -> switchPanel(panelMainMenu));
 
-        // Agregar componentes con espacio entre ellos
+        // [Separadores]
         panelStart.add(title);
         panelStart.add(Box.createRigidArea(new Dimension(0, 50))); // Espacio entre título y botón
         panelStart.add(buttonPlay);
@@ -161,7 +161,7 @@ public class Juego implements Variables {
         panelMainMenu = new JPanel();
         panelMainMenu.setLayout(new BoxLayout(panelMainMenu, BoxLayout.Y_AXIS));
         panelMainMenu.setBackground(new Color(70, 130, 180));
-        panelMainMenu.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100)); // Márgenes grandes
+        panelMainMenu.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100));
 
         // Título
         JLabel titleMainMenu = new JLabel("Main Menu", SwingConstants.CENTER);
@@ -169,16 +169,16 @@ public class Juego implements Variables {
         titleMainMenu.setForeground(Color.WHITE);
         titleMainMenu.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelMainMenu.add(titleMainMenu);
-        panelMainMenu.add(Box.createRigidArea(new Dimension(0, 30))); // Espacio debajo del título
+        panelMainMenu.add(Box.createRigidArea(new Dimension(0, 30)));
 
-        // Estilo común
+        // [Fuente y color de los botones]
         Font buttonFont = new Font("Arial", Font.BOLD, 16);
         Dimension buttonSize = new Dimension(500, 90);
         Color buttonColor = new Color(240, 248, 255); // Azul muy suave
         Color textColor = new Color(25, 25, 112); // Azul oscuro
         Border buttonBorder = BorderFactory.createLineBorder(Color.WHITE, 2);
 
-        // Botón 1
+        // [Boton 1]
         JButton buttonStats = new JButton("View Planet Stats");
         buttonStats.setMaximumSize(buttonSize);
         buttonStats.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -190,7 +190,7 @@ public class Juego implements Variables {
         panelMainMenu.add(buttonStats);
         panelMainMenu.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        // Botón 2
+        // [Botón 2]
         JButton buttonBuild = new JButton("Build");
         buttonBuild.setMaximumSize(buttonSize);
         buttonBuild.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -202,7 +202,7 @@ public class Juego implements Variables {
         panelMainMenu.add(buttonBuild);
         panelMainMenu.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        // Botón 3
+        // [Botón 3]
         JButton buttonUpgrade = new JButton("Upgrade Technology");
         buttonUpgrade.setMaximumSize(buttonSize);
         buttonUpgrade.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -214,7 +214,7 @@ public class Juego implements Variables {
         panelMainMenu.add(buttonUpgrade);
         panelMainMenu.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        // Botón 4
+        // [Botón 4]
         JButton buttonBattleReports = new JButton("View Battle Reports");
         buttonBattleReports.setMaximumSize(buttonSize);
         buttonBattleReports.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -226,7 +226,7 @@ public class Juego implements Variables {
         panelMainMenu.add(buttonBattleReports);
         panelMainMenu.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        // Botón 5
+        // [Botón 5]
         JButton buttonExit = new JButton("Exit");
         buttonExit.setMaximumSize(buttonSize);
         buttonExit.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -238,9 +238,10 @@ public class Juego implements Variables {
         panelMainMenu.add(buttonExit);
         panelMainMenu.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        // Agregar panel a ventana
+        // [Agregar panel a ventana]
         ventana.add(panelMainMenu);
-            
+        
+        // [ActionListener para Planet Stats]
         buttonStats.addActionListener(e -> {
         JOptionPane.showMessageDialog(ventana,
             "Planet Stats:\n\n" +
@@ -267,14 +268,14 @@ public class Juego implements Variables {
         buttonBattleReports.setBackground(buttonColor);
         buttonExit.setBackground(buttonColor);
 
-        // Agregar acciones a los botones
+        // [Agregar acciones a los botones]
         buttonStats.addActionListener(e -> planet.printStats());
         buttonBuild.addActionListener(e -> switchPanel(panelBuild));
         buttonUpgrade.addActionListener(e -> switchPanel(panelUpgradeTechnology));
         buttonBattleReports.addActionListener(e -> JOptionPane.showMessageDialog(ventana, "Displaying battle reports..."));
         buttonExit.addActionListener(e -> System.exit(0));
 
-        // Build Menu panel
+        // [Build Menu panel]
         panelBuild = new JPanel(new GridLayout(3, 1));
         panelBuild.setBackground(new Color(100, 149, 237));
         panelBuild.add(new JLabel("Build Menu", SwingConstants.CENTER));
@@ -290,27 +291,26 @@ public class Juego implements Variables {
         panelBuild.add(buttonDefenses);
         panelBuild.add(buttonBack);
 
-        // Build Troops panel
+        // [Build Troops panel]
         panelBuildTroops = new JPanel(new GridLayout(5, 1));
         panelBuildTroops.setBackground(new Color(176, 196, 222));
         panelBuildTroops.add(new JLabel("Build Troops", SwingConstants.CENTER));
 
-        // Crear botones como JButton con imágenes
+        // [Botones con imágenes (para construir tropas)]
         JButton buttonLH = new JButton("Build Light Hunter");
-        buttonLH.setIcon(loadImageIcon("src/images/light_hunter.png", 50, 50)); // Imagen para Light Hunter
+        buttonLH.setIcon(loadImageIcon("src/images/light_hunter.png", 50, 50)); // [Imagen para Light Hunter]
 
         JButton buttonHH = new JButton("Build Heavy Hunter");
-        buttonHH.setIcon(loadImageIcon("src/images/heavy_hunter.png", 50, 50)); // Imagen para Heavy Hunter
+        buttonHH.setIcon(loadImageIcon("src/images/heavy_hunter.png", 50, 50)); // [Imagen para Heavy Hunter]
 
         JButton buttonBS = new JButton("Build Battle Ship");
-        buttonBS.setIcon(loadImageIcon("src/images/battle_ship.png", 50, 50)); // Imagen para Battle Ship
+        buttonBS.setIcon(loadImageIcon("src/images/battle_ship.png", 50, 50)); // [Imagen para Battle Ship]
 
         JButton buttonAS = new JButton("Build Armored Ship");
-        buttonAS.setIcon(loadImageIcon("src/images/armored_ship.png", 50, 50)); // Imagen para Armored Ship
+        buttonAS.setIcon(loadImageIcon("src/images/armored_ship.png", 50, 50)); // [Imagen para Armored Ship]
 
         JButton buttonBackTroops = new JButton("Go Back");
 
-        // Agregar ActionListeners (ya existentes en tu código)
         buttonLH.addActionListener(e -> {
             int cantidad = getUnitAmount("Enter the number of Light Hunters:");
             LightHunter temp = new LightHunter();
@@ -329,12 +329,12 @@ public class Juego implements Variables {
                 int aConstruir = Math.min(cantidad, posibles);
 
                 planet.newLightHunter(aConstruir);
-                //DatabaseManager.insertPlanetBattleArmy(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0);
+                //DatabaseManager.insertPlanetBattleArmy(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0); 
 
                 //enemy army:
                 //DatabaseManager.insertEnemyArmy(planet.getIdPlanet(), battleCounter, 0, 0, 0, 0);
 
-                // Update planet stats after building
+                // [Actualizar estadísticas del planeta]
                 DatabaseManager.updatePlanetStats(
                     planet.getIdPlanet(),
                     "PlanetName",
@@ -351,7 +351,7 @@ public class Juego implements Variables {
                     planetArmy[2].size(),
                     planetArmy[3].size()
                 );
-                // Update battle army table
+                // [Actualizar estadísticas del ejército]
                 DatabaseManager.updatePlanetBattleArmy(
                     planet.getIdPlanet(),
                     battleCounter,
@@ -366,7 +366,7 @@ public class Juego implements Variables {
             }
         });
 
-        // Heavy Hunter
+        // [Heavy Hunter]
         buttonHH.addActionListener(e -> {
             int cantidad = getUnitAmount("Enter the number of Heavy Hunters:");
             HeavyHunter temp = new HeavyHunter();
@@ -418,7 +418,7 @@ public class Juego implements Variables {
             }
         });
 
-        // Battle Ship
+        // [Battle Ship]
         buttonBS.addActionListener(e -> {
             int cantidad = getUnitAmount("Enter the number of Battle Ships:");
             BattleShip temp = new BattleShip();
@@ -469,7 +469,7 @@ public class Juego implements Variables {
             }
         });
 
-        // Armored Ship
+        // [Armored Ship]
         buttonAS.addActionListener(e -> {
             int cantidad = getUnitAmount("Enter the number of Armored Ships:");
             ArmoredShip temp = new ArmoredShip();
@@ -522,19 +522,19 @@ public class Juego implements Variables {
 
         buttonBackTroops.addActionListener(e -> switchPanel(panelBuild));
 
-        // Agregar botones al panel
+        // [Agregar botones al panel]
         panelBuildTroops.add(buttonLH);
         panelBuildTroops.add(buttonHH);
         panelBuildTroops.add(buttonBS);
         panelBuildTroops.add(buttonAS);
         panelBuildTroops.add(buttonBackTroops);
 
-        // Build Defenses panel
+        // [Panel para construir defensas]
         panelBuildDefenses = new JPanel(new GridLayout(5, 1));
         panelBuildDefenses.setBackground(new Color(205, 92, 92));
         panelBuildDefenses.add(new JLabel("Build Defenses", SwingConstants.CENTER));
 
-        // Missile Launcher
+        // [Missile Launcher]
         JButton buttonML = new JButton("Build Missile Launcher");
         buttonML.addActionListener(e -> {
             int cantidad = getUnitAmount("Enter the number of Missile Launchers:");
@@ -588,11 +588,11 @@ public class Juego implements Variables {
             JOptionPane.showMessageDialog(ventana, "Successfully built " + aConstruir + " Missile Launchers.");
         });
 
-        // Back Button
+        // [Boton para volver]
         JButton buttonBackDefenses = new JButton("Go Back");
         buttonBackDefenses.addActionListener(e -> switchPanel(panelBuild));
 
-        // Ion Cannon
+        // [Ion Cannon]
         JButton buttonIC = new JButton("Build Ion Cannon");
         buttonIC.addActionListener(e -> {
             int cantidad = getUnitAmount("Enter the number of Ion Cannons:");
@@ -640,7 +640,7 @@ public class Juego implements Variables {
             JOptionPane.showMessageDialog(ventana, "Successfully built " + aConstruir + " Ion Cannons.");
         });
 
-        // Plasma Cannon
+        // [Plasma Cannon]
         JButton buttonPC = new JButton("Build Plasma Cannon");
         buttonPC.addActionListener(e -> {
             int cantidad = getUnitAmount("Enter the number of Plasma Cannons:");
@@ -688,7 +688,6 @@ public class Juego implements Variables {
             JOptionPane.showMessageDialog(ventana, "Successfully built " + aConstruir + " Plasma Cannons.");
         });
 
-        // Add buttons to panel
         panelBuildDefenses.add(buttonML);
         panelBuildDefenses.add(buttonIC);
         panelBuildDefenses.add(buttonPC);
@@ -717,7 +716,7 @@ public class Juego implements Variables {
                 int newLevel = planet.getTechnologyDefense();
                 planet.setDeuterium(planet.getDeuterium() - cost);
 
-                // Update planet stats after upgrading
+                // [Actualizar estadísticas del planeta]
                 DatabaseManager.updatePlanetStats(
                     planet.getIdPlanet(),
                     "PlanetName",
@@ -742,7 +741,7 @@ public class Juego implements Variables {
             }
         });
 
-        // Botón para mejorar ataque
+        // [Botón para mejorar ataque]
         JButton buttonAttack = new JButton("Upgrade Attack Technology");
         buttonAttack.setPreferredSize(new Dimension(80, 25));
         buttonAttack.setBackground(new Color(240, 248, 255)); // Rojo intenso
@@ -783,7 +782,6 @@ public class Juego implements Variables {
             }
         });
 
-        // Botón para volver
         JButton buttonBackUpgrade = new JButton("Go Back");
         buttonBackUpgrade.setPreferredSize(new Dimension(80, 25));
         buttonBackUpgrade.setBackground(new Color(240, 248, 255)); // Azul brillante
@@ -793,7 +791,7 @@ public class Juego implements Variables {
         buttonBackUpgrade.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
         buttonBackUpgrade.addActionListener(e -> switchPanel(panelMainMenu));
 
-        // Añadir botones al panel de mejora de tecnología
+        // [Añadir botones al panel de mejora de tecnología]
         panelUpgradeTechnology.add(buttonDefense);
         panelUpgradeTechnology.add(buttonAttack);
         panelUpgradeTechnology.add(buttonBackUpgrade);
@@ -851,14 +849,14 @@ buttonBattleReports.addActionListener(e -> {
         JPanel panelCredits = new JPanel();
         panelCredits.setLayout(new BoxLayout(panelCredits, BoxLayout.Y_AXIS));
         panelCredits.setBackground(new Color(176, 196, 222));
-        panelCredits.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100)); // Márgenes grandes
+        panelCredits.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100)); 
 
         JLabel titleCredits = new JLabel("Credits", SwingConstants.CENTER);
         titleCredits.setFont(new Font("Arial", Font.BOLD, 50));
         titleCredits.setForeground(Color.WHITE);
         titleCredits.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelCredits.add(titleCredits);
-        panelCredits.add(Box.createRigidArea(new Dimension(0, 30))); // Espacio debajo del título
+        panelCredits.add(Box.createRigidArea(new Dimension(0, 30))); 
 
 
         // Botón Back
@@ -871,10 +869,9 @@ buttonBattleReports.addActionListener(e -> {
          buttonBackCredits.setFocusPainted(false);
         buttonBackCredits.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
         buttonBackCredits.addActionListener(e -> switchPanel(panelMainMenu));
-        panelCredits.add(Box.createRigidArea(new Dimension(0, 30))); // Espacio antes del botón
+        panelCredits.add(Box.createRigidArea(new Dimension(0, 30)));
         panelCredits.add(buttonBackCredits);
 
-        // Agregar panel de créditos a la ventana (asegúrate de que esto esté en el lugar correcto de tu código)
         ventana.add(panelCredits);
     }
     private int getUnitAmount(String message) {
@@ -909,11 +906,10 @@ buttonBattleReports.addActionListener(e -> {
     }
     
     private void resolveBattle() {
-        // Simular el resultado de la batalla
         boolean planetWins = simulateBattle();
 
-        int metalGained = 0; // Metal ganado
-        int deuteriumGained = 0; // Deuterium ganado
+        int metalGained = 0;
+        int deuteriumGained = 0; 
 
         if (planetWins) {
             // Calcular el costo total de las tropas enemigas
@@ -993,13 +989,13 @@ buttonBattleReports.addActionListener(e -> {
         JButton closeButton = new JButton("Cerrar");
         closeButton.addActionListener(e -> {
             resultWindow.dispose();
-            isBattleInProgress = false; // Restablecer el indicador después de cerrar la ventana
+            isBattleInProgress = false;
         });
 
         resultWindow.add(resultLabel, BorderLayout.CENTER);
         resultWindow.add(closeButton, BorderLayout.SOUTH);
 
-        resultWindow.setLocationRelativeTo(ventana); // Centrar respecto a la ventana principal
+        resultWindow.setLocationRelativeTo(ventana);
         resultWindow.setVisible(true);
 
         // Restablecer el indicador incluso si la ventana no se cierra manualmente
