@@ -6,26 +6,6 @@
     <title>Juego Retro</title>
     <link rel="stylesheet" href="principal.css">
 </head>
-<script>
-    const carrusel = document.querySelector('.carrusel-imagenes');
-    const totalImagenes = carrusel.children.length;
-    let index = 0;
-
-    document.querySelector('.anterior').addEventListener('click', () => {
-        index = (index - 1 + totalImagenes) % totalImagenes;
-        actualizarCarrusel();
-    });
-
-    document.querySelector('.siguiente').addEventListener('click', () => {
-        index = (index + 1) % totalImagenes;
-        actualizarCarrusel();
-    });
-
-    function actualizarCarrusel() {
-        carrusel.style.transform = `translateX(-${index * 100}%)`;
-    }
-</script>
-
 <body>
 
     <header>
@@ -43,14 +23,17 @@
     <main>
         <section class="publicidad">
             <h2>Descubre la experiencia</h2>
-        
+
             <div class="imagenes">
-                <img src="planetwars.jpg" alt="Img planetwars  ">
+                <img src="planetwars.jpg" alt="Planet Wars">
+                <img src="imagenjuego1.png" alt="Juego 1">
+                <img src="imagenjuego2.png" alt="Juego 2">
+                <img src="imagenjuego3.png" alt="Juego 3">
             </div>
-        
+
             <p>Sumérgete en este apasionante juego de batallas intergalácticas</p>
         </section>
-        
+
     </main>
 
     <footer>

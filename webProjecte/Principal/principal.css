@@ -284,3 +284,7 @@ footer p {
     right: 10px;
 }
 
+.imagenes img {
+    display: block;
+    margin: 0 auto 20px;
+}
